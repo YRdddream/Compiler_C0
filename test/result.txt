@@ -1,0 +1,869 @@
+1 const conSt
+2 int INT
+3 identifier _
+4 becomes = 1
+5 number 0
+6 semicolon ; 1
+7 const const
+8 int int
+9 identifier voiD1
+10 becomes = 3
+11 number 0
+12 semicolon ; 3
+13 const const
+14 int int
+15 identifier int1
+16 becomes = 4
+17 plus + 4
+18 number 1
+19 comma , 4
+20 identifier int2
+21 becomes = 4
+22 number 2
+23 semicolon ; 4
+24 const const
+25 char Char
+26 identifier char1
+27 becomes = 5
+28 char '1'
+29 semicolon ; 5
+30 number 17890
+31 const const
+32 char char
+33 identifier charZ
+34 becomes = 7
+35 char 'Z'
+36 comma , 7
+37 identifier char9
+38 becomes = 7
+39 char '9'
+40 semicolon ; 7
+41 int int
+42 identifier a
+43 comma , 9
+44 identifier b
+45 comma , 9
+46 identifier c
+47 lbrack [ 9
+48 number 5
+49 rbrack ] 9
+50 semicolon ; 9
+51 int int
+52 identifier single
+53 semicolon ; 10
+54 char char
+55 identifier d
+56 comma , 11
+57 identifier e
+58 lbrack [ 11
+59 number 9
+60 rbrack ] 11
+61 semicolon ; 11
+62 char char
+63 identifier default
+64 semicolon ; 12
+65 void void
+66 identifier null
+67 lparent ( 14
+68 rparent ) 14
+69 lcurly { 15
+70 rcurly } 15
+71 void VOID
+72 identifier print_error
+73 lparent ( 17
+74 int int
+75 identifier e_number
+76 rparent ) 17
+77 lcurly { 18
+78 int int
+79 identifier else
+80 becomes = 19
+81 number 1
+82 semicolon ; 19
+83 switch switch
+84 lparent ( 20
+85 identifier e_number
+86 rparent ) 20
+87 lcurly { 21
+88 case case
+89 number 1
+90 colon : 22
+91 lcurly { 22
+92 printf printf
+93 lparent ( 23
+94 string "Error1 "
+95 rparent ) 23
+96 semicolon ; 23
+97 printf printf
+98 lparent ( 24
+99 identifier E_numBer
+100 rparent ) 24
+101 semicolon ; 24
+102 rcurly } 25
+103 case case
+104 number 2
+105 colon : 26
+106 lcurly { 26
+107 printf printf
+108 lparent ( 27
+109 string "Error2 "
+110 rparent ) 27
+111 semicolon ; 27
+112 semicolon ; 28
+113 printf printf
+114 lparent ( 29
+115 number 2
+116 rparent ) 29
+117 semicolon ; 29
+118 rcurly } 30
+119 case case
+120 number 3
+121 colon : 31
+122 printf printf
+123 lparent ( 31
+124 string "Error3 "
+125 comma , 31
+126 plus + 31
+127 identifier e_number
+128 multi * 31
+129 number 1
+130 rparent ) 31
+131 semicolon ; 31
+132 case cAse
+133 number 4
+134 colon : 32
+135 lcurly { 32
+136 lcurly { 32
+137 rcurly } 32
+138 rcurly } 32
+139 rcurly } 33
+140 return rEturn
+141 semicolon ; 34
+142 rcurly } 35
+143 int int
+144 identifier fibonaCCi
+145 lparent ( 37
+146 int int
+147 identifier n
+148 rparent ) 37
+149 lcurly { 38
+150 int int
+151 identifier else
+152 becomes = 39
+153 plus + 39
+154 number 0
+155 semicolon ; 39
+156 if if
+157 lparent ( 40
+158 identifier n
+159 less < 40
+160 number 0
+161 rparent ) 40
+162 lcurly { 41
+163 printf printf
+164 lparent ( 42
+165 string "The number is so small!"
+166 rparent ) 42
+167 semicolon ; 42
+168 return return
+169 lparent ( 43
+170 minus - 43
+171 number 1
+172 rparent ) 43
+173 semicolon ; 43
+174 rcurly } 44
+175 if IF
+176 lparent ( 46
+177 identifier n
+178 lequal <= 46
+179 number 1
+180 rparent ) 46
+181 return return
+182 lparent ( 47
+183 identifier N
+184 rparent ) 47
+185 semicolon ; 47
+186 if if
+187 lparent ( 49
+188 identifier n
+189 greater > 49
+190 minus - 49
+191 lparent ( 49
+192 plus + 49
+193 lparent ( 49
+194 lparent ( 49
+195 minus - 49
+196 number 1
+197 rparent ) 49
+198 rparent ) 49
+199 rparent ) 49
+200 rparent ) 49
+201 return return
+202 lparent ( 50
+203 plus + 50
+204 identifier fibonacci
+205 lparent ( 50
+206 identifier n
+207 minus - 50
+208 number 1
+209 rparent ) 50
+210 multi * 50
+211 lparent ( 50
+212 char ''
+213 minus - 50
+214 number 31
+215 rparent ) 50
+216 plus + 50
+217 number 1
+218 multi * 50
+219 identifier fibonacci
+220 lparent ( 50
+221 identifier n
+222 multi * 50
+223 number 1
+224 division / 50
+225 lparent ( 50
+226 number 20
+227 minus - 50
+228 number 19
+229 rparent ) 50
+230 minus - 50
+231 number 2
+232 rparent ) 50
+233 division / 50
+234 lparent ( 50
+235 number 20
+236 minus - 50
+237 number 19
+238 rparent ) 50
+239 rparent ) 50
+240 semicolon ; 50
+241 rcurly } 51
+242 int int
+243 identifier mult_add
+244 lparent ( 53
+245 int int
+246 identifier int1
+247 comma , 53
+248 char char
+249 identifier char1
+250 comma , 53
+251 int int
+252 identifier d1
+253 rparent ) 53
+254 lcurly { 54
+255 return return
+256 lparent ( 55
+257 identifier int1
+258 plus + 55
+259 identifier char1
+260 minus - 55
+261 identifier d1
+262 rparent ) 55
+263 semicolon ; 55
+264 rcurly } 56
+265 void void
+266 main main
+267 lparent ( 58
+268 rparent ) 58
+269 lcurly { 59
+270 const const
+271 char char
+272 identifier mult
+273 becomes = 60
+274 char '*'
+275 semicolon ; 60
+276 const const
+277 int int
+278 identifier multc
+279 becomes = 61
+280 number 42
+281 semicolon ; 61
+282 int int
+283 identifier a1
+284 comma , 63
+285 identifier b1
+286 comma , 63
+287 identifier c1
+288 comma , 63
+289 identifier d1
+290 lbrack [ 63
+291 number 2
+292 rbrack ] 63
+293 semicolon ; 63
+294 int int
+295 identifier sum
+296 comma , 64
+297 identifier i
+298 semicolon ; 64
+299 char char
+300 identifier ch1
+301 comma , 65
+302 identifier ch2
+303 comma , 65
+304 identifier ch3
+305 comma , 65
+306 identifier ch4
+307 lbrack [ 65
+308 number 3
+309 rbrack ] 65
+310 semicolon ; 65
+311 identifier sum
+312 becomes = 66
+313 number 1
+314 semicolon ; 66
+315 identifier i
+316 becomes = 67
+317 minus - 67
+318 number 0
+319 semicolon ; 67
+320 identifier d1
+321 lbrack [ 68
+322 identifier _
+323 plus + 68
+324 identifier _
+325 rbrack ] 68
+326 becomes = 68
+327 number 3
+328 semicolon ; 68
+329 identifier d1
+330 lbrack [ 69
+331 number 1
+332 rbrack ] 69
+333 becomes = 69
+334 minus - 69
+335 number 2
+336 semicolon ; 69
+337 identifier ch4
+338 lbrack [ 70
+339 number 0
+340 rbrack ] 70
+341 becomes = 70
+342 char 'A'
+343 semicolon ; 70
+344 identifier ch4
+345 lbrack [ 71
+346 number 1
+347 rbrack ] 71
+348 becomes = 71
+349 char '-'
+350 semicolon ; 71
+351 identifier ch4
+352 lbrack [ 72
+353 plus + 72
+354 number 3
+355 plus + 72
+356 number 0
+357 minus - 72
+358 number 1
+359 rbrack ] 72
+360 becomes = 72
+361 char '/'
+362 semicolon ; 72
+363 printf printf
+364 lparent ( 74
+365 string "Test do-while"
+366 rparent ) 74
+367 semicolon ; 74
+368 scanf scanf
+369 lparent ( 75
+370 identifier a1
+371 comma , 75
+372 identifier b1
+373 rparent ) 75
+374 semicolon ; 75
+375 do DO
+376 lcurly { 76
+377 identifier sum
+378 becomes = 77
+379 identifier sum
+380 multi * 77
+381 lparent ( 77
+382 identifier a1
+383 plus + 77
+384 identifier b1
+385 rparent ) 77
+386 semicolon ; 77
+387 identifier i
+388 becomes = 78
+389 identifier i
+390 plus + 78
+391 number 1
+392 semicolon ; 78
+393 rcurly } 79
+394 while while
+395 lparent ( 79
+396 identifier I
+397 less < 79
+398 number 4
+399 rparent ) 79
+400 printf printf
+401 lparent ( 80
+402 string "#Result of do-while is "
+403 comma , 80
+404 identifier sum
+405 rparent ) 80
+406 semicolon ; 80
+407 printf printf
+408 lparent ( 82
+409 string "Test fibonacci"
+410 rparent ) 82
+411 semicolon ; 82
+412 scanf scanf
+413 lparent ( 83
+414 identifier a1
+415 rparent ) 83
+416 semicolon ; 83
+417 printf printf
+418 lparent ( 84
+419 string "#Result of fibonacci is "
+420 comma , 84
+421 identifier fibonacci
+422 lparent ( 84
+423 identifier A1
+424 rparent ) 84
+425 rparent ) 84
+426 semicolon ; 84
+427 printf printf
+428 lparent ( 86
+429 string "Test relation operation"
+430 rparent ) 86
+431 semicolon ; 86
+432 scanf scanf
+433 lparent ( 87
+434 identifier a1
+435 rparent ) 87
+436 semicolon ; 87
+437 if if
+438 lparent ( 88
+439 identifier a1
+440 equal == 88
+441 identifier _
+442 rparent ) 88
+443 printf printf
+444 lparent ( 89
+445 string "a1 should be 0:"
+446 comma , 89
+447 identifier a1
+448 rparent ) 89
+449 semicolon ; 89
+450 if if
+451 lparent ( 90
+452 identifier a1
+453 notequal != 90
+454 identifier _
+455 rparent ) 90
+456 printf printf
+457 lparent ( 91
+458 string "a1 shouldn't be 0:"
+459 comma , 91
+460 identifier a1
+461 rparent ) 91
+462 semicolon ; 91
+463 if if
+464 lparent ( 92
+465 identifier a1
+466 gequal >= 92
+467 char ''
+468 rparent ) 92
+469 printf printf
+470 lparent ( 93
+471 string "a1 should beq 32:"
+472 comma , 93
+473 identifier a1
+474 rparent ) 93
+475 semicolon ; 93
+476 printf printf
+477 lparent ( 94
+478 string "#Result of relation operation ends"
+479 rparent ) 94
+480 semicolon ; 94
+481 printf printf
+482 lparent ( 96
+483 string "Test (void function&switch int)"
+484 rparent ) 96
+485 semicolon ; 96
+486 scanf scanf
+487 lparent ( 97
+488 identifier a
+489 comma , 97
+490 identifier b1
+491 comma , 97
+492 identifier c1
+493 rparent ) 97
+494 semicolon ; 97
+495 identifier print_error
+496 lparent ( 98
+497 identifier a
+498 rparent ) 98
+499 semicolon ; 98
+500 identifier nulL
+501 lparent ( 99
+502 rparent ) 99
+503 semicolon ; 99
+504 identifier print_error
+505 lparent ( 100
+506 identifier b1
+507 rparent ) 100
+508 semicolon ; 100
+509 identifier print_error
+510 lparent ( 101
+511 identifier c1
+512 rparent ) 101
+513 semicolon ; 101
+514 identifier print_error
+515 lparent ( 102
+516 number 4
+517 rparent ) 102
+518 semicolon ; 102
+519 printf printf
+520 lparent ( 103
+521 string "#Result of (void function&switch int) ends"
+522 rparent ) 103
+523 semicolon ; 103
+524 printf printf
+525 lparent ( 105
+526 string "Test expression"
+527 rparent ) 105
+528 semicolon ; 105
+529 identifier a
+530 becomes = 106
+531 minus - 106
+532 identifier d1
+533 lbrack [ 106
+534 number 1
+535 rbrack ] 106
+536 multi * 106
+537 identifier d1
+538 lbrack [ 106
+539 lparent ( 106
+540 identifier d1
+541 lbrack [ 106
+542 number 1
+543 rbrack ] 106
+544 plus + 106
+545 number 2
+546 rparent ) 106
+547 multi * 106
+548 lparent ( 106
+549 minus - 106
+550 number 12
+551 rparent ) 106
+552 plus + 106
+553 identifier _
+554 rbrack ] 106
+555 plus + 106
+556 identifier d1
+557 lbrack [ 106
+558 number 0
+559 rbrack ] 106
+560 minus - 106
+561 identifier _
+562 semicolon ; 106
+563 printf printf
+564 lparent ( 107
+565 string "a should be 9:"
+566 comma , 107
+567 identifier a
+568 rparent ) 107
+569 semicolon ; 107
+570 identifier a
+571 becomes = 108
+572 minus - 108
+573 minus - 108
+574 number 5
+575 plus + 108
+576 number 9
+577 semicolon ; 108
+578 printf printf
+579 lparent ( 109
+580 string "a should be 14:"
+581 comma , 109
+582 identifier a
+583 rparent ) 109
+584 semicolon ; 109
+585 printf printf
+586 lparent ( 110
+587 string "#Result of expression ends"
+588 rparent ) 110
+589 semicolon ; 110
+590 printf printf
+591 lparent ( 112
+592 string "Test switch char"
+593 rparent ) 112
+594 semicolon ; 112
+595 identifier i
+596 becomes = 113
+597 number 0
+598 semicolon ; 113
+599 do do
+600 lcurly { 114
+601 switch switch
+602 lparent ( 115
+603 identifier a
+604 lbrack [ 115
+605 identifier i
+606 rbrack ] 115
+607 rparent ) 115
+608 lcurly { 116
+609 case case
+610 char 'A'
+611 colon : 117
+612 printf printf
+613 lparent ( 117
+614 identifier a
+615 lbrack [ 117
+616 identifier i
+617 rbrack ] 117
+618 rparent ) 117
+619 semicolon ; 117
+620 case case
+621 char '-'
+622 colon : 118
+623 printf printf
+624 lparent ( 118
+625 string ""
+626 comma , 118
+627 identifier a
+628 lbrack [ 118
+629 identifier i
+630 rbrack ] 118
+631 rparent ) 118
+632 semicolon ; 118
+633 case case
+634 char '/'
+635 colon : 119
+636 printf printf
+637 lparent ( 119
+638 identifier a
+639 lbrack [ 119
+640 identifier i
+641 rbrack ] 119
+642 rparent ) 119
+643 semicolon ; 119
+644 rcurly } 120
+645 identifier i
+646 becomes = 122
+647 identifier i
+648 plus + 122
+649 number 1
+650 semicolon ; 122
+651 rcurly } 124
+652 while while
+653 lparent ( 124
+654 identifier i
+655 less < 124
+656 number 3
+657 rparent ) 124
+658 printf printf
+659 lparent ( 125
+660 string "#Result of switch char should be A-/"
+661 rparent ) 125
+662 semicolon ; 125
+663 printf printf
+664 lparent ( 127
+665 string "Test print char"
+666 rparent ) 127
+667 semicolon ; 127
+668 printf printf
+669 lparent ( 128
+670 string "1."
+671 comma , 128
+672 plus + 128
+673 char ''
+674 rparent ) 128
+675 semicolon ; 128
+676 printf printf
+677 lparent ( 129
+678 string "2."
+679 comma , 129
+680 char 'a'
+681 plus + 129
+682 number 1
+683 minus - 129
+684 char 'b'
+685 rparent ) 129
+686 semicolon ; 129
+687 printf printf
+688 lparent ( 130
+689 string "3."
+690 comma , 130
+691 char 'a'
+692 rparent ) 130
+693 semicolon ; 130
+694 printf printf
+695 lparent ( 131
+696 string "4."
+697 comma , 131
+698 identifier charZ
+699 rparent ) 131
+700 semicolon ; 131
+701 printf printf
+702 lparent ( 132
+703 string ""
+704 rparent ) 132
+705 semicolon ; 132
+706 printf printf
+707 lparent ( 133
+708 string "#Result of print char ends"
+709 rparent ) 133
+710 semicolon ; 133
+711 printf printf
+712 lparent ( 135
+713 string "Test multi-parameters"
+714 rparent ) 135
+715 semicolon ; 135
+716 if if
+717 lparent ( 136
+718 identifier mult
+719 equal == 136
+720 identifier multc
+721 rparent ) 136
+722 if if
+723 lparent ( 137
+724 identifier mult
+725 rparent ) 137
+726 printf printf
+727 lparent ( 138
+728 identifier mult_add
+729 lparent ( 138
+730 identifier int1
+731 comma , 138
+732 identifier char1
+733 comma , 138
+734 identifier d1
+735 lbrack [ 138
+736 number 1
+737 rbrack ] 138
+738 rparent ) 138
+739 rparent ) 138
+740 semicolon ; 138
+741 printf printf
+742 lparent ( 139
+743 identifier mult_add
+744 lparent ( 139
+745 char ''
+746 plus + 139
+747 number 0
+748 comma , 139
+749 char ''
+750 comma , 139
+751 minus - 139
+752 number 1
+753 plus + 139
+754 char '9'
+755 multi * 139
+756 number 2
+757 rparent ) 139
+758 rparent ) 139
+759 semicolon ; 139
+760 scanf scanf
+761 lparent ( 140
+762 identifier a1
+763 comma , 140
+764 identifier single
+765 comma , 140
+766 identifier default
+767 rparent ) 140
+768 semicolon ; 140
+769 identifier pritnf
+770 lparent ( 141
+771 identifier mult_add
+772 lparent ( 141
+773 identifier a1
+774 comma , 141
+775 identifier default
+776 comma , 141
+777 identifier single
+778 rparent ) 141
+779 rparent ) 141
+780 semicolon ; 141
+781 printf prIntf
+782 lparent ( 142
+783 string "#Result of multi-parameters ends"
+784 rparent ) 142
+785 semicolon ; 142
+786 printf printf
+787 lparent ( 144
+788 string "Test single sentence"
+789 rparent ) 144
+790 semicolon ; 144
+791 scanf scanf
+792 lparent ( 145
+793 identifier A
+794 rparent ) 145
+795 semicolon ; 145
+796 do do
+797 if if
+798 lparent ( 147
+799 lparent ( 147
+800 identifier a
+801 rparent ) 147
+802 rparent ) 147
+803 identifier a
+804 becomes = 148
+805 lparent ( 148
+806 identifier a
+807 plus + 148
+808 number 1
+809 rparent ) 148
+810 semicolon ; 148
+811 while while
+812 lparent ( 149
+813 identifier mult
+814 minus - 149
+815 identifier multc
+816 rparent ) 149
+817 printf printf
+818 lparent ( 150
+819 identifier a
+820 rparent ) 150
+821 semicolon ; 150
+822 do do
+823 switch switch
+824 lparent ( 152
+825 plus + 152
+826 lparent ( 152
+827 identifier A
+828 minus - 152
+829 number 0
+830 rparent ) 152
+831 rparent ) 152
+832 lcurly { 153
+833 case case
+834 number 0
+835 colon : 154
+836 printf printf
+837 lparent ( 154
+838 string "test0"
+839 rparent ) 154
+840 semicolon ; 154
+841 rcurly } 155
+842 while while
+843 lparent ( 156
+844 plus + 156
+845 minus - 156
+846 identifier d1
+847 lbrack [ 156
+848 minus - 156
+849 minus - 156
+850 number 1
+851 rbrack ] 156
+852 plus + 156
+853 number 9
+854 plus + 156
+855 lparent ( 156
+856 plus + 156
+857 minus - 156
+858 number 11
+859 rparent ) 156
+860 rparent ) 156
+861 printf prIntf
+862 lparent ( 157
+863 string "#Result of single sentence ends"
+864 rparent ) 157
+865 semicolon ; 157
+866 return return
+867 semicolon ; 163
+868 rcurly } 164
+END!
