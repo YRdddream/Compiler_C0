@@ -15,7 +15,9 @@ extern int reg_num;
 extern int str_num;
 extern int label_num;
 extern char midcode[llMAX];
-extern char* mid_op[50];
+extern char *mid_op[50];
+extern char *MIDLIST[midcodeMAX];
+extern int midcnt;
 
 void gen_midcode(char *op, char *a, char *b, char *c);
 

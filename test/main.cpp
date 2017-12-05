@@ -51,6 +51,14 @@ int label_num = 0;   // label编号
 char midcode[llMAX];   // 中间代码的内容
 char *StringList[200];  // 程序中出现过的字符串集合
 
+// mips汇编码相关
+int if_return = 0;     // 有无返回值标记
+int tempReg = 0;   // 当前用了多少临时寄存器
+char *MIDLIST[midcodeMAX];  // 从第一个function开始的midcode序列
+int midcnt = 0;    // MIDLIST的计数指针
+int midpointer = 0;   // MIDLIST的读取指针(汇编到了哪里)
+int mainFlag = 0;    // 汇编是否编到了main函数
+
 void init_symname()    // 初始化类别码
 {
     sym_name[MAIN] = "main";

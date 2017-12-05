@@ -403,6 +403,10 @@ void RetFuncDef(char *ident_name, int type)   // 此时的symbol为LPARENT
         error(LOSE_RCURLY);
     
     gen_midcode(mid_op[ENDFUNC], 0, 0, 0);
+    if(if_return == 1)
+        if_return = 0;
+    else
+        error(LOSE_RETURN);
 }
 
 // ＜无返回值函数定义＞::= void＜标识符＞‘(’＜参数表＞‘)’ ‘{’＜复合语句＞‘}’    checked
@@ -1291,7 +1295,8 @@ void PrintfState()
         {
             sprintf(temp1, "~str%d", str_num);
             StringList[str_num] = (char *)malloc(200*sizeof(char));
-            strcpy(StringList[str_num++], token);
+            strcpy(StringList[str_num], token);
+            strcat(StringList[str_num++], "\\n");    // 这里给每个字符串后面加一个换行符
             
             getsym();
             if(symbol == COMMA)
@@ -1341,6 +1346,7 @@ void ReturnState()
         if(find_symset(symbol, item_fac_exprBegSet) == 1)
         {
             Expression();
+            if_return = 1;
             gen_midcode(mid_op[RETURNOP], 0, 0, tokenmid);
         }
         else

@@ -12,7 +12,14 @@
 extern FILE *ASMOUT;
 extern int str_num;
 extern char *StringList[200];
+extern SymItem table[tablelMAX];
+extern int tableindex[tablelMAX];
+extern char *MIDLIST[midcodeMAX];
+extern int midcnt;
+extern int mainFlag;
+extern int midpointer;
 
 void gen_asm();
+void func_asm();
 
 #endif /* asmcode_h */

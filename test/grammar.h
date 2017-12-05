@@ -28,6 +28,7 @@ extern char tokenmid[wlMAX];
 extern int elenum;
 extern int levelnum;
 extern char *StringList[200];
+extern int if_return;
 
 void program();
 void constDecl();

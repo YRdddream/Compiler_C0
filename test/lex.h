@@ -22,7 +22,7 @@ extern int label_num;
 extern char ch;
 extern int num;
 extern int symbol;
-extern char token[wlMAX];
+extern char token[wlMAX]; 
 extern char line[llMAX];
 extern char* sym_name[50];
 

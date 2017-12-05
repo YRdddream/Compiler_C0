@@ -13,6 +13,7 @@
 #define wlMAX 100    // 单词的最大长度
 #define llMAX 2000    // 一行的最大长度
 #define tablelMAX 2000 // 符号表最大长度
+#define midcodeMAX 8000  // 中间代码最大长度，每一个中间代码需要四个空间，实际是2000
 
 /*---------------Key Words-保留字---------------*/
 #define MAIN 0
@@ -108,7 +109,6 @@
 #define EXPR_HAS_VOIDFUNC 47
 #define STRING_NEWLINE 48
 #define IDENT_TYPE_ERROR 49
-
 
 /*-----------------------------符号表项的类型----------------------------*/
 #define CONSTTYPE 1

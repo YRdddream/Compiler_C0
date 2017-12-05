@@ -13,6 +13,8 @@
 
 void gen_midcode(char *op, char *a, char *b, char *c)
 {
+    int funcFlag = 0;   // 函数开始的标记
+    
     memset(midcode, 0, llMAX);
     strcat(midcode, op);
     strcat(midcode, ", ");      // 1
@@ -35,6 +37,30 @@ void gen_midcode(char *op, char *a, char *b, char *c)
     
     if(c != 0)
         strcat(midcode, c);       // 4
+    
+    if(strcmp(op, "function") == 0)
+        funcFlag = 1;
+    
+    if(funcFlag == 1)
+    {
+        strcpy(MIDLIST[midcnt], op);
+        if(a != 0)
+            strcpy(MIDLIST[midcnt+1], a);
+        else
+            strcpy(MIDLIST[midcnt+1], "\0");
+        
+        if(b != 0)
+            strcpy(MIDLIST[midcnt+2], b);
+        else
+            strcpy(MIDLIST[midcnt+2], "\0");
+        
+        if(c != 0)
+            strcpy(MIDLIST[midcnt+3], c);
+        else
+            strcpy(MIDLIST[midcnt+3], "\0");
+        
+        midcnt += 4;
+    }
     
     fprintf(midcode_out, "%s\n", midcode);
 }
