@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		14470CF41FBBCB8900530609 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14470CF31FBBCB8900530609 /* main.cpp */; };
 		1477568D1FCEB24E00EBB345 /* error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1477568C1FCEB24E00EBB345 /* error.cpp */; };
+		148064281FD66BA2004E323B /* asmcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 148064271FD66BA2004E323B /* asmcode.cpp */; };
 		14B36C441FD29CA900F29A92 /* midcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14B36C431FD29CA900F29A92 /* midcode.cpp */; };
 		14BC162D1FC3BEA500AF6C94 /* lex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14BC162C1FC3BEA500AF6C94 /* lex.cpp */; };
 		14CE1AAA1FC9E789005AF37F /* grammar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CE1AA81FC9E789005AF37F /* grammar.cpp */; };
@@ -34,6 +35,8 @@
 		1477568B1FCC5E9900EBB345 /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
 		1477568C1FCEB24E00EBB345 /* error.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = error.cpp; sourceTree = "<group>"; };
 		1477568E1FCEB26300EBB345 /* error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		148064271FD66BA2004E323B /* asmcode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = asmcode.cpp; sourceTree = "<group>"; };
+		148064291FD66C69004E323B /* asmcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = asmcode.h; sourceTree = "<group>"; };
 		14B36C431FD29CA900F29A92 /* midcode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = midcode.cpp; sourceTree = "<group>"; };
 		14B36C451FD29CCD00F29A92 /* midcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = midcode.h; sourceTree = "<group>"; };
 		14BC162C1FC3BEA500AF6C94 /* lex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lex.cpp; sourceTree = "<group>"; };
@@ -81,6 +84,8 @@
 				146E09A71FC55BA40040003B /* lex.h */,
 				14CE1AA81FC9E789005AF37F /* grammar.cpp */,
 				14CE1AAB1FC9E81B005AF37F /* grammar.h */,
+				148064271FD66BA2004E323B /* asmcode.cpp */,
+				148064291FD66C69004E323B /* asmcode.h */,
 				14CE1AAC1FC9E95F005AF37F /* semantic.cpp */,
 				14CE1AAE1FC9E971005AF37F /* semantic.h */,
 				1477568C1FCEB24E00EBB345 /* error.cpp */,
@@ -147,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				14470CF41FBBCB8900530609 /* main.cpp in Sources */,
+				148064281FD66BA2004E323B /* asmcode.cpp in Sources */,
 				14B36C441FD29CA900F29A92 /* midcode.cpp in Sources */,
 				14CE1AAD1FC9E95F005AF37F /* semantic.cpp in Sources */,
 				14CE1AAA1FC9E789005AF37F /* grammar.cpp in Sources */,

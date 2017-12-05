@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "macro.h"
 #include "grammar.h"
 #include "lex.h"
@@ -628,9 +629,12 @@ void Expression()
     char temp1[wlMAX];
     char temp2[wlMAX];
     int type = 0;
+    int ifsign = 0;    // 判断第一个项前面是否有正负号
     IOC = 0;
+    
     if(symbol == PLUS || symbol == MINUS)    // + - 修饰第一个项
     {
+        ifsign = 1;
         if(symbol == MINUS)
             sign = 1;
         getsym();
@@ -670,6 +674,9 @@ void Expression()
         strcpy(temp1, tokenmid);
         IOC = 0;
     }
+    
+    if(ifsign == 1)
+        IOC = 0;     // 考验一下+'a'的表达式
 }
 
 // ＜项＞::=＜因子＞{＜乘法运算符＞＜因子＞}      midcode
@@ -1282,7 +1289,10 @@ void PrintfState()
         getsym();
         if(symbol == STRING)
         {
-            sprintf(temp1, "~str%d", str_num++);
+            sprintf(temp1, "~str%d", str_num);
+            StringList[str_num] = (char *)malloc(200*sizeof(char));
+            strcpy(StringList[str_num++], token);
+            
             getsym();
             if(symbol == COMMA)
             {

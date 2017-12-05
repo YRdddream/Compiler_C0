@@ -14,6 +14,7 @@
 #include "error.h"
 #include "semantic.h"
 #include "midcode.h"
+#include "asmcode.h"
 
 char ch = ' ';   // 当前字符
 int num = 0;   // 存放当前的数值
@@ -23,8 +24,8 @@ char token[wlMAX];   // 存放单词的字符串
 char tokenmid[wlMAX];  // 存放当前四元式操作数
 char line[llMAX];    // 当前行的内容
 FILE *file;     // 全局的文件指针，为需要编译的文件
-FILE *file_out;  // 输出文件
 FILE *midcode_out;   // 中间代码(四元式)
+FILE *ASMOUT;
 
 char* sym_name[50];   // 需要输出的信息
 char* op[50];    // 操作符和关系符的内容
@@ -48,6 +49,7 @@ int reg_num = 0;     // 寄存器编号
 int str_num = 0;     // 字符串编号
 int label_num = 0;   // label编号
 char midcode[llMAX];   // 中间代码的内容
+char *StringList[200];  // 程序中出现过的字符串集合
 
 void init_symname()    // 初始化类别码
 {
@@ -158,34 +160,17 @@ int main() {
     printf("Please input a filename:\n");
     scanf("%s",file_name);
     file = fopen(file_name, "r");
-    midcode_out = fopen("midcode3.txt", "w");
+    midcode_out = fopen("midcode.txt", "w");
+    ASMOUT = fopen("asmcode.asm", "w");
     
-    // fprintf(file_out, "Begin Program!\n");
-   /* getch();
-    while(EF == 0)
-    {
-        getsym();
-        if (symbol>=0 && symbol<=12)
-            fprintf(file_out, "%d %s %s\n", order++, sym_name[symbol], token);
-        else if(symbol == IDENT)
-            fprintf(file_out, "%d %s %s\n", order++, sym_name[IDENT], token);
-        else if(symbol == CHAR)
-            fprintf(file_out, "%d %s '%s'\n", order++, sym_name[CHAR], token);
-        else if(symbol == STRING)
-            fprintf(file_out, "%d %s \"%s\"\n", order++, sym_name[STRING], token);
-        else if(symbol == NUMBER)
-            fprintf(file_out, "%d %s %s\n", order++, sym_name[NUMBER], token);
-        else if(symbol != EOFSY)
-        {
-            fprintf(file_out, "%d %s %s %d\n", order++, sym_name[symbol], op[symbol], lc);
-        }
-    } */
+    
     getch();
     program();
-    
+    gen_asm();
     
     fclose(file);
     fclose(midcode_out);
+    fclose(ASMOUT);
     
     return 0;
 }

@@ -27,6 +27,7 @@ extern int tableindex[tablelMAX];
 extern char tokenmid[wlMAX];
 extern int elenum;
 extern int levelnum;
+extern char *StringList[200];
 
 void program();
 void constDecl();
