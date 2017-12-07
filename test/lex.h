@@ -26,6 +26,8 @@ extern char token[wlMAX];
 extern char line[llMAX];
 extern char* sym_name[50];
 
+int isLetter(char a);
+int isDigit(char a);
 void transfer(char a[]);
 void Token2num(char a[]);
 int find_keyword(char* buffer);

@@ -18,6 +18,7 @@ extern char midcode[llMAX];
 extern char *mid_op[50];
 extern char *MIDLIST[midcodeMAX];
 extern int midcnt;
+extern int funcFlag;
 
 void gen_midcode(char *op, char *a, char *b, char *c);
 

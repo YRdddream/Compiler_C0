@@ -7,14 +7,13 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "macro.h"
 #include "midcode.h"
 
 void gen_midcode(char *op, char *a, char *b, char *c)
 {
-    int funcFlag = 0;   // 函数开始的标记
-    
     memset(midcode, 0, llMAX);
     strcat(midcode, op);
     strcat(midcode, ", ");      // 1
@@ -43,17 +42,22 @@ void gen_midcode(char *op, char *a, char *b, char *c)
     
     if(funcFlag == 1)
     {
+        MIDLIST[midcnt] = (char *)malloc(50*sizeof(char));
         strcpy(MIDLIST[midcnt], op);
+        
+        MIDLIST[midcnt+1] = (char *)malloc(50*sizeof(char));
         if(a != 0)
             strcpy(MIDLIST[midcnt+1], a);
         else
             strcpy(MIDLIST[midcnt+1], "\0");
         
+        MIDLIST[midcnt+2] = (char *)malloc(50*sizeof(char));
         if(b != 0)
             strcpy(MIDLIST[midcnt+2], b);
         else
             strcpy(MIDLIST[midcnt+2], "\0");
         
+        MIDLIST[midcnt+3] = (char *)malloc(50*sizeof(char));
         if(c != 0)
             strcpy(MIDLIST[midcnt+3], c);
         else

@@ -713,7 +713,11 @@ void Item()
         if(type == MULTI)
             gen_midcode(mid_op[MULTIOP], temp1, temp2, tokenmid);
         else
+        {
+            if(strcmp(temp2, "0") == 0)
+                error(DIV_ZERO);
             gen_midcode(mid_op[DIVOP], temp1, temp2, tokenmid);
+        }
         strcpy(temp1, tokenmid);
         IOC = 0;
     }
