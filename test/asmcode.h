@@ -26,6 +26,9 @@ extern int loc_t_reg[1000][2];  // 中间代码中出现过的~txx的位置
 extern char base_data[wlMAX];
 extern int base_address;
 extern int base_addr_offset;
+extern int func_stacksize[100];
+extern int round;
+extern int func_cnt;
 
 void store_on_data(int num);
 void Transfer_midreg(char string[]);

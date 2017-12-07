@@ -79,6 +79,7 @@ void gen_asm()
 {
     int i = 0;
     levelnum = 0;
+    func_cnt = 0;
     
     fprintf(ASMOUT, "\t\t.data\n");
     
@@ -120,6 +121,9 @@ void gen_asm()
                 mainFlag = 1;
             levelnum++;
             func_asm();
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+            func_cnt++;
         }
         midpointer += 4;
     }
@@ -127,16 +131,19 @@ void gen_asm()
 
 void func_asm()    // 以函数为单位生成目标代码
 {
-    int var_num = 0;    // 函数的数据(变量和常量)个数
+    // int var_num = 0;    // 函数的数据(变量和常量)个数
     int valuepara_num = 0;  //函数中出现的最大值参数的个数,由max_valuepara_num返回
-    int func_type = 0;     // function的返回类型
+    // int func_type = 0;     // function的返回类型
     int i = 0;
     int position = 0;
     int para_address = 0;  // 函数参数相对栈底的地址计数
     int data_address = -12;  // 函数数据相对栈底的地址计数，从-12开始
     int sp = 0;    // sp到底应该减多少
     int sp_base = 0;   // sp基
-    int loc_reg = 0;
+    // int loc_reg = 0;
+    int valuepara_cnt = 0;   // 值参数个数计数，存a0-a3，超过4个存内存
+    int valuepara_inmmr = 16;   // 值参数超过四个，存到相对sp的地址
+    int add_stacksize = 0;
     
     fprintf(ASMOUT, "%s:\t\n", MIDLIST[midpointer+3]);    // 先输出函数名
     /*for(i=0; i<curt_tempReg; i++)     // 保存现场
@@ -588,12 +595,14 @@ void func_asm()    // 以函数为单位生成目标代码
             fprintf(ASMOUT, "\t\t%s $t%d, %s\n", MIDLIST[midpointer], loc_t_reg[mid_reg_num][0], MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "\t\tnop\n");
             tempReg = 0;
+            base_address = 4 + base_addr_offset;
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[SETLABELOP]) == 0)   // setlabel
         {
             delete_wave_line(MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "%s:\t\n", MIDLIST[midpointer+3]);
             tempReg = 0;
+            base_address = 4 + base_addr_offset;
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[JUMPOP]) == 0)    // jump
         {
@@ -601,6 +610,7 @@ void func_asm()    // 以函数为单位生成目标代码
             fprintf(ASMOUT, "\t\tj %s\n", MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "\t\tnop\n");
             tempReg = 0;
+            base_address = 4 + base_addr_offset;
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[ASSIGNOP]) == 0)   // =
         {
@@ -644,6 +654,402 @@ void func_asm()    // 以函数为单位生成目标代码
                 fprintf(ASMOUT, "\t\taddi $v1, $sp, %d\n", table[position].address);
             fprintf(ASMOUT, "\t\tsw %s, 0($v1)\n", temp1);
             tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[BNEOP]) == 0) // bne  第二个操作数一定是数字
+        {
+            // 先处理第一个操作数  temp1
+            if(MIDLIST[midpointer+1][0] == '~')
+            {
+                Transfer_midreg(MIDLIST[midpointer+1]);
+                if(loc_t_reg[mid_reg_num][1]==0)
+                    sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
+                else
+                {
+                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v0");
+                }
+            }
+            else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
+            {
+                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+1]));
+                sprintf(temp1, "$v0");
+            }
+            else if(isLetter(MIDLIST[midpointer+1][0]))
+            {
+                position = LookupTab(MIDLIST[midpointer+1], 0);
+                if(position < tableindex[1])   // 如果是全局的
+                {
+                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
+                    sprintf(temp1, "$v0");
+                }
+                else
+                {
+                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v0");
+                }
+            }
+            
+            delete_wave_line(MIDLIST[midpointer+3]);
+            fprintf(ASMOUT, "\t\tbne %s, %d, %s\n", temp1, atoi(MIDLIST[midpointer+2]), MIDLIST[midpointer+3]);
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[ASSIGNARRAY]) == 0)   // []=   给数组赋值
+        {
+            // 先处理第三个操作数，就是要给数组赋的那个值    temp1   $v0
+            if(MIDLIST[midpointer+3][0] == '~')
+            {
+                Transfer_midreg(MIDLIST[midpointer+3]);
+                if(loc_t_reg[mid_reg_num][1]==0)
+                    sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
+                else
+                {
+                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v0");
+                }
+            }
+            else if(isDigit(MIDLIST[midpointer+3][0]) || MIDLIST[midpointer+3][0]=='-')
+            {
+                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+3]));
+                sprintf(temp1, "$v0");
+            }
+            else if(isLetter(MIDLIST[midpointer+3][0]))
+            {
+                position = LookupTab(MIDLIST[midpointer+3], 0);
+                if(position < tableindex[1])   // 如果是全局的
+                {
+                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+3]);
+                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
+                    sprintf(temp1, "$v0");
+                }
+                else
+                {
+                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v0");
+                }
+            }
+            
+            // 先把数组的基地址load到$v1
+            position = LookupTab(MIDLIST[midpointer+1], 0);
+            if(position < tableindex[1])   // 全局数组
+                fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+            else    // 局部数组
+                fprintf(ASMOUT, "\t\taddi $v1, $sp, %d\n", table[position].address);
+            
+            // 第二个操作数，标识符，数字，或寄存器
+            if(MIDLIST[midpointer+2][0] == '~')
+            {
+                Transfer_midreg(MIDLIST[midpointer+2]);
+                if(loc_t_reg[mid_reg_num][1]==0)
+                    sprintf(temp2, "$t%d", loc_t_reg[mid_reg_num][0]);
+                else
+                {
+                    store_on_data(0);    // 把0号寄存器的东西存回内存
+                    fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t0, %d($t8)\n", loc_t_reg[mid_reg_num][0]);
+                    loc_t_reg[mid_reg_num][0] = 0;
+                    loc_t_reg[mid_reg_num][1] = 0;    // 写回了寄存器
+                    sprintf(temp2, "$t0");
+                }
+                fprintf(ASMOUT, "\t\tadd $v1, $v1, %s\n", temp2);
+            }
+            else if(isDigit(MIDLIST[midpointer+2][0]))    // 不可能是负数
+                fprintf(ASMOUT, "\t\taddi $v1, $v1, %d\n", atoi(MIDLIST[midpointer+2]));
+            else if(isLetter(MIDLIST[midpointer+2][0]))
+            {
+                position = LookupTab(MIDLIST[midpointer+2], 0);
+                if(position < tableindex[1])   // 如果是全局的
+                    fprintf(ASMOUT, "\t\tlw $t8, %s\n", MIDLIST[midpointer+2]);
+                else
+                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                fprintf(ASMOUT, "\t\tadd $v1, $v1, $t8\n");
+            }
+            
+            fprintf(ASMOUT, "\t\tsw %s, 0($v1)\n", temp1);
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[SCANFOP]) == 0)   // scanf
+        {
+            position = LookupTab(MIDLIST[midpointer+1], 0);
+            if(atoi(MIDLIST[midpointer+3]) == 0)   // 读取整数
+            {
+                fprintf(ASMOUT, "\t\tli $v0, 5\n");
+                fprintf(ASMOUT, "\t\tsyscall\n");
+                if(position < tableindex[1])     //   全局变量
+                {
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tsw $v0, 0($v1)\n");
+                }
+                else
+                    fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+            }
+            else   // 读取字符
+            {
+                fprintf(ASMOUT, "\t\tli $v0, 12\n");
+                fprintf(ASMOUT, "\t\tsyscall\n");
+                if(position < tableindex[1])     //   全局变量
+                {
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tsw $v0, 0($v1)\n");
+                }
+                else
+                    fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+            }
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[PRINTFOP]) == 0)   // printf
+        {
+            int if_has_string = 0;
+            // 有字符串先输出字符串
+            if(MIDLIST[midpointer+1][1] == 's')    // 第一个操作数是字符串
+            {
+                if_has_string = 1;
+                fprintf(ASMOUT, "\t\tli $v0, 4\n");
+                delete_wave_line(MIDLIST[midpointer+1]);
+                fprintf(ASMOUT, "\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
+                fprintf(ASMOUT, "\t\tsyscall\n");
+            }
+            
+            if(MIDLIST[midpointer+3][0] != '\0')   // 有要输出的表达式
+            {
+                if(if_has_string == 0)   // 要输出的是第一个操作数 存在temp1
+                {
+                    if(MIDLIST[midpointer+1][0] == '~')
+                    {
+                        Transfer_midreg(MIDLIST[midpointer+1]);
+                        if(loc_t_reg[mid_reg_num][1]==0)
+                            sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($t8)\n", loc_t_reg[mid_reg_num][0]);
+                            sprintf(temp1, "$t8");
+                        }
+                    }
+                    else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
+                    {
+                        fprintf(ASMOUT, "\t\tli $t8, %d\n", atoi(MIDLIST[midpointer+1]));
+                        sprintf(temp1, "$t8");
+                    }
+                    else if(isLetter(MIDLIST[midpointer+1][0]))
+                    {
+                        position = LookupTab(MIDLIST[midpointer+1], 0);
+                        if(position < tableindex[1])   // 如果是全局的
+                        {
+                            fprintf(ASMOUT, "\t\tla $t8, %s\n", MIDLIST[midpointer+1]);
+                            fprintf(ASMOUT, "\t\tlw $t8, 0($t8)\n");
+                            sprintf(temp1, "$t8");
+                        }
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$t8");
+                        }
+                    }
+                    
+                    if(atoi(MIDLIST[midpointer+3]) == 0)   // 输出整数
+                    {
+                        fprintf(ASMOUT, "\t\tli $v0, 1\n");
+                        fprintf(ASMOUT, "\t\tmove $a0, %s\n", temp1);
+                        fprintf(ASMOUT, "\t\tsyscall\n");
+                    }
+                    else    // 输出字符
+                    {
+                        fprintf(ASMOUT, "\t\tli $v0, 11\n");
+                        fprintf(ASMOUT, "\t\tmove $a0, %s\n", temp1);
+                        fprintf(ASMOUT, "\t\tsyscall\n");
+                    }
+                }
+                else    // 要输出的是第二个操作数
+                {
+                    if(MIDLIST[midpointer+2][0] == '~')
+                    {
+                        Transfer_midreg(MIDLIST[midpointer+2]);
+                        if(loc_t_reg[mid_reg_num][1]==0)
+                            sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($t8)\n", loc_t_reg[mid_reg_num][0]);
+                            sprintf(temp1, "$t8");
+                        }
+                    }
+                    else if(isDigit(MIDLIST[midpointer+2][0]) || MIDLIST[midpointer+2][0]=='-')
+                    {
+                        fprintf(ASMOUT, "\t\tli $t8, %d\n", atoi(MIDLIST[midpointer+2]));
+                        sprintf(temp1, "$t8");
+                    }
+                    else if(isLetter(MIDLIST[midpointer+2][0]))
+                    {
+                        position = LookupTab(MIDLIST[midpointer+2], 0);
+                        if(position < tableindex[1])   // 如果是全局的
+                        {
+                            fprintf(ASMOUT, "\t\tla $t8, %s\n", MIDLIST[midpointer+2]);
+                            fprintf(ASMOUT, "\t\tlw $t8, 0($t8)\n");
+                            sprintf(temp1, "$t8");
+                        }
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$t8");
+                        }
+                    }
+                    
+                    if(atoi(MIDLIST[midpointer+3]) == 0)   // 输出整数
+                    {
+                        fprintf(ASMOUT, "\t\tli $v0, 1\n");
+                        fprintf(ASMOUT, "\t\tmove $a0, %s\n", temp1);
+                        fprintf(ASMOUT, "\t\tsyscall\n");
+                    }
+                    else    // 输出字符
+                    {
+                        fprintf(ASMOUT, "\t\tli $v0, 11\n");
+                        fprintf(ASMOUT, "\t\tmove $a0, %s\n", temp1);
+                        fprintf(ASMOUT, "\t\tsyscall\n");
+                    }
+                }
+            }
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[RETURNOP]) == 0)   // return
+        {
+            if(MIDLIST[midpointer+3][0] != '\0')   // 有返回值
+            {
+                if(MIDLIST[midpointer+3][0] == '~')
+                {
+                    Transfer_midreg(MIDLIST[midpointer+3]);
+                    if(loc_t_reg[mid_reg_num][1]==0)
+                        sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
+                        fprintf(ASMOUT, "\t\tlw $t8, %d($t8)\n", loc_t_reg[mid_reg_num][0]);
+                        sprintf(temp1, "$t8");
+                    }
+                }
+                else if(isDigit(MIDLIST[midpointer+3][0]) || MIDLIST[midpointer+3][0]=='-')
+                {
+                    fprintf(ASMOUT, "\t\tli $t8, %d\n", atoi(MIDLIST[midpointer+3]));
+                    sprintf(temp1, "$t8");
+                }
+                else if(isLetter(MIDLIST[midpointer+3][0]))
+                {
+                    position = LookupTab(MIDLIST[midpointer+3], 0);
+                    if(position < tableindex[1])   // 如果是全局的
+                    {
+                        fprintf(ASMOUT, "\t\tla $t8, %s\n", MIDLIST[midpointer+3]);
+                        fprintf(ASMOUT, "\t\tlw $t8, 0($t8)\n");
+                        sprintf(temp1, "$t8");
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$t8");
+                    }
+                }
+                
+                fprintf(ASMOUT, "\t\tmove $v0, %s\n", temp1);
+            }
+            
+            if(mainFlag == 0)  // main函数的return语句不用管
+            {
+                fprintf(ASMOUT, "\t\tmove $sp, $fp\n");
+                fprintf(ASMOUT, "\t\tlw $ra, %d($sp)\n", sp_base-4);
+                fprintf(ASMOUT, "\t\tlw $fp, %d($sp)\n", sp_base-8);
+                fprintf(ASMOUT, "\t\taddi $sp, $sp, %d\n", sp_base);
+                fprintf(ASMOUT, "\t\tjr $ra\n");
+                fprintf(ASMOUT, "\t\tnop\n");
+            }
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[VALUEPARAOP]) == 0)   // valueparameter
+        {
+            if(MIDLIST[midpointer+3][0] == '~')   // 第三个操作数
+            {
+                Transfer_midreg(MIDLIST[midpointer+3]);
+                if(loc_t_reg[mid_reg_num][1]==0)    // 就存在寄存器里
+                {
+                    if(valuepara_cnt < 4)
+                        fprintf(ASMOUT, "\t\tmove $a%d, $t%d\n", valuepara_cnt++, loc_t_reg[mid_reg_num][0]);
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tsw $t%d, %d($sp)\n", loc_t_reg[mid_reg_num][0], valuepara_inmmr);
+                        valuepara_inmmr += 4;
+                    }
+                }
+                else    // 被挤到了内存上
+                {
+                    fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t8, %d($t8)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$t8");
+                    if(valuepara_cnt < 4)
+                        fprintf(ASMOUT, "\t\tmove $a%d, $t8\n", valuepara_cnt++);
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
+                        valuepara_inmmr += 4;
+                    }
+                }
+            }
+            else if(isDigit(MIDLIST[midpointer+3][0]) || MIDLIST[midpointer+3][0]=='-')
+            {
+                if(valuepara_cnt < 4)
+                    fprintf(ASMOUT, "\t\tli $a%d, %d\n", valuepara_cnt++, atoi(MIDLIST[midpointer+3]));
+                else
+                {
+                    fprintf(ASMOUT, "\t\tli $t8, %d\n", atoi(MIDLIST[midpointer+3]));
+                    fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
+                    valuepara_inmmr += 4;
+                }
+            }
+            else if(isLetter(MIDLIST[midpointer+3][0]))
+            {
+                position = LookupTab(MIDLIST[midpointer+3], 0);
+                if(position < tableindex[1])   // 如果是全局的
+                {
+                    fprintf(ASMOUT, "\t\tla $t8, %s\n", MIDLIST[midpointer+3]);
+                    fprintf(ASMOUT, "\t\tlw $t8, 0($t8)\n");
+                    if(valuepara_cnt < 4)
+                        fprintf(ASMOUT, "\t\tmove $a%d, $t8\n", valuepara_cnt++);
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
+                        valuepara_inmmr += 4;
+                    }
+                }
+                else
+                {
+                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                    if(valuepara_cnt < 4)
+                        fprintf(ASMOUT, "\t\tmove $a%d, $t8\n", valuepara_cnt++);
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
+                        valuepara_inmmr += 4;
+                    }
+                }
+            }
+            tempReg = 0;
+            base_address = 4 + base_addr_offset;
+        }
+        else if(strcmp(MIDLIST[midpointer], mid_op[CALLOP]) == 0)
+        {
+            if(round == 1)
+            {
+                add_stacksize = tempReg*4 + (base_address - 4 - base_addr_offset);
+                if(add_stacksize > func_stacksize[func_cnt])
+                    func_stacksize[func_cnt] = add_stacksize;
+            }
+            valuepara_cnt = 0;
+            valuepara_inmmr = 16;
         }
         midpointer += 4;
     }

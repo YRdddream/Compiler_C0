@@ -36,6 +36,7 @@ symset item_fac_exprBegSet;
 
 SymItem table[tablelMAX];
 int tableindex[tablelMAX];
+int func_stacksize[100]={0};   // 和tableindex表对应，代表函数需要多开的栈的空间
 int elenum = 0;   // 符号表栈顶指针
 int levelnum = 0;   // 分程序总数，及索引表栈顶指针
 
@@ -65,6 +66,9 @@ int mid_reg_num = 0;   // 中间代码中的~txx后面的xx
 char base_data[wlMAX];  // 全局数据区最后一个变量名
 int base_address = 4;    // 盛不下的临时变量相对于base_data的地址，初始化为4
 int base_addr_offset = 0;   // base_address的偏移，主要处理最后一个全局数据是数组的情况
+
+int round = 1;    // 第几遍扫描(总共两遍扫描)
+int func_cnt = 0;  
 
 void init_symname()    // 初始化类别码
 {
@@ -127,20 +131,20 @@ void init_symname()    // 初始化类别码
     op[RCURLY] = "}";
     op[COLON] = ":";
     
-    mid_op[CONSTOP] = "const";    //1
+    mid_op[CONSTOP] = "const";//1
     mid_op[INTOP] = "int";//1
     mid_op[CHAROP] = "char";//1
-    mid_op[FUNCOP] = "function";
-    mid_op[PARAOP] = "parameter";
-    mid_op[VALUEPARAOP] = "valuepara";
+    mid_op[FUNCOP] = "function";//1
+    mid_op[PARAOP] = "parameter";//1
+    mid_op[VALUEPARAOP] = "valuepara";//1
     mid_op[CALLOP] = "call";
-    mid_op[RETURNOP] = "return";
+    mid_op[RETURNOP] = "return";// 0.5
     mid_op[PLUSOP] = "+";//1
     mid_op[MINUSOP] = "-";//1
     mid_op[MULTIOP] = "*";//1
     mid_op[DIVOP] = "/";//1
     mid_op[ASSIGNOP] = "=";//1
-    mid_op[ASSIGNARRAY] = "[]=";
+    mid_op[ASSIGNARRAY] = "[]=";//1
     mid_op[GETARRAY] = "=[]";//1
     mid_op[EQLCON] = "==";//1
     mid_op[NEQCON] = "!=";//1
@@ -149,7 +153,7 @@ void init_symname()    // 初始化类别码
     mid_op[LSCON] = "<";//1
     mid_op[LSECON] = "<=";//1
     mid_op[JUMPOP] = "jump";//1
-    mid_op[BNEOP] = "bne";
+    mid_op[BNEOP] = "bne";//1
     mid_op[BNEZOP] = "bnez";//1
     mid_op[BEQZOP] = "beqz";//1
     mid_op[BGTZOP] = "bgtz";//1
@@ -157,8 +161,8 @@ void init_symname()    // 初始化类别码
     mid_op[BLTZOP] = "bltz";//1
     mid_op[BLEZOP] = "blez";//1
     mid_op[SETLABELOP] = "setlabel";//1
-    mid_op[SCANFOP] = "scanf";
-    mid_op[PRINTFOP] = "printf";
+    mid_op[SCANFOP] = "scanf";//1
+    mid_op[PRINTFOP] = "printf";//1
     mid_op[ENDFUNC] = "endfunction";
     mid_op[VOIDOP] = "void";
     mid_op[SWTICHOP] = "switchhead";
