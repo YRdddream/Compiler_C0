@@ -152,7 +152,7 @@ void init_symname()    // 初始化类别码
     mid_op[FUNCOP] = "function";//1
     mid_op[PARAOP] = "parameter";//1
     mid_op[VALUEPARAOP] = "valuepara";//1
-    mid_op[CALLOP] = "call";
+    mid_op[CALLOP] = "call";//1
     mid_op[RETURNOP] = "return";// 0.5
     mid_op[PLUSOP] = "+";//1
     mid_op[MINUSOP] = "-";//1

@@ -140,7 +140,7 @@ void func_asm()    // 以函数为单位生成目标代码
 {
     // int var_num = 0;    // 函数的数据(变量和常量)个数
     int valuepara_num = 0;  //函数中出现的最大值参数的个数,由max_valuepara_num返回
-    // int func_type = 0;     // function的返回类型
+    int func_type = 0;     // function的返回类型
     int i = 0;
     int position = 0;
     int para_address = 0;  // 函数参数相对栈底的地址计数
@@ -155,6 +155,8 @@ void func_asm()    // 以函数为单位生成目标代码
     int recv_addr = 0;
     
     fprintf(ASMOUT, "%s:\t\n", MIDLIST[midpointer+3]);    // 先输出函数名
+    if(strcmp(MIDLIST[midpointer+1], mid_op[VOIDOP]) == 0)
+        func_type = 2;     // 函数类型位void
     
     midpointer += 4;
     while(strcmp(MIDLIST[midpointer], mid_op[ENDFUNC]) != 0)
@@ -389,7 +391,7 @@ void func_asm()    // 以函数为单位生成目标代码
             
             // 再处理第二个操作数
             int minus_flag = 0;
-            if(MIDLIST[midpointer+2][2] != '\0')
+            if(MIDLIST[midpointer+2][0] != '\0')
             {
                 if(MIDLIST[midpointer+2][0] == '~')
                 {
@@ -449,7 +451,7 @@ void func_asm()    // 以函数为单位生成目标代码
             else
                 fprintf(ASMOUT, "\t\tsub %s, %s, %s\n", temp3, temp1, temp2);
         }
-        else if(strcmp(MIDLIST[midpointer], mid_op[GETARRAY]) == 0)   // =[]
+        else if(strcmp(MIDLIST[midpointer], mid_op[GETARRAY]) == 0)   // =[] 取数组值，长度应该乘4
         {
             // 先处理第一个操作数，即数组名
             int if_glbarray = 0;    // 是否是全局数组
@@ -601,12 +603,40 @@ void func_asm()    // 以函数为单位生成目标代码
         }
         else if((strcmp(MIDLIST[midpointer], mid_op[BEQZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BNEZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BGTZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BGEZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BLTZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BLEZOP]) == 0))     // dowhile和if的跳转
         {
-            Transfer_midreg(MIDLIST[midpointer+1]);   // 一定是个寄存器而且不可能被挤到内存上
-            delete_wave_line(MIDLIST[midpointer+3]);
-            fprintf(ASMOUT, "\t\t%s $t%d, %s\n", MIDLIST[midpointer], loc_t_reg[mid_reg_num][0], MIDLIST[midpointer+3]);
-            fprintf(ASMOUT, "\t\tnop\n");
-            tempReg = 0;
-            base_address = 4 + base_addr_offset;
+            if(MIDLIST[midpointer+1][0] == '~')
+            {
+                Transfer_midreg(MIDLIST[midpointer+1]);   // 一定是个寄存器而且不可能被挤到内存上
+                delete_wave_line(MIDLIST[midpointer+3]);
+                fprintf(ASMOUT, "\t\t%s $t%d, %s\n", MIDLIST[midpointer], loc_t_reg[mid_reg_num][0], MIDLIST[midpointer+3]);
+                fprintf(ASMOUT, "\t\tnop\n");
+                tempReg = 0;
+                base_address = 4 + base_addr_offset;
+            }
+            else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')   // 数字
+            {
+                delete_wave_line(MIDLIST[midpointer+3]);
+                fprintf(ASMOUT, "\t\tli $t8, %d\n", atoi(MIDLIST[midpointer+1]));
+                fprintf(ASMOUT, "\t\t%s $t8, %s\n", MIDLIST[midpointer], MIDLIST[midpointer+3]);
+                fprintf(ASMOUT, "\t\tnop\n");
+            }
+            else if(isLetter(MIDLIST[midpointer+1][0]))
+            {
+                position = LookupTab(MIDLIST[midpointer+1], 0);
+                delete_wave_line(MIDLIST[midpointer+3]);
+                if(position < tableindex[1])
+                {
+                    fprintf(ASMOUT, "\t\tla $t8, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $t8, 0($t8)\n");
+                    fprintf(ASMOUT, "\t\t%s $t8, %s\n", MIDLIST[midpointer], MIDLIST[midpointer+3]);
+                    fprintf(ASMOUT, "\t\tnop\n");
+                }
+                else
+                {
+                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                    fprintf(ASMOUT, "\t\t%s $t8, %s\n", MIDLIST[midpointer], MIDLIST[midpointer+3]);
+                    fprintf(ASMOUT, "\t\tnop\n");
+                }
+            }
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[SETLABELOP]) == 0)   // setlabel
         {
@@ -762,10 +792,11 @@ void func_asm()    // 以函数为单位生成目标代码
                     loc_t_reg[mid_reg_num][1] = 0;    // 写回了寄存器
                     sprintf(temp2, "$t0");
                 }
+                fprintf(ASMOUT, "\t\tmulu %s, %s, 4\n", temp2, temp2);
                 fprintf(ASMOUT, "\t\tadd $v1, $v1, %s\n", temp2);
             }
             else if(isDigit(MIDLIST[midpointer+2][0]))    // 不可能是负数
-                fprintf(ASMOUT, "\t\taddi $v1, $v1, %d\n", atoi(MIDLIST[midpointer+2]));
+                fprintf(ASMOUT, "\t\taddi $v1, $v1, %d\n", atoi(MIDLIST[midpointer+2])*4);
             else if(isLetter(MIDLIST[midpointer+2][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+2], 0);
@@ -773,6 +804,7 @@ void func_asm()    // 以函数为单位生成目标代码
                     fprintf(ASMOUT, "\t\tlw $t8, %s\n", MIDLIST[midpointer+2]);
                 else
                     fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                fprintf(ASMOUT, "\t\tmulu $t8, $t8, 4\n");
                 fprintf(ASMOUT, "\t\tadd $v1, $v1, $t8\n");
             }
             
@@ -814,17 +846,27 @@ void func_asm()    // 以函数为单位生成目标代码
         {
             int if_has_string = 0;
             // 有字符串先输出字符串
-            if(MIDLIST[midpointer+1][1] == 'S')    // 第一个操作数是字符串
+            if(round == 1)
             {
-                if_has_string = 1;
-                    printf("\t\tli $v0, 4\n");
-                fprintf(ASMOUT, "\t\tli $v0, 4\n");
-                delete_wave_line(MIDLIST[midpointer+1]);
-                MIDLIST[midpointer+1][0] = 'S';     // 把str的s都转换成大写
-                fprintf(ASMOUT, "\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
-                    printf("\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
-                fprintf(ASMOUT, "\t\tsyscall\n");
-                    printf("\t\tsyscall\n");
+                if(MIDLIST[midpointer+1][1] == 's')    // 第一个操作数是字符串
+                {
+                    if_has_string = 1;
+                    fprintf(ASMOUT, "\t\tli $v0, 4\n");
+                    delete_wave_line(MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tsyscall\n");
+                }
+            }
+            else
+            {
+                if(MIDLIST[midpointer+1][0] == 's')    // 第一个操作数是字符串
+                {
+                    if_has_string = 1;
+                    fprintf(ASMOUT, "\t\tli $v0, 4\n");
+                    delete_wave_line(MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tsyscall\n");
+                }
             }
             
             if(MIDLIST[midpointer+3][0] != '\0')   // 有要输出的表达式
@@ -1118,6 +1160,16 @@ void func_asm()    // 以函数为单位生成目标代码
             valuepara_inmmr = 16;
         }
         midpointer += 4;
+    }
+    
+    if(mainFlag == 0 && func_type == 2)
+    {
+        fprintf(ASMOUT, "\t\tmove $sp, $fp\n");
+        fprintf(ASMOUT, "\t\tlw $ra, %d($sp)\n", sp_base-4);
+        fprintf(ASMOUT, "\t\tlw $fp, %d($sp)\n", sp_base-8);
+        fprintf(ASMOUT, "\t\taddi $sp, $sp, %d\n", sp_base);
+        fprintf(ASMOUT, "\t\tjr $ra\n");
+        fprintf(ASMOUT, "\t\tnop\n");
     }
 }
 
