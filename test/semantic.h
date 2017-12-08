@@ -24,6 +24,7 @@ extern SymItem table[tablelMAX];
 extern int tableindex[tablelMAX];
 extern int elenum;
 extern int levelnum;
+extern int round;
 
 int LookupTab(char* name, int use_or_def);
 int EnterTab(char* name, int type, int kind, int intval, char chval, int address, int length);

@@ -333,9 +333,23 @@ void func_asm()    // 以函数为单位生成目标代码
             Transfer_midreg(MIDLIST[midpointer+3]);
             if(tempReg == 8)   // 8个临时寄存器全部占满,把第一个挪走
             {
-                store_on_data(0);    // 把原来$t0上的数据存到内存上
-                sprintf(temp3, "$t0");
-                loc_t_reg[mid_reg_num][0] = 0;
+                if(moveReg < 8)
+                {
+                    store_on_data(moveReg);    // 把原来$t0上的数据存到内存上
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
+                    t_register[moveReg] = mid_reg_num;
+                    moveReg++;
+                }
+                else
+                {
+                    moveReg = 0;
+                    store_on_data(moveReg);
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
+                    t_register[moveReg] = mid_reg_num;
+                    moveReg++;
+                }
                 loc_t_reg[mid_reg_num][1] = 0;
             }
             else
@@ -343,6 +357,7 @@ void func_asm()    // 以函数为单位生成目标代码
                 sprintf(temp3, "$t%d", tempReg);
                 loc_t_reg[mid_reg_num][0] = tempReg;
                 loc_t_reg[mid_reg_num][1] = 0;
+                t_register[tempReg] = mid_reg_num;
                 tempReg++;
             }
             
@@ -431,18 +446,23 @@ void func_asm()    // 以函数为单位生成目标代码
             
             // 再处理第三个操作数
             Transfer_midreg(MIDLIST[midpointer+3]);
-            if(tempReg == 8)   // 8个临时寄存器全部占满,把第一个挪走
+            if(tempReg == 8)
             {
-                store_on_data(0);    // 把原来$t0上的数据存到内存上
-                sprintf(temp3, "$t0");
-                loc_t_reg[mid_reg_num][0] = 0;
+                if(moveReg == 8)
+                    moveReg = 0;
+                store_on_data(moveReg);    // 把原来$t0上的数据存到内存上
+                sprintf(temp3, "$t%d", moveReg);
+                loc_t_reg[mid_reg_num][0] = moveReg;
                 loc_t_reg[mid_reg_num][1] = 0;
+                t_register[moveReg] = mid_reg_num;
+                moveReg++;
             }
             else
             {
                 sprintf(temp3, "$t%d", tempReg);
                 loc_t_reg[mid_reg_num][0] = tempReg;
                 loc_t_reg[mid_reg_num][1] = 0;
+                t_register[moveReg] = mid_reg_num;
                 tempReg++;
             }
             
@@ -468,7 +488,7 @@ void func_asm()    // 以函数为单位生成目标代码
                 fprintf(ASMOUT, "\t\taddi $v0, $sp, %d\n", table[position].address);
             }
             
-            // 再处理第二个操作数，即数组索引  （不是寄存器就是数字）
+            // 再处理第二个操作数，即数组索引  （寄存器，数字，或标识符）
             if(isDigit(MIDLIST[midpointer+2][0]))
                 getarray_addr = atoi(MIDLIST[midpointer+2])*4;
             else if(MIDLIST[midpointer+2][0] == '~')
@@ -486,14 +506,44 @@ void func_asm()    // 以函数为单位生成目标代码
                     fprintf(ASMOUT, "\t\tmulu $v1, $t%d, 4\n", loc_t_reg[mid_reg_num][0]);
                 }
             }
+            else if(isLetter(MIDLIST[midpointer+2][0]))
+            {
+                num_or_reg = 1;
+                position = LookupTab(MIDLIST[midpointer+2], 0);
+                if(position < tableindex[1])   // 如果是全局的
+                {
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+2]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    fprintf(ASMOUT, "\t\tmulu $v1, $v1, 4\n");
+                }
+                else
+                {
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    fprintf(ASMOUT, "\t\tmulu $v1, $v1, 4\n");
+                }
+            }
             
             // 最后处理第三个操作数（肯定是寄存器）
             Transfer_midreg(MIDLIST[midpointer+3]);
-            if(tempReg == 8)   // 8个临时寄存器全部占满,把第一个挪走
+            if(tempReg == 8)   // 8个临时寄存器全部占满,挪走一个
             {
-                store_on_data(0);    // 把原来$t0上的数据存到内存上
-                sprintf(temp3, "$t0");
-                loc_t_reg[mid_reg_num][0] = 0;
+                if(moveReg < 8)
+                {
+                    store_on_data(moveReg);
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
+                    t_register[moveReg] = mid_reg_num;
+                    moveReg++;
+                }
+                else
+                {
+                    moveReg = 0;
+                    store_on_data(moveReg);
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
+                    t_register[moveReg] = mid_reg_num;
+                    moveReg++;
+                }
                 loc_t_reg[mid_reg_num][1] = 0;
             }
             else
@@ -501,6 +551,7 @@ void func_asm()    // 以函数为单位生成目标代码
                 sprintf(temp3, "$t%d", tempReg);
                 loc_t_reg[mid_reg_num][0] = tempReg;
                 loc_t_reg[mid_reg_num][1] = 0;
+                t_register[tempReg] = mid_reg_num;
                 tempReg++;
             }
             
@@ -586,9 +637,23 @@ void func_asm()    // 以函数为单位生成目标代码
             Transfer_midreg(MIDLIST[midpointer+3]);
             if(tempReg == 8)   // 8个临时寄存器全部占满,把第一个挪走
             {
-                store_on_data(0);    // 把原来$t0上的数据存到内存上
-                sprintf(temp3, "$t0");
-                loc_t_reg[mid_reg_num][0] = 0;
+                if(moveReg < 8)
+                {
+                    store_on_data(moveReg);
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
+                    t_register[moveReg] = mid_reg_num;
+                    moveReg++;
+                }
+                else
+                {
+                    moveReg = 0;
+                    store_on_data(moveReg);
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
+                    t_register[moveReg] = mid_reg_num;
+                    moveReg++;
+                }
                 loc_t_reg[mid_reg_num][1] = 0;
             }
             else
@@ -596,6 +661,7 @@ void func_asm()    // 以函数为单位生成目标代码
                 sprintf(temp3, "$t%d", tempReg);
                 loc_t_reg[mid_reg_num][0] = tempReg;
                 loc_t_reg[mid_reg_num][1] = 0;
+                t_register[tempReg] = mid_reg_num;
                 tempReg++;
             }
             
@@ -731,6 +797,7 @@ void func_asm()    // 以函数为单位生成目标代码
             
             delete_wave_line(MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "\t\tbne %s, %d, %s\n", temp1, atoi(MIDLIST[midpointer+2]), MIDLIST[midpointer+3]);
+            fprintf(ASMOUT, "\t\tnop\n");
             tempReg = 0;
             base_address = 4 + base_addr_offset;
         }
@@ -785,12 +852,16 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp2, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    store_on_data(0);    // 把0号寄存器的东西存回内存
+                    if(moveReg == 8)
+                        moveReg = 0;
+                    
+                    store_on_data(moveReg);    // 把0号寄存器的东西存回内存
                     fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $t0, %d($t8)\n", loc_t_reg[mid_reg_num][0]);
-                    loc_t_reg[mid_reg_num][0] = 0;
+                    fprintf(ASMOUT, "\t\tlw $t%d, %d($t8)\n", moveReg, loc_t_reg[mid_reg_num][0]);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
                     loc_t_reg[mid_reg_num][1] = 0;    // 写回了寄存器
-                    sprintf(temp2, "$t0");
+                    sprintf(temp2, "$t%d", moveReg);
+                    moveReg++;
                 }
                 fprintf(ASMOUT, "\t\tmulu %s, %s, 4\n", temp2, temp2);
                 fprintf(ASMOUT, "\t\tadd $v1, $v1, %s\n", temp2);
@@ -1141,10 +1212,13 @@ void func_asm()    // 以函数为单位生成目标代码
                 Transfer_midreg(MIDLIST[midpointer+3]);
                 if(tempReg == 8)   // 8个临时寄存器全部占满,把第一个挪走
                 {
-                    store_on_data(0);    // 把原来$t0上的数据存到内存上
-                    sprintf(temp3, "$t0");
-                    loc_t_reg[mid_reg_num][0] = 0;
+                    if(moveReg == 8)
+                        moveReg = 0;
+                    store_on_data(moveReg);    // 把原来$t0上的数据存到内存上
+                    sprintf(temp3, "$t%d", moveReg);
+                    loc_t_reg[mid_reg_num][0] = moveReg;
                     loc_t_reg[mid_reg_num][1] = 0;
+                    moveReg++;
                 }
                 else
                 {

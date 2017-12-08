@@ -20,6 +20,14 @@ int LookupTab(char* name, int use_or_def)    // 0代表使用，def代表定义
     int find = 0;   // find为1表示找到
     transfer(name);
     
+    if(round == 2)
+    {
+        if(tableindex[levelnum+1] != 0)
+            position = tableindex[levelnum+1] - 1;    // 如果不是main函数
+        else
+            position = elenum - 1;
+    }
+        
     while(position >= tableindex[levelnum])     // 先在本函数内部找
     {
         if(strcmp(name, table[position].name) == 0)

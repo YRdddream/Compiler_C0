@@ -16,6 +16,7 @@ extern SymItem table[tablelMAX];
 extern int tableindex[tablelMAX];
 extern char *MIDLIST[midcodeMAX];
 extern int tempReg;
+extern int moveReg;
 extern int midcnt;
 extern int mainFlag;
 extern int midpointer;

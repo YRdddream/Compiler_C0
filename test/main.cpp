@@ -56,6 +56,7 @@ int funcFlag = 0;   // 函数开始的标记
 // mips汇编码相关
 int if_return = 0;     // 有无返回值标记
 int tempReg = 0;   // 当前用了多少临时寄存器
+int moveReg = 0;   // 需要被挪走的寄存器
 char *MIDLIST[midcodeMAX];  // 从第一个function开始的midcode序列
 int midcnt = 0;    // MIDLIST的计数指针
 int midpointer = 0;   // MIDLIST的读取指针(汇编到了哪里)
@@ -74,6 +75,7 @@ void new_to_scan()
 {
     if_return = 0;
     tempReg = 0;
+    moveReg = 0;
     midpointer = 0;
     mainFlag = 0;
     memset(t_register, 0, 8*sizeof(int));
