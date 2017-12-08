@@ -70,6 +70,21 @@ int base_addr_offset = 0;   // base_address的偏移，主要处理最后一个�
 int round = 1;    // 第几遍扫描(总共两遍扫描)
 int func_cnt = 0;  
 
+void new_to_scan()
+{
+    if_return = 0;
+    tempReg = 0;
+    midpointer = 0;
+    mainFlag = 0;
+    memset(t_register, 0, 8*sizeof(int));
+    memset(loc_t_reg, 0, 2000*sizeof(int));
+    mid_reg_num = 0;
+    memset(base_data, 0, wlMAX);
+    base_address = 4;
+    base_addr_offset = 0;
+    func_cnt = 0;
+}
+
 void init_symname()    // 初始化类别码
 {
     sym_name[MAIN] = "main";
@@ -184,6 +199,12 @@ int main() {
     
     getch();
     program();
+    gen_asm();
+    
+    fclose(ASMOUT);    // 第二遍
+    ASMOUT = fopen("asmcode.asm", "w");
+    round++;
+    new_to_scan();
     gen_asm();
     
     fclose(file);

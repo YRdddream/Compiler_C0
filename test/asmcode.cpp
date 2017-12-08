@@ -38,11 +38,17 @@ void Transfer_midreg(char a[])
 void delete_wave_line(char a[])   // 把~label0和~string0的~都去掉
 {
     int i = 1;
-    while (i<=strlen(a))
+    
+    if(round == 1)
     {
-        a[i-1] = a[i];
-        i++;
+        while (i<=strlen(a))
+        {
+            a[i-1] = a[i];
+            i++;
+        }
     }
+    else
+        a[0] -= 32;
 }
 
 int max_valuepara_num(int position)   // 函数中出现的最大值参数的个数，要在栈中开辟这块空间
@@ -84,7 +90,7 @@ void gen_asm()
     fprintf(ASMOUT, "\t\t.data\n");
     
     for(i = 0; i < str_num; i++)
-        fprintf(ASMOUT, "\t\tstr%d:  .asciiz \"%s\"\n", i, StringList[i]);   // 初始化程序中出现过的字符串
+        fprintf(ASMOUT, "\t\tStr%d:  .asciiz \"%s\"\n", i, StringList[i]);   // 初始化程序中出现过的字符串
     
     fprintf(ASMOUT, "\n");
     
@@ -112,6 +118,7 @@ void gen_asm()
     fprintf(ASMOUT, "\n");
     fprintf(ASMOUT, "\t\t.text\n");
     fprintf(ASMOUT, "\t\t.globl main\n");
+    midpointer = 0;
     
     while(midpointer < midcnt)
     {
@@ -144,10 +151,10 @@ void func_asm()    // 以函数为单位生成目标代码
     int valuepara_cnt = 0;   // 值参数个数计数，存a0-a3，超过4个存内存
     int valuepara_inmmr = 16;   // 值参数超过四个，存到相对sp的地址
     int add_stacksize = 0;
+    // 恢复现场空间的基址
+    int recv_addr = 0;
     
     fprintf(ASMOUT, "%s:\t\n", MIDLIST[midpointer+3]);    // 先输出函数名
-    /*for(i=0; i<curt_tempReg; i++)     // 保存现场
-        fprintf(ASMOUT, "\t\tmove $s%d, $t%d\n", curt_tempReg, curt_tempReg); */
     
     midpointer += 4;
     while(strcmp(MIDLIST[midpointer], mid_op[ENDFUNC]) != 0)
@@ -186,7 +193,7 @@ void func_asm()    // 以函数为单位生成目标代码
     }
     
     valuepara_num = max_valuepara_num(midpointer);
-    sp_base = -data_address + 4*valuepara_num;
+    sp_base = -data_address + 4*valuepara_num + func_stacksize[func_cnt];
     sp = sp_base;
     
     fprintf(ASMOUT, "\t\taddi $sp, $sp, %d\n", -sp_base);
@@ -194,6 +201,7 @@ void func_asm()    // 以函数为单位生成目标代码
     fprintf(ASMOUT, "\t\tsw $fp, %d($sp)\n", sp-8);
     fprintf(ASMOUT, "\t\tmove $fp, $sp\n");      // 存储返回地址和帧指针
     sp -= 12;
+    recv_addr = sp;
     
     position = tableindex[levelnum] + 1;
     if(table[tableindex[levelnum]].length != 0)   // 如果函数有参数,将参数存储在栈上
@@ -221,6 +229,7 @@ void func_asm()    // 以函数为单位生成目标代码
     
     // 此时的midpointer已经到了变量声明后的第一条语句
     // midpointer += table[tableindex[levelnum]].length*4;   // midpointer指到了第一个局部常量(变量)的位置   WTF??????
+    
     while (table[position].type == CONSTTYPE)    // 将局部常量放到栈上
     {
         if(table[position].kind == CHARSY)
@@ -233,12 +242,14 @@ void func_asm()    // 以函数为单位生成目标代码
         sp -= 4;
         position++;
     }
+    // recv_addr = sp;
     
     while (table[position].type == VARIABLETYPE)     // 变量只需要更新其在符号表的位置
     {
         table[position].address += sp_base;
         position++;
     }
+    recv_addr = table[position-1].address - 4;
     
     char temp1[wlMAX];   // 四元式的三个操作数
     char temp2[wlMAX];
@@ -601,16 +612,12 @@ void func_asm()    // 以函数为单位生成目标代码
         {
             delete_wave_line(MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "%s:\t\n", MIDLIST[midpointer+3]);
-            tempReg = 0;
-            base_address = 4 + base_addr_offset;
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[JUMPOP]) == 0)    // jump
         {
             delete_wave_line(MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "\t\tj %s\n", MIDLIST[midpointer+3]);
             fprintf(ASMOUT, "\t\tnop\n");
-            tempReg = 0;
-            base_address = 4 + base_addr_offset;
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[ASSIGNOP]) == 0)   // =
         {
@@ -807,13 +814,17 @@ void func_asm()    // 以函数为单位生成目标代码
         {
             int if_has_string = 0;
             // 有字符串先输出字符串
-            if(MIDLIST[midpointer+1][1] == 's')    // 第一个操作数是字符串
+            if(MIDLIST[midpointer+1][1] == 'S')    // 第一个操作数是字符串
             {
                 if_has_string = 1;
+                    printf("\t\tli $v0, 4\n");
                 fprintf(ASMOUT, "\t\tli $v0, 4\n");
                 delete_wave_line(MIDLIST[midpointer+1]);
+                MIDLIST[midpointer+1][0] = 'S';     // 把str的s都转换成大写
                 fprintf(ASMOUT, "\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
+                    printf("\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
                 fprintf(ASMOUT, "\t\tsyscall\n");
+                    printf("\t\tsyscall\n");
             }
             
             if(MIDLIST[midpointer+3][0] != '\0')   // 有要输出的表达式
@@ -1037,24 +1048,77 @@ void func_asm()    // 以函数为单位生成目标代码
                     }
                 }
             }
-            tempReg = 0;
-            base_address = 4 + base_addr_offset;
+            // tempReg = 0;
+            // base_address = 4 + base_addr_offset;
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[CALLOP]) == 0)
         {
+            int tempvalue = 0;
             if(round == 1)
             {
                 add_stacksize = tempReg*4 + (base_address - 4 - base_addr_offset);
                 if(add_stacksize > func_stacksize[func_cnt])
                     func_stacksize[func_cnt] = add_stacksize;
             }
+            else
+            {
+                tempvalue = recv_addr;
+                for (i=0; i<tempReg; i++)    // 保存现场
+                {
+                    fprintf(ASMOUT, "\t\tsw $t%d, %d($sp)\n", i, tempvalue);
+                    tempvalue -= 4;
+                }
+                for (i=0; i<base_address - 4 - base_addr_offset; i+=4)
+                {
+                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t8, %d($v0)\n", i);
+                    fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", tempvalue);
+                    tempvalue -= 4;
+                }
+            }
+            
+            fprintf(ASMOUT, "\t\tjal %s\n", MIDLIST[midpointer+1]);
+            fprintf(ASMOUT, "\t\tnop\n");
+            
+            tempvalue = recv_addr;
+            for (i=0; i<tempReg; i++)    // 恢复现场
+            {
+                fprintf(ASMOUT, "\t\tlw $t%d, %d($sp)\n", i, tempvalue);
+                tempvalue -= 4;
+            }
+            for (i=0; i<base_address - 4 - base_addr_offset; i+=4)
+            {
+                fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", tempvalue);
+                fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
+                fprintf(ASMOUT, "\t\tsw $t8, %d($v0)\n", i);
+                tempvalue -= 4;
+            }
+            
+            if(MIDLIST[midpointer+3][0] != '\0')   // 有返回值
+            {
+                Transfer_midreg(MIDLIST[midpointer+3]);
+                if(tempReg == 8)   // 8个临时寄存器全部占满,把第一个挪走
+                {
+                    store_on_data(0);    // 把原来$t0上的数据存到内存上
+                    sprintf(temp3, "$t0");
+                    loc_t_reg[mid_reg_num][0] = 0;
+                    loc_t_reg[mid_reg_num][1] = 0;
+                }
+                else
+                {
+                    sprintf(temp3, "$t%d", tempReg);
+                    loc_t_reg[mid_reg_num][0] = tempReg;
+                    loc_t_reg[mid_reg_num][1] = 0;
+                    tempReg++;
+                }
+                fprintf(ASMOUT, "\t\tmove %s, $v0\n", temp3);
+            }
+            
             valuepara_cnt = 0;
             valuepara_inmmr = 16;
         }
         midpointer += 4;
     }
-    /*for(i=0; i<curt_tempReg; i++)   // 恢复现场
-        fprintf(ASMOUT, "\t\tmove $t%d, $s%d\n", curt_tempReg, curt_tempReg);*/
 }
 
 

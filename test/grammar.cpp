@@ -1297,10 +1297,11 @@ void PrintfState()
         getsym();
         if(symbol == STRING)
         {
-            sprintf(temp1, "~str%d", str_num);
+            sprintf(temp1, "~Str%d", str_num);
             StringList[str_num] = (char *)malloc(200*sizeof(char));
             strcpy(StringList[str_num], token);
             strcat(StringList[str_num++], "\\n");    // 这里给每个字符串后面加一个换行符
+            
             
             getsym();
             if(symbol == COMMA)

@@ -18,18 +18,18 @@ function, void,  , print_error
 parameter, int,  , e_number
 switchhead,  ,  , e_number
 bne, e_number, 1, ~label1
-printf, ~str0,  , 
+printf, ~Str0,  , 
 printf, e_number,  , 0
 jump,  ,  , ~label0
 setlabel,  ,  , ~label1
 bne, e_number, 2, ~label2
-printf, ~str1,  , 
+printf, ~Str1,  , 
 printf, 2,  , 0
 jump,  ,  , ~label0
 setlabel,  ,  , ~label2
 bne, e_number, 3, ~label3
 *, e_number, 1, ~t0
-printf, ~str2, ~t0, 0
+printf, ~Str2, ~t0, 0
 jump,  ,  , ~label0
 setlabel,  ,  , ~label3
 bne, e_number, 4, ~label4
@@ -45,7 +45,7 @@ int,  ,  , else
 =, 0,  , else
 <, n, 0, ~t1
 bgez, ~t1,  , ~label5
-printf, ~str3,  , 
+printf, ~Str3,  , 
 -, 1,  , ~t2
 return,  ,  , ~t2
 setlabel,  ,  , ~label5
@@ -87,12 +87,12 @@ function, char,  , tolower
 parameter, char,  , x
 <, x, 65, ~t22
 bgez, ~t22,  , ~label8
-printf, ~str4,  , 
+printf, ~Str4,  , 
 return,  ,  , 42
 setlabel,  ,  , ~label8
 >, x, 90, ~t23
 blez, ~t23,  , ~label9
-printf, ~str5,  , 
+printf, ~Str5,  , 
 -, -47,  , ~t24
 return,  ,  , ~t24
 setlabel,  ,  , ~label9
@@ -107,12 +107,12 @@ int,  ,  , a
 =, ~t26,  , a
 >, x, 122, ~t27
 blez, ~t27,  , ~label10
-printf, ~str6,  , 
+printf, ~Str6,  , 
 return,  ,  , 45
 setlabel,  ,  , ~label10
 <, x, 97, ~t28
 bgez, ~t28,  , ~label11
-printf, ~str7,  , 
+printf, ~Str7,  , 
 return,  ,  , a
 setlabel,  ,  , ~label11
 -, x, 32, ~t29
@@ -145,7 +145,7 @@ char, 3,  , ch4
 +, 3, 0, ~t33
 -, ~t33, 1, ~t34
 []=, ch4, ~t34, 47
-printf, ~str8,  , 
+printf, ~Str8,  , 
 scanf, a1,  , 0
 scanf, b1,  , 0
 setlabel,  ,  , ~label12
@@ -156,29 +156,29 @@ setlabel,  ,  , ~label12
 =, ~t37,  , i
 <, i, 4, ~t38
 bltz, ~t38,  , ~label12
-printf, ~str9, sum, 0
-printf, ~str10,  , 
+printf, ~Str9, sum, 0
+printf, ~Str10,  , 
 scanf, a1,  , 0
 valuepara,  ,  , a1
 call, fibonacci,  , ~t39
-printf, ~str11, ~t39, 0
-printf, ~str12,  , 
+printf, ~Str11, ~t39, 0
+printf, ~Str12,  , 
 scanf, a1,  , 0
 ==, a1, _, ~t40
 bnez, ~t40,  , ~label13
-printf, ~str13, a1, 0
+printf, ~Str13, a1, 0
 setlabel,  ,  , ~label13
 !=, a1, _, ~t41
 beqz, ~t41,  , ~label14
-printf, ~str14, a1, 0
+printf, ~Str14, a1, 0
 setlabel,  ,  , ~label14
 -, 43, 11, ~t42
 >=, a1, ~t42, ~t43
 bltz, ~t43,  , ~label15
-printf, ~str15, a1, 0
+printf, ~Str15, a1, 0
 setlabel,  ,  , ~label15
-printf, ~str16,  , 
-printf, ~str17,  , 
+printf, ~Str16,  , 
+printf, ~Str17,  , 
 scanf, a,  , 0
 scanf, b1,  , 0
 scanf, c1,  , 0
@@ -191,8 +191,8 @@ valuepara,  ,  , c1
 call, print_error,  , 
 valuepara,  ,  , 4
 call, print_error,  , 
-printf, ~str18,  , 
-printf, ~str19,  , 
+printf, ~Str18,  , 
+printf, ~Str19,  , 
 =[], d1, 1, ~t44
 =[], d1, 1, ~t45
 +, ~t45, 2, ~t46
@@ -206,13 +206,13 @@ printf, ~str19,  ,
 +, ~t52, ~t53, ~t54
 -, ~t54, _, ~t55
 =, ~t55,  , a
-printf, ~str20, a, 0
+printf, ~Str20, a, 0
 -, -5,  , ~t56
 +, ~t56, 9, ~t57
 =, ~t57,  , a
-printf, ~str21, a, 0
-printf, ~str22,  , 
-printf, ~str23,  , 
+printf, ~Str21, a, 0
+printf, ~Str22,  , 
+printf, ~Str23,  , 
 =, 0,  , i
 setlabel,  ,  , ~label16
 =[], ch4, i, ~t58
@@ -224,7 +224,7 @@ jump,  ,  , ~label17
 setlabel,  ,  , ~label18
 bne, ~t58, 45, ~label19
 =[], ch4, i, ~t60
-printf, ~str24, ~t60, 1
+printf, ~Str24, ~t60, 1
 jump,  ,  , ~label17
 setlabel,  ,  , ~label19
 bne, ~t58, 47, ~label20
@@ -237,18 +237,18 @@ setlabel,  ,  , ~label17
 =, ~t62,  , i
 <, i, 3, ~t63
 bltz, ~t63,  , ~label16
-printf, ~str25,  , 
-printf, ~str26,  , 
+printf, ~Str25,  , 
+printf, ~Str26,  , 
 -, 43, 11, ~t64
-printf, ~str27, ~t64, 0
+printf, ~Str27, ~t64, 0
 +, 97, 1, ~t65
 -, ~t65, 98, ~t66
-printf, ~str28, ~t66, 0
-printf, ~str29, 97, 1
-printf, ~str30, charz, 1
-printf, ~str31,  , 
-printf, ~str32,  , 
-printf, ~str33,  , 
+printf, ~Str28, ~t66, 0
+printf, ~Str29, 97, 1
+printf, ~Str30, charz, 1
+printf, ~Str31,  , 
+printf, ~Str32,  , 
+printf, ~Str33,  , 
 ==, mult, multc, ~t67
 bnez, ~t67,  , ~label21
 beqz, mult,  , ~label22
@@ -276,8 +276,8 @@ valuepara,  ,  , default
 valuepara,  ,  , single
 call, mult_add,  , ~t74
 printf, ~t74,  , 0
-printf, ~str34,  , 
-printf, ~str35,  , 
+printf, ~Str34,  , 
+printf, ~Str35,  , 
 scanf, a,  , 0
 setlabel,  ,  , ~label23
 beqz, a,  , ~label24
@@ -291,7 +291,7 @@ setlabel,  ,  , ~label25
 -, a, 0, ~t77
 switchhead,  ,  , ~t77
 bne, ~t77, 0, ~label27
-printf, ~str36,  , 
+printf, ~Str36,  , 
 jump,  ,  , ~label26
 setlabel,  ,  , ~label27
 setlabel,  ,  , ~label26
@@ -301,8 +301,8 @@ setlabel,  ,  , ~label26
 +, ~t80, 9, ~t81
 +, ~t81, -11, ~t82
 bnez, ~t82,  , ~label25
-printf, ~str37,  , 
-printf, ~str38,  , 
-printf, ~str39,  , 
+printf, ~Str37,  , 
+printf, ~Str38,  , 
+printf, ~Str39,  , 
 return,  ,  , 
 endfunction,  ,  , 
