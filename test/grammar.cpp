@@ -38,6 +38,49 @@ void init_symset()
     item_fac_exprBegSet.fsym[4] = PLUS;
     item_fac_exprBegSet.fsym[5] = MINUS;
     item_fac_exprBegSet.setlen = 6;
+    
+    /*跳读的头符号集合*/
+    // case出错后跳到的符号集
+    case_errorBegSet.fsym[0] = RCURLY;
+    case_errorBegSet.fsym[1] = CASESY;
+    case_errorBegSet.setlen = 2;
+    
+    // 标识符未定义跳到的地方
+    undefined_identEndSet.fsym[0] = IFSY;
+    undefined_identEndSet.fsym[1] = DOSY;
+    undefined_identEndSet.fsym[2] = SWITCHSY;
+    undefined_identEndSet.fsym[3] = LCURLY;
+    undefined_identEndSet.fsym[4] = IDENT;
+    undefined_identEndSet.fsym[5] = PRINTFSY;
+    undefined_identEndSet.fsym[6] = SCANFSY;
+    undefined_identEndSet.fsym[7] = SEMICOLON;
+    undefined_identEndSet.fsym[8] = RETURNSY;
+    undefined_identEndSet.fsym[9] = PLUS;
+    undefined_identEndSet.fsym[10] = MINUS;
+    undefined_identEndSet.fsym[11] = MULTI;
+    undefined_identEndSet.fsym[12] = DIVISION;
+    undefined_identEndSet.setlen = 13;
+    
+    // 表达式中因子是数组的时候没有[]下标
+    expr_arrayerrorEndSet.fsym[0] = PLUS;
+    expr_arrayerrorEndSet.fsym[1] = MINUS;
+    expr_arrayerrorEndSet.fsym[2] = MULTI;
+    expr_arrayerrorEndSet.fsym[3] = DIVISION;
+    expr_arrayerrorEndSet.fsym[4] = SEMICOLON;
+    expr_arrayerrorEndSet.fsym[5] = RBRACK;
+    expr_arrayerrorEndSet.fsym[6] = RPARENT;
+    expr_arrayerrorEndSet.fsym[7] = COMMA;
+    expr_arrayerrorEndSet.setlen = 8;
+    
+    // casenotalbe出错后
+    casenotableEndSet.fsym[0] = SEMICOLON;
+    casenotableEndSet.fsym[1] = RCURLY;
+    casenotableEndSet.setlen = 2;
+    
+    // condition出错后
+    conditionerrorEndSet.fsym[0] = RPARENT;
+    conditionerrorEndSet.fsym[1] = SEMICOLON;
+    conditionerrorEndSet.setlen = 2;
 }
 
 int find_symset(int symvalue, symset Aset)
@@ -121,7 +164,7 @@ void constDecl()
         if(symbol == INTSY || symbol == CHARSY)
             constDef();
         else
-            error(LOSE_TYPE);    // 跳到下一个;
+            error(CONSTDEF_LOSETYPE);    // 跳到下一个;
         
         if(symbol == SEMICOLON)
             getsym();
@@ -149,7 +192,10 @@ void constDef()
             if(symbol == BECOMES)
                 getsym();
             else
+            {
                 error(LOSE_ASSIGN);   // 缺少=，跳到下一个,或者;
+                return;
+            }
             
             if(symbol == PLUS || symbol == MINUS || symbol == NUMBER)
                 Integer();
@@ -175,7 +221,10 @@ void constDef()
             if(symbol == BECOMES)
                 getsym();
             else
+            {
                 error(LOSE_ASSIGN);   // 缺少=，跳到下一个,或者;
+                return;
+            }
             
             if(symbol == CHAR)
             {
@@ -204,7 +253,7 @@ void Integer()
         {
             Token2num(token);
             if(num == 0)
-                error(CLEAN_OPERATECH);    // 0前面不能有运算符，不处理
+                error(BEFORE_ZERO);    // 0前面不能有运算符，不处理
             if(token[0] == '0' && strlen(token) > 1)
                 error(CLEAN_ZERO);
             
@@ -212,7 +261,10 @@ void Integer()
                 num = -num;
         }
         else
+        {
             error(CLEAN_OPERATECH);     // 多余的正负号
+            return;
+        }
         
         getsym();
     }
@@ -260,7 +312,7 @@ void varDecl(char *ident_name, int type, int flag)    // flag为1代表是回读
         if(symbol == SEMICOLON)
             getsym();
         else
-            error(LOSE_SEMICOLON);
+            error(LOSE_SEMICOLON);   // 不处理
         
         if(symbol == INTSY || symbol == CHARSY)
             retfunc_var_dec(symbol);
@@ -280,7 +332,7 @@ void varDecl(char *ident_name, int type, int flag)    // flag为1代表是回读
             if(symbol == SEMICOLON)
                 getsym();
             else
-                error(LOSE_SEMICOLON);
+                error(LOSE_SEMICOLON);  //不处理
             count++;
         }while(symbol == INTSY || symbol == CHARSY);
     }
@@ -337,7 +389,10 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
                     
                     getsym();
                     if(symbol != RBRACK)
+                    {
                         error(LOSE_RBRACK);
+                        return;
+                    }
                     EnterTab(ident_name, VARIABLETYPE, type, 0, 0, 0, arraylen);
                     sprintf(lengthop, "%d", arraylen);
                     gen_midcode(typeop, lengthop, 0, ident_name);
@@ -392,10 +447,11 @@ void RetFuncDef(char *ident_name, int type)   // 此时的symbol为LPARENT
     if(symbol == LCURLY)
     {
         getsym();
-        ComplexState();    // 由于复合语句可以完全为空，所以不存在头符号集
     }
     else
         error(LOSE_LCURLY);
+    
+    ComplexState();    // 由于复合语句可以完全为空，所以不存在头符号集
     
     if(symbol == RCURLY)
         getsym();
@@ -429,10 +485,11 @@ void VoidFuncDef(char *ident_name)
     if(symbol == LCURLY)
     {
         getsym();
-        ComplexState();
     }
     else
         error(LOSE_LCURLY);
+    
+    ComplexState();
     
     if(symbol == RCURLY)
     {
@@ -538,7 +595,10 @@ void Statement()
         case IDENT:
             position = LookupTab(token, 0);
             if(position == (-1))
+            {
                 error(UNDEFINED_IDENT);
+                return;
+            }
             else if(table[position].type == FUNCTIONTYPE)
                 assign_or_call = 1;
             //----------查符号表看是：函数调用1  赋值语句0
@@ -563,7 +623,7 @@ void Statement()
             if(symbol == SEMICOLON)
                 getsym();
             else
-                error(LOSE_SEMICOLON);
+                error(LOSE_SEMICOLON);   //不处理
             break;
         
         case SCANFSY:
@@ -571,7 +631,7 @@ void Statement()
             if(symbol == SEMICOLON)
                 getsym();
             else
-                error(LOSE_SEMICOLON);
+                error(LOSE_SEMICOLON);   //不处理
             break;
             
         case PRINTFSY:
@@ -579,7 +639,7 @@ void Statement()
             if(symbol == SEMICOLON)
                 getsym();
             else
-                error(LOSE_SEMICOLON);
+                error(LOSE_SEMICOLON);    //不处理
             break;
             
         case RETURNSY:
@@ -587,7 +647,7 @@ void Statement()
             if(symbol == SEMICOLON)
                 getsym();
             else
-                error(LOSE_SEMICOLON);
+                error(LOSE_SEMICOLON);    //不处理
             break;
             
         case SEMICOLON:     // 空语句
@@ -736,7 +796,10 @@ void Factor()
             strcpy(ident_name, token);
             position = LookupTab(token, 0);
             if(position == (-1))
+            {
                 error(UNDEFINED_IDENT);
+                return;
+            }
             else
             {
                 type = table[position].type;
@@ -753,7 +816,10 @@ void Factor()
                         if(symbol == LBRACK)
                             getsym();
                         else
+                        {
                             error(LOSE_LBRACK);
+                            return;
+                        }
                         
                         if(find_symset(symbol, item_fac_exprBegSet) == 1)
                         {
@@ -766,7 +832,10 @@ void Factor()
                         if(symbol == RBRACK)
                             getsym();
                         else
+                        {
                             error(LOSE_RBRACK);
+                            return;
+                        }
                         
                         if(table[position].kind == CHARSY)
                             IOC = 1;
@@ -874,7 +943,10 @@ void IfState()
     if(find_symset(symbol, stateBegSet) == 1)
         Statement();
     else
+    {
         error(STATEMENT_ERROR);
+        return;
+    }
     
     gen_midcode(mid_op[SETLABELOP], 0, 0, labelname);
 }
@@ -998,12 +1070,18 @@ void DowhileState()
     if(find_symset(symbol, stateBegSet) == 1)
         Statement();
     else
+    {
         error(STATEMENT_ERROR);
+        return;
+    }
     
     if(symbol == WHILESY)
         getsym();
     else
+    {
         error(STATEMENT_ERROR);
+        return;
+    }
     
     if(symbol == LPARENT)
     {
@@ -1027,6 +1105,7 @@ void SwitchState()
 {
     char labelname[wlMAX];
     char basevar[wlMAX];    // switch后跟的表达式
+    int switchtype = 0;   // 和ioc对应，int为0，char为1
     
     getsym();
     if(symbol == LPARENT)
@@ -1037,6 +1116,7 @@ void SwitchState()
             Expression();
             gen_midcode(mid_op[SWTICHOP], 0, 0, tokenmid);
             strcpy(basevar, tokenmid);
+            switchtype = IOC;
         }
         else
             error(EXPRESSION_ERROR);
@@ -1056,12 +1136,18 @@ void SwitchState()
     {
         getsym();
         if(symbol == CASESY)
-            CaseList(labelname, basevar);
+            CaseList(labelname, basevar, switchtype);
         else
+        {
             error(STATEMENT_ERROR);
+            return;
+        }
     }
     else
-        error(LOSE_LCURLY);
+    {
+        error(NO_CASE_TABLE);
+        return;
+    }
     
     if(symbol == RCURLY)
         getsym();
@@ -1072,48 +1158,85 @@ void SwitchState()
 }
 
 // ＜情况表＞::=＜情况子语句＞{＜情况子语句＞}     checked
-void CaseList(char *labelend, char *basevar)
+void CaseList(char *labelend, char *basevar, int switchtype)
 {
     char nextlabel[wlMAX];
+    int casenum = 0;   // case的个数
     
     while(symbol == CASESY)
     {
         sprintf(tokenmid, "~label%d", label_num++);
         strcpy(nextlabel, tokenmid);
-        CaseState(labelend, nextlabel, basevar);
+        CaseState(labelend, nextlabel, basevar, switchtype, casenum);
+        casenum++;
     }
+    memset(casetable, 0, 100*sizeof(int));
 }
 
 // ＜情况子语句＞::= case＜常量＞：＜语句＞   checked
-void CaseState(char *labelend, char *nextlabel, char *basevar)     // case重复的话则报错
+void CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, int casenum)
 {
     char constvalue[wlMAX];
+    int i = 0;
     
     getsym();
     if(symbol == PLUS || symbol == MINUS || symbol == NUMBER)
     {
+        if(switchtype == 1)
+            error(CASE_NOT_MATCH);
         Integer();
         sprintf(constvalue, "%d", num);
+        while(i < casenum)
+        {
+            if(num == casetable[i])
+            {
+                error(REPEAT_CASE);
+                return;
+            }
+            i++;
+        }
+        casetable[casenum] = num;
     }
     else if(symbol == CHAR)
     {
+        if(switchtype == 0)
+            error(CASE_NOT_MATCH);
         sprintf(constvalue, "%d", token[0]);
+        while(i < casenum)
+        {
+            if(token[0] == casetable[i])
+            {
+                error(REPEAT_CASE);
+                return;
+            }
+            i++;
+        }
+        casetable[casenum] = token[0];
         getsym();
     }
     else
+    {
         error(CASE_NOCONSTANT);
+        return;
+    }
     
     gen_midcode(mid_op[BNEOP], basevar, constvalue, nextlabel);
     
     if(symbol == COLON)
         getsym();
     else
+    {
         error(LOSE_COLON);
+        return;
+    }
     
     if(find_symset(symbol, stateBegSet) == 1)
         Statement();
     else
+    {
         error(STATEMENT_ERROR);
+        return;
+    }
     
     gen_midcode(mid_op[JUMPOP], 0, 0, labelend);
     gen_midcode(mid_op[SETLABELOP], 0, 0, nextlabel);
@@ -1129,7 +1252,10 @@ void CallState(int void_or_ret, int state_or_factor)    // void是0，有返回�
     
     position = LookupTab(func_name, 0);
     if(position == (-1))
+    {
         error(UNDEFINED_FUNC);
+        return;
+    }
     
     getsym();
     if(symbol == LPARENT)
@@ -1201,7 +1327,10 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
             }
         }
         else
+        {
             error(LOSE_ASSIGN);
+            return;
+        }
     }
     else
     {
@@ -1237,7 +1366,10 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
                 error(EXPRESSION_ERROR);
         }
         else
+        {
             error(LOSE_ASSIGN);
+            return;
+        }
     }
 }
 
@@ -1250,7 +1382,10 @@ void ScanfState()
     
     getsym();
     if(symbol != LPARENT)
+    {
         error(SCANF_ERROR);
+        return;
+    }
     
     do {
         getsym();
@@ -1259,7 +1394,10 @@ void ScanfState()
             position = LookupTab(token, 0);
             strcpy(ident_name, token);
             if(position == (-1))
+            {
                 error(UNDEFINED_IDENT);
+                return;
+            }
             else if(table[position].type == CONSTTYPE)
                 error(ASSIGN_CONST);
             else if (table[position].type == FUNCTIONTYPE)
@@ -1277,7 +1415,10 @@ void ScanfState()
             gen_midcode(mid_op[SCANFOP], ident_name, 0, int_or_char);
         }
         else
+        {
             error(SCANF_ERROR);
+            return;
+        }
     } while (symbol == COMMA);
     
     if(symbol == RPARENT)
@@ -1316,7 +1457,10 @@ void PrintfState()
                         gen_midcode(mid_op[PRINTFOP], temp1, tokenmid, "1");
                 }
                 else
+                {
                     error(PRINTF_ERROR);
+                    return;
+                }
             }
             else
                 gen_midcode(mid_op[PRINTFOP], temp1, 0, 0);
@@ -1330,7 +1474,10 @@ void PrintfState()
                 gen_midcode(mid_op[PRINTFOP], tokenmid, 0, "1");
         }
         else
+        {
             error(PRINTF_ERROR);
+            return;
+        }
     }
     else
         error(LOSE_LPARENT);

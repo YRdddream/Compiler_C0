@@ -196,7 +196,11 @@ void getsym()
                 
                 getch();
                 if(ch != '\'')
+                {
                     error(LOSE_CHAR);
+                    symbol = CHAR;
+                    break;
+                }
                 
                 getch();
                 symbol = CHAR;
@@ -207,7 +211,10 @@ void getsym()
                 do {
                     getch();
                     if(begin_line != lc)
+                    {
                         error(STRING_NEWLINE);
+                        return;
+                    }
                     
                     buffer[pos++] = ch;
                     
@@ -216,7 +223,7 @@ void getsym()
                 } while (ch!='"');
                 buffer[pos-1] = '\0';
                 
-                for(i=0; i<strlen(buffer); i++)
+                for(i=0; i<strlen(buffer); i++)    // 这时已经把字符串都存在了buffer里了，这步做的只是检查
                 {
                     if(buffer[i]>126 || buffer[i]<32 || buffer[i]==34)
                         error(ILLEGAL_STRING);
@@ -339,6 +346,7 @@ void getsym()
                 
             default:    //  '\0'
                 error(ILLEGAL_CHAR);
+                getch();
                 break;
         }
     }

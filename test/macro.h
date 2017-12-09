@@ -70,7 +70,6 @@
 #define LOSE_IDENT 6
 #define ILLEGAL_CHAR 7
 #define ILLEGAL_STRING 8
-#define LOSE_COMMA 9
 #define LOSE_COLON 10
 #define LOSE_SEMICOLON 11
 #define LOSE_LBRACK 12
@@ -91,17 +90,16 @@
 #define DIV_ZERO 28
 #define CLEAN_OPERATECH 29
 #define ASSIGN_CONST 30
-#define NO_CHAR 31
 #define ARRAY_ERROR 32
 #define ARRAY_OVERFLOW 33
 #define TABLE_FULL 34
 #define STATEMENT_ERROR 35
 #define CONDITION_ERROR 36
+#define CASE_NOT_MATCH 37
 #define REPEAT_CASE 38
 #define CASE_NOCONSTANT 39
 #define SCANF_ERROR 40
 #define PRINTF_ERROR 41
-#define TOOMANY_PRINT 42
 #define ILLEGAL_FOLLOWER 43
 #define EXPRESSION_ERROR 44
 #define CONSTDEF_ERROR 45
@@ -109,6 +107,9 @@
 #define EXPR_HAS_VOIDFUNC 47
 #define STRING_NEWLINE 48
 #define IDENT_TYPE_ERROR 49
+#define NO_CASE_TABLE 51
+#define BEFORE_ZERO 52
+#define CONSTDEF_LOSETYPE 53
 
 /*-----------------------------符号表项的类型----------------------------*/
 #define CONSTTYPE 1

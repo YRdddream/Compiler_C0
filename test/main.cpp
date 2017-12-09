@@ -33,6 +33,11 @@ char* mid_op[50];     // 和四元式生成有关的内容
 
 symset stateBegSet;
 symset item_fac_exprBegSet;
+symset case_errorBegSet;
+symset undefined_identEndSet;
+symset expr_arrayerrorEndSet;
+symset casenotableEndSet;
+symset conditionerrorEndSet;
 
 SymItem table[tablelMAX];
 int tableindex[tablelMAX];
@@ -69,7 +74,11 @@ int base_address = 4;    // 盛不下的临时变量相对于base_data的地址�
 int base_addr_offset = 0;   // base_address的偏移，主要处理最后一个全局数据是数组的情况
 
 int round = 1;    // 第几遍扫描(总共两遍扫描)
-int func_cnt = 0;  
+int func_cnt = 0;
+
+// 出错处理相关
+int if_has_error = 0;   // 有error就不生成汇编码
+int casetable[100] = {0};   // 主要是为了看有没有相同的case
 
 void new_to_scan()
 {
@@ -155,7 +164,7 @@ void init_symname()    // 初始化类别码
     mid_op[PARAOP] = "parameter";//1
     mid_op[VALUEPARAOP] = "valuepara";//1
     mid_op[CALLOP] = "call";//1
-    mid_op[RETURNOP] = "return";// 0.5
+    mid_op[RETURNOP] = "return";// 1
     mid_op[PLUSOP] = "+";//1
     mid_op[MINUSOP] = "-";//1
     mid_op[MULTIOP] = "*";//1
@@ -204,6 +213,15 @@ int main() {
     
     getch();
     program();
+    
+    if(if_has_error != 0)   //  如果源程序出错
+    {
+        fclose(file);
+        fclose(midcode_out);
+        fclose(ASMOUT);
+        return 0;
+    }
+    
     gen_asm();
     
     fclose(ASMOUT);    // 第二遍

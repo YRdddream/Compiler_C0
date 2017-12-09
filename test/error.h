@@ -10,6 +10,7 @@
 #define error_h
 
 extern int lc;
+extern int if_has_error;
 
 void error(int i);
 
