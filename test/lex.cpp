@@ -33,6 +33,8 @@ void Token2num(char a[])   // 字符串转换为数字
         num = num*10 + a[i] - '0';
         i++;
     }
+    if(num > 1000000000)
+        error(TOOBIG_NUMBER);
 }
 
 int find_keyword(char* buffer)   // 查找保留字表
@@ -80,8 +82,7 @@ void getch()
     {
         char* test;    // 解决fgets的一个小bug，遇到最后一空行时，得到的字符串是前一行的字符串，但返回的是null
         lc++;
-          //  if(lc == 154)
-            //    printf("locate in 154!\n");
+        
         test = fgets(line, llMAX, file);
         ll = strlen(line);
         
@@ -147,6 +148,8 @@ void getsym()
     {
         do {
             buffer[pos++] = ch;
+            if (pos==wlMAX)
+                error(TOOLONG_WL);
             getch();
         } while (isLetter(ch) || isDigit(ch));
         buffer[pos] = '\0';

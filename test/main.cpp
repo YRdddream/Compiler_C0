@@ -196,6 +196,9 @@ int main() {
     printf("Please input a filename:\n");
     scanf("%s",file_name);
     file = fopen(file_name, "r");
+    if(file == NULL)
+        error(FILE_ERROR);
+    
     midcode_out = fopen("midcode.txt", "w");
     ASMOUT = fopen("asmcode.asm", "w");
     
