@@ -809,6 +809,8 @@ void Factor()
                     {
                         strcpy(tokenmid, token);
                         getsym();
+                        if(table[position].kind == CHARSY)
+                            IOC = 1;
                     } // 四元式操作
                     else         // 数组变量
                     {

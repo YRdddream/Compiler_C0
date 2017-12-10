@@ -51,7 +51,7 @@ int fibonaCCi(int n)
 		return (N);
 
 	if(n > -(+((-1))))
-		return (+fibonacci(n-1)*('+'-42) + 1*fibonacci(n*1/(20-19)-2)/(20-19));
+		return (+(fibonacci(n-1)*('+'-42))*(17+(-16)) + 0 + 1*fibonacci((n+0)*1/(20-19)+4-2-4)/(20-19)*(17+(-16)));
 }
 
 int mult_add(int int1, char char1, int d1)
@@ -148,6 +148,8 @@ void main()
 	printf("a should be 9:",a);
 	a = --5+9;
 	printf("a should be 14:",a);
+	d1[(d1[1]+2)*(-12)+_+(17+-16)-1] = 17;
+	printf("d1[1] should be 17:",d1[0]);
 	printf("#Result of expression ends");
 
 	printf("Test switch char");
@@ -198,6 +200,11 @@ void main()
 	prIntf("#Result of single sentence ends");
 
 	printf("Test convertion of char and int");
+	printF(toUpper('a'));
+	printF(+toUpper('a'));
+	printf(toLower('A'));
+	printf(-toLower('A'));
+	printf(toUpper('a')-toLower('A'));
 	printf("#Result of convertion of char and int ends");
 
 	return;

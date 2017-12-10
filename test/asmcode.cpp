@@ -235,11 +235,11 @@ void func_asm()    // 以函数为单位生成目标代码
     while (table[position].type == CONSTTYPE)    // 将局部常量放到栈上
     {
         if(table[position].kind == CHARSY)
-            fprintf(ASMOUT, "\t\tli $v0, %d\n", table[position].charval);
+            fprintf(ASMOUT, "\t\tli $v1, %d\n", table[position].charval);
         else
-            fprintf(ASMOUT, "\t\tli $v0, %d\n", table[position].intval);
+            fprintf(ASMOUT, "\t\tli $v1, %d\n", table[position].intval);
         
-        fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", sp);
+        fprintf(ASMOUT, "\t\tsw $v1, %d($sp)\n", sp);
         table[position].address = sp;
         sp -= 4;
         position++;
@@ -269,29 +269,29 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v1");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+1]));
-                sprintf(temp1, "$v0");
+                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+1]));
+                sprintf(temp1, "$v1");
             }
             else if(isLetter(MIDLIST[midpointer+1][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+1], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
-                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    sprintf(temp1, "$v1");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v1");
                 }
             }
             
@@ -303,29 +303,29 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp2, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tla $t9, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t9, %d($t9)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp2, "$t9");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+2][0]) || MIDLIST[midpointer+2][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+2]));
-                sprintf(temp2, "$v1");
+                fprintf(ASMOUT, "\t\tli $t9, %d\n", atoi(MIDLIST[midpointer+2]));
+                sprintf(temp2, "$t9");
             }
             else if(isLetter(MIDLIST[midpointer+2][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+2], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+2]);
-                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+2]);
+                    fprintf(ASMOUT, "\t\tlw $t9, 0($t9)\n");
+                    sprintf(temp2, "$t9");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                    sprintf(temp2, "$t9");
                 }
             }
             
@@ -378,29 +378,29 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v1");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+1]));
-                sprintf(temp1, "$v0");
+                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+1]));
+                sprintf(temp1, "$v1");
             }
             else if(isLetter(MIDLIST[midpointer+1][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+1], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
-                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    sprintf(temp1, "$v1");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v1");
                 }
             }
             
@@ -415,29 +415,29 @@ void func_asm()    // 以函数为单位生成目标代码
                         sprintf(temp2, "$t%d", loc_t_reg[mid_reg_num][0]);
                     else
                     {
-                        fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
-                        fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
-                        sprintf(temp2, "$v1");
+                        fprintf(ASMOUT, "\t\tla $t9, %s\n", base_data);
+                        fprintf(ASMOUT, "\t\tlw $t9, %d($t9)\n", loc_t_reg[mid_reg_num][0]);
+                        sprintf(temp2, "$t9");
                     }
                 }
                 else if(isDigit(MIDLIST[midpointer+2][0]) || MIDLIST[midpointer+2][0]=='-')
                 {
-                    fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+2]));
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tli $t9, %d\n", atoi(MIDLIST[midpointer+2]));
+                    sprintf(temp2, "$t9");
                 }
                 else if(isLetter(MIDLIST[midpointer+2][0]))
                 {
                     position = LookupTab(MIDLIST[midpointer+2], 0);
                     if(position < tableindex[1])   // 如果是全局的
                     {
-                        fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+2]);
-                        fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
-                        sprintf(temp2, "$v1");
+                        fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+2]);
+                        fprintf(ASMOUT, "\t\tlw $t9, 0($t9)\n");
+                        sprintf(temp2, "$t9");
                     }
                     else
                     {
-                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                        sprintf(temp2, "$v1");
+                        fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                        sprintf(temp2, "$t9");
                     }
                 }
             }
@@ -480,12 +480,12 @@ void func_asm()    // 以函数为单位生成目标代码
             position = LookupTab(MIDLIST[midpointer+1], 0);
             if(position < tableindex[1])   // 全局数组
             {
-                fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
+                fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
                 if_glbarray = 1;
             }
             else    // 局部数组
             {
-                fprintf(ASMOUT, "\t\taddi $v0, $sp, %d\n", table[position].address);
+                fprintf(ASMOUT, "\t\taddi $v1, $sp, %d\n", table[position].address);
             }
             
             // 再处理第二个操作数，即数组索引  （寄存器，数字，或标识符）
@@ -497,13 +497,13 @@ void func_asm()    // 以函数为单位生成目标代码
                 Transfer_midreg(MIDLIST[midpointer+2]);
                 if(loc_t_reg[mid_reg_num][1] == 1)
                 {
-                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
-                    fprintf(ASMOUT, "\t\tmulu $v1, $v1, 4\n");
+                    fprintf(ASMOUT, "\t\tla $t9, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t9, %d($t9)\n", loc_t_reg[mid_reg_num][0]);
+                    fprintf(ASMOUT, "\t\tmulu $t9, $t9, 4\n");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tmulu $v1, $t%d, 4\n", loc_t_reg[mid_reg_num][0]);
+                    fprintf(ASMOUT, "\t\tmulu $t9, $t%d, 4\n", loc_t_reg[mid_reg_num][0]);
                 }
             }
             else if(isLetter(MIDLIST[midpointer+2][0]))
@@ -512,14 +512,14 @@ void func_asm()    // 以函数为单位生成目标代码
                 position = LookupTab(MIDLIST[midpointer+2], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+2]);
-                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
-                    fprintf(ASMOUT, "\t\tmulu $v1, $v1, 4\n");
+                    fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+2]);
+                    fprintf(ASMOUT, "\t\tlw $t9, 0($t9)\n");
+                    fprintf(ASMOUT, "\t\tmulu $t9, $t9, 4\n");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    fprintf(ASMOUT, "\t\tmulu $v1, $v1, 4\n");
+                    fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                    fprintf(ASMOUT, "\t\tmulu $t9, $t9, 4\n");
                 }
             }
             
@@ -556,11 +556,11 @@ void func_asm()    // 以函数为单位生成目标代码
             }
             
             if(num_or_reg == 0)
-                fprintf(ASMOUT, "\t\tlw %s, %d($v0)\n", temp3, getarray_addr);
+                fprintf(ASMOUT, "\t\tlw %s, %d($v1)\n", temp3, getarray_addr);
             else
             {
-                fprintf(ASMOUT, "\t\tadd $v0, $v0, $v1\n");
-                fprintf(ASMOUT, "\t\tlw %s, 0($v0)\n", temp3);
+                fprintf(ASMOUT, "\t\tadd $v1, $v1, $t9\n");
+                fprintf(ASMOUT, "\t\tlw %s, 0($v1)\n", temp3);
             }
         }
         else if((strcmp(MIDLIST[midpointer], mid_op[EQLCON]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[NEQCON]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[GTCON]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[GTECON]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[LSCON]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[LSECON]) == 0))    // 关系运算符
@@ -573,29 +573,29 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v1");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+1]));
-                sprintf(temp1, "$v0");
+                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+1]));
+                sprintf(temp1, "$v1");
             }
             else if(isLetter(MIDLIST[midpointer+1][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+1], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
-                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    sprintf(temp1, "$v1");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v1");
                 }
             }
             
@@ -607,29 +607,29 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp2, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tla $t9, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t9, %d($t9)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp2, "$t9");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+2][0]) || MIDLIST[midpointer+2][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+2]));
-                sprintf(temp2, "$v1");
+                fprintf(ASMOUT, "\t\tli $t9, %d\n", atoi(MIDLIST[midpointer+2]));
+                sprintf(temp2, "$t9");
             }
             else if(isLetter(MIDLIST[midpointer+2][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+2], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+2]);
-                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+2]);
+                    fprintf(ASMOUT, "\t\tlw $t9, 0($t9)\n");
+                    sprintf(temp2, "$t9");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp2, "$v1");
+                    fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                    sprintf(temp2, "$t9");
                 }
             }
             
@@ -724,38 +724,38 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v1");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+1]));
-                sprintf(temp1, "$v0");
+                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+1]));
+                sprintf(temp1, "$v1");
             }
             else if(isLetter(MIDLIST[midpointer+1][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+1], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
-                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    sprintf(temp1, "$v1");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v1");
                 }
             }
             
             position = LookupTab(MIDLIST[midpointer+3], 0);
             if(position < tableindex[1])
-                fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+3]);
+                fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+3]);
             else
-                fprintf(ASMOUT, "\t\taddi $v1, $sp, %d\n", table[position].address);
-            fprintf(ASMOUT, "\t\tsw %s, 0($v1)\n", temp1);
+                fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+            fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
             tempReg = 0;
             base_address = 4 + base_addr_offset;
         }
@@ -769,29 +769,29 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v1");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+1][0]) || MIDLIST[midpointer+1][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+1]));
-                sprintf(temp1, "$v0");
+                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+1]));
+                sprintf(temp1, "$v1");
             }
             else if(isLetter(MIDLIST[midpointer+1][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+1], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+1]);
-                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    sprintf(temp1, "$v1");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v1");
                 }
             }
             
@@ -803,7 +803,7 @@ void func_asm()    // 以函数为单位生成目标代码
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[ASSIGNARRAY]) == 0)   // []=   给数组赋值
         {
-            // 先处理第三个操作数，就是要给数组赋的那个值    temp1   $v0
+            // 先处理第三个操作数，就是要给数组赋的那个值    temp1   $v1
             if(MIDLIST[midpointer+3][0] == '~')
             {
                 Transfer_midreg(MIDLIST[midpointer+3]);
@@ -811,38 +811,38 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp1, "$t%d", loc_t_reg[mid_reg_num][0]);
                 else
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($v0)\n", loc_t_reg[mid_reg_num][0]);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($v1)\n", loc_t_reg[mid_reg_num][0]);
+                    sprintf(temp1, "$v1");
                 }
             }
             else if(isDigit(MIDLIST[midpointer+3][0]) || MIDLIST[midpointer+3][0]=='-')
             {
-                fprintf(ASMOUT, "\t\tli $v0, %d\n", atoi(MIDLIST[midpointer+3]));
-                sprintf(temp1, "$v0");
+                fprintf(ASMOUT, "\t\tli $v1, %d\n", atoi(MIDLIST[midpointer+3]));
+                sprintf(temp1, "$v1");
             }
             else if(isLetter(MIDLIST[midpointer+3][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+3], 0);
                 if(position < tableindex[1])   // 如果是全局的
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", MIDLIST[midpointer+3]);
-                    fprintf(ASMOUT, "\t\tlw $v0, 0($v0)\n");
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+3]);
+                    fprintf(ASMOUT, "\t\tlw $v1, 0($v1)\n");
+                    sprintf(temp1, "$v1");
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v0, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v0");
+                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                    sprintf(temp1, "$v1");
                 }
             }
             
-            // 先把数组的基地址load到$v1
+            // 先把数组的基地址load到$t9
             position = LookupTab(MIDLIST[midpointer+1], 0);
             if(position < tableindex[1])   // 全局数组
-                fprintf(ASMOUT, "\t\tla $v1, %s\n", MIDLIST[midpointer+1]);
+                fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+1]);
             else    // 局部数组
-                fprintf(ASMOUT, "\t\taddi $v1, $sp, %d\n", table[position].address);
+                fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
             
             // 第二个操作数，标识符，数字，或寄存器
             if(MIDLIST[midpointer+2][0] == '~')
@@ -864,10 +864,10 @@ void func_asm()    // 以函数为单位生成目标代码
                     moveReg++;
                 }
                 fprintf(ASMOUT, "\t\tmulu %s, %s, 4\n", temp2, temp2);
-                fprintf(ASMOUT, "\t\tadd $v1, $v1, %s\n", temp2);
+                fprintf(ASMOUT, "\t\tadd $t9, $t9, %s\n", temp2);
             }
             else if(isDigit(MIDLIST[midpointer+2][0]))    // 不可能是负数
-                fprintf(ASMOUT, "\t\taddi $v1, $v1, %d\n", atoi(MIDLIST[midpointer+2])*4);
+                fprintf(ASMOUT, "\t\taddi $t9, $t9, %d\n", atoi(MIDLIST[midpointer+2])*4);
             else if(isLetter(MIDLIST[midpointer+2][0]))
             {
                 position = LookupTab(MIDLIST[midpointer+2], 0);
@@ -876,10 +876,10 @@ void func_asm()    // 以函数为单位生成目标代码
                 else
                     fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
                 fprintf(ASMOUT, "\t\tmulu $t8, $t8, 4\n");
-                fprintf(ASMOUT, "\t\tadd $v1, $v1, $t8\n");
+                fprintf(ASMOUT, "\t\tadd $t9, $t9, $t8\n");
             }
             
-            fprintf(ASMOUT, "\t\tsw %s, 0($v1)\n", temp1);
+            fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
             tempReg = 0;
             base_address = 4 + base_addr_offset;
         }
@@ -1181,10 +1181,10 @@ void func_asm()    // 以函数为单位生成目标代码
                     fprintf(ASMOUT, "\t\tsw $t%d, %d($sp)\n", i, tempvalue);
                     tempvalue -= 4;
                 }
-                for (i=0; i<base_address - 4 - base_addr_offset; i+=4)
+                for (i=4; i<=base_address - 4 - base_addr_offset; i+=4)
                 {
-                    fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                    fprintf(ASMOUT, "\t\tlw $t8, %d($v0)\n", i);
+                    fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                    fprintf(ASMOUT, "\t\tlw $t8, %d($v1)\n", i);
                     fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", tempvalue);
                     tempvalue -= 4;
                 }
@@ -1199,11 +1199,11 @@ void func_asm()    // 以函数为单位生成目标代码
                 fprintf(ASMOUT, "\t\tlw $t%d, %d($sp)\n", i, tempvalue);
                 tempvalue -= 4;
             }
-            for (i=0; i<base_address - 4 - base_addr_offset; i+=4)
+            for (i=4; i<=base_address - 4 - base_addr_offset; i+=4)
             {
                 fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", tempvalue);
-                fprintf(ASMOUT, "\t\tla $v0, %s\n", base_data);
-                fprintf(ASMOUT, "\t\tsw $t8, %d($v0)\n", i);
+                fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
+                fprintf(ASMOUT, "\t\tsw $t8, %d($v1)\n", i);
                 tempvalue -= 4;
             }
             
