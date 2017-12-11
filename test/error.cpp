@@ -53,12 +53,12 @@ void error(int i)
             break;
             
         case UNDEFINED_IDENT:
-            printf("ERROR[%d] in LINE%d: Undefined identifier [%s]!\n", i, lc, token);
-            skip_symset(undefined_identEndSet);
+            printf("ERROR[%d] in LINE%d: Undefined identifier!\n", i, lc);
+            skip_sym(SEMICOLON);
             break;
             
         case REPEATDEF_IDENT:
-            printf("ERROR[%d] in LINE%d: Identifier [%s] has been defined before!\n", i, lc, token);
+            printf("ERROR[%d] in LINE%d: Identifier has been defined before!\n", i, lc);
             break;
             
         case ILLEGAL_CHAR:
@@ -212,7 +212,80 @@ void error(int i)
             skip_sym(SEMICOLON);
             break;
             
+        case REPEATDEF_FUNC:
+            printf("ERROR[%d] in LINE%d: The function is DEFINED BEFORE!\n", i, lc);
+            break;
+            
+        case ILLEGAL_FUNCNAME:
+            printf("ERROR[%d] in LINE%d: The function name is illegal or LOSE the function name!\n", i, lc);
+            break;
+            
+        case ILLEGAL_IDENT_HD:
+            printf("ERROR[%d] in LINE%d: Illegal identifier or Lose the identifier!\n", i, lc);
+            break;
+            
+        case ILLEGAL_IDENT:
+            printf("ERROR[%d] in LINE%d: The identifier is illegal or Lose the identifier!\n", i, lc);
+            skip_sym(SEMICOLON);
+            break;
+            
+        case ILLEGAL_PARANAME:
+            printf("ERROR[%d] in LINE%d: The parameter name is illegal!\n", i, lc);
+            skip_sym(RPARENT);
+            break;
+            
+        case FUNCDEF_LOSE_LPARENT:
+            printf("ERROR[%d] in LINE%d: The symbol after func define is not (!\n", i, lc);
+            break;
+            
+        case LOSE_LPARENT:
+            printf("ERROR[%d] in LINE%d: You forget to add (!\n", i, lc);
+            skip_sym(RPARENT);
+            break;
+            
+        case LOSE_RPARENT:
+            printf("ERROR[%d] in LINE%d: You forget to add )!\n", i, lc);
+            break;
+            
+        case ARRAYLEN_ZERO:
+            printf("ERROR[%d] in LINE%d: The length of array is ZERO!\n", i, lc);
+            break;
+            
+        case ARRAY_LOSE_INDEX:
+            printf("ERROR[%d] in LINE%d: The array must have the index!\n", i, lc);
+            break;
+            
+        case ASSIGN_ARRAY_ERROR:
+            printf("ERROR[%d] in LINE%d: The array must have the index or index have error!\n", i, lc);
+            skip_sym(SEMICOLON);
+            break;
+            
+        case ARRAY_ERROR:
+            printf("ERROR[%d] in LINE%d: The length of array have errors!\n", i, lc);
+            skip_sym(SEMICOLON);
+            break;
+            
+        case SCANF_FUNC:
+            printf("ERROR[%d] in LINE%d: You should not scanf a function!\n", i, lc);
+            break;
+            
+        case IDENT_TYPE_ERROR:
+            printf("ERROR[%d] in LINE%d: The ident type and the var type doesnt match!\n", i, lc);
+            skip_symset(identtypeEndSet);
+            break;
+            
+        case EXPRESSION_ERROR:
+            printf("ERROR[%d] in LINE%d: There should be factor or item or expressiton!Expr Error!\n", i, lc);
+            skip_sym(SEMICOLON);
+            break;
+            
+        case VARDEF_ERROR:
+            printf("ERROR[%d] in LINE%d: Variable define has errors!\n", i, lc);
+            skip_sym(SEMICOLON);
+            break;
+            
         default:
+            printf("ERROR[%d] in LINE%d: There has error!\n", i, lc);
             break;
     }
     

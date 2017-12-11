@@ -81,6 +81,11 @@ void init_symset()
     conditionerrorEndSet.fsym[0] = RPARENT;
     conditionerrorEndSet.fsym[1] = SEMICOLON;
     conditionerrorEndSet.setlen = 2;
+    
+    // ident_type_error出错后
+    identtypeEndSet.fsym[0] = COMMA;
+    identtypeEndSet.fsym[1] = SEMICOLON;
+    identtypeEndSet.setlen = 2;
 }
 
 int find_symset(int symvalue, symset Aset)
@@ -123,23 +128,21 @@ void program()
         if(symbol == IDENT || symbol == MAIN)      // 不是标识符则是main保留字，否则报错
             strcpy(ident_name, token);
         else
-            error(LOSE_IDENT);
+            error(ILLEGAL_FUNCNAME);
         
         getsym();     // 进入函数处理的时候就已经读了一个左括号了
-        if(symbol == LPARENT)
+        if(symbol != LPARENT)
+            error(FUNCDEF_LOSE_LPARENT);     // 不处理
+        
+        if(type == VOIDSY)
         {
-            if(type == VOIDSY)
-            {
-                if(strcmp(ident_name, sym_name[MAIN]) == 0)
-                    break;        // 说明是main函数，退出，进入主函数处理子程序
-                else
-                    VoidFuncDef(ident_name);
-            }
+            if(strcmp(ident_name, sym_name[MAIN]) == 0)
+                break;        // 说明是main函数，退出，进入主函数处理子程序
             else
-                RetFuncDef(ident_name, type);
+                VoidFuncDef(ident_name);
         }
         else
-            error(LOSE_LPARENT);
+            RetFuncDef(ident_name, type);
     }
     
     if(strcmp(ident_name, sym_name[MAIN]) != 0)// main function
@@ -186,7 +189,10 @@ void constDef()
             if(symbol == IDENT)
                 strcpy(constname, token);    // 此时token中存放标识符名字，要填符号表
             else
-                error(LOSE_IDENT);  // 缺少标识符，跳到下一个,或者;
+            {
+                error(ILLEGAL_IDENT);  // 缺少标识符，跳到下一个;
+                return;
+            }
             
             getsym();
             if(symbol == BECOMES)
@@ -200,7 +206,7 @@ void constDef()
             if(symbol == PLUS || symbol == MINUS || symbol == NUMBER)
                 Integer();
             else
-                error(IDENT_TYPE_ERROR);
+                error(IDENT_TYPE_ERROR);   // 跳到,或;
             
             EnterTab(constname, CONSTTYPE, INTSY, num, 0, 0, 0);
             
@@ -215,7 +221,10 @@ void constDef()
             if(symbol == IDENT)
                 strcpy(constname, token);  // 此时token中存放标识符名字，要填符号表
             else
-                error(LOSE_IDENT);  // 缺少标识符，跳到下一个,或者;
+            {
+                error(ILLEGAL_IDENT);  // 缺少标识符，跳到下一个;
+                return;
+            }
             
             getsym();
             if(symbol == BECOMES)
@@ -231,11 +240,10 @@ void constDef()
                 EnterTab(constname, CONSTTYPE, CHARSY, 0, token[0], 0, 0);    // 登录符号表
                 sprintf(constvalue, "%d", token[0]);
                 gen_midcode(mid_op[CONSTOP], mid_op[CHAROP], constvalue, constname);
+                getsym();
             }
             else
-                error(IDENT_TYPE_ERROR);
-            
-            getsym();
+                error(IDENT_TYPE_ERROR);   // 跳到，或；
         } while (symbol == COMMA);
     }
 }
@@ -289,7 +297,7 @@ void retfunc_var_dec(int sym)
     if(symbol == IDENT)
         strcpy(ident_name, token);
     else
-        error(LOSE_IDENT);
+        error(ILLEGAL_IDENT_HD);
     
     getsym();
     if(symbol == LPARENT)
@@ -327,7 +335,7 @@ void varDecl(char *ident_name, int type, int flag)    // flag为1代表是回读
             if(symbol == IDENT)
                 varDef(Default, type, 0);
             else
-                error(LOSE_IDENT);
+                error(ILLEGAL_IDENT);    // 跳到下一个;
             
             if(symbol == SEMICOLON)
                 getsym();
@@ -359,7 +367,10 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
             getsym();
         }
         else
-            error(LOSE_IDENT);
+        {
+            error(ILLEGAL_IDENT);     // 不可能到这里，不用管
+            return;
+        }
     }
     // 这时候symbol为第一个标识符后的符号
     do {
@@ -372,7 +383,10 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
                 getsym();
             }
             else
-                error(LOSE_IDENT);
+            {
+                error(ILLEGAL_IDENT);   // 到下一个;
+                return;
+            }
         }
         switch (symbol) {       // 变量定义中，标识符后面的合法后继符
             case LBRACK:      // 数组处理
@@ -383,7 +397,7 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
                     if(token[0] == '0' && strlen(token)>1)
                         error(CLEAN_ZERO);
                     else if (num == 0)
-                        error(ARRAY_ERROR);    // 数组长度不能是0
+                        error(ARRAYLEN_ZERO);    // 数组长度不能是0,不处理
                     else
                         arraylen = num;
                     
@@ -399,7 +413,10 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
                     getsym();
                 }
                 else
-                    error(ARRAY_ERROR);   // 数组长度没有定义或者不是无符号整数定义
+                {
+                    error(ARRAY_ERROR);   // 数组长度没有定义或者不是无符号整数定义  跳到下一个;
+                    return;
+                }
                 break;
                 
             case COMMA:
@@ -413,7 +430,7 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
                 break;
                 
             default:
-                error(ILLEGAL_FOLLOWER);
+                error(VARDEF_ERROR);
                 break;
         }
         count++;
@@ -424,11 +441,18 @@ void varDef(char *ident_name, int type, int flag) //flag为1代表回读判断�
 void RetFuncDef(char *ident_name, int type)   // 此时的symbol为LPARENT
 {
     char typeop[wlMAX];
+    int i;
     
     if(type == INTSY)
         strcpy(typeop, mid_op[INTOP]);
     else if(type == CHARSY)
         strcpy(typeop, mid_op[CHAROP]);
+    
+    for(i=1; i<=levelnum; i++)
+    {
+        if(strcmp(table[tableindex[i]].name, ident_name) == 0)
+            error(REPEATDEF_FUNC);
+    }
     
     levelnum++;
     tableindex[levelnum] = elenum;
@@ -442,7 +466,7 @@ void RetFuncDef(char *ident_name, int type)   // 此时的symbol为LPARENT
     if(symbol == RPARENT)   // 直接到这步，说明参数表是空的
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);     // 不处理
     
     if(symbol == LCURLY)
     {
@@ -468,6 +492,14 @@ void RetFuncDef(char *ident_name, int type)   // 此时的symbol为LPARENT
 // ＜无返回值函数定义＞::= void＜标识符＞‘(’＜参数表＞‘)’ ‘{’＜复合语句＞‘}’    checked
 void VoidFuncDef(char *ident_name)
 {
+    int i = 0;
+    
+    for(i=1; i<=levelnum; i++)
+    {
+        if(strcmp(table[tableindex[i]].name, ident_name) == 0)
+            error(REPEATDEF_FUNC);
+    }
+    
     levelnum++;
     tableindex[levelnum] = elenum;
     EnterTab(ident_name, FUNCTIONTYPE, VOIDSY, 0, 0, 0, 0);
@@ -480,7 +512,7 @@ void VoidFuncDef(char *ident_name)
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);     // 不处理
     
     if(symbol == LCURLY)
     {
@@ -526,7 +558,10 @@ void ParaTable()
         if(symbol == IDENT)
             strcpy(para_name, token);
         else
-            error(LOSE_IDENT);
+        {
+            error(ILLEGAL_PARANAME);     // 重点测一下，跳到下一个)
+            return;
+        }
         
         EnterTab(para_name, PARAMETER, type, 0, 0, 0, 0);
         gen_midcode(mid_op[PARAOP], typeop, 0, para_name);
@@ -668,7 +703,7 @@ void MainFunc()    // 入口symbol是'('
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);     // 不处理
     
     if(symbol == LCURLY)
         getsym();
@@ -716,7 +751,10 @@ void Expression()
         }
     }
     else
+    {
         error(EXPRESSION_ERROR);
+        return;
+    }
     
     while(symbol == PLUS || symbol == MINUS)
     {
@@ -728,7 +766,10 @@ void Expression()
             strcpy(temp2, tokenmid);
         }
         else
+        {
             error(EXPRESSION_ERROR);
+            return;
+        }
         
         sprintf(tokenmid, "~t%d", reg_num++);
         if(type == PLUS)
@@ -756,7 +797,10 @@ void Item()
         strcpy(temp1, tokenmid);
     }
     else
+    {
         error(EXPRESSION_ERROR);
+        return;
+    }
     
     while(symbol == MULTI || symbol == DIVISION)
     {
@@ -768,7 +812,10 @@ void Item()
             strcpy(temp2, tokenmid);
         }
         else
+        {
             error(EXPRESSION_ERROR);
+            return;
+        }
         sprintf(tokenmid, "~t%d", reg_num++);
         if(type == MULTI)
             gen_midcode(mid_op[MULTIOP], temp1, temp2, tokenmid);
@@ -829,7 +876,10 @@ void Factor()
                             strcpy(temp1, tokenmid);
                         }
                         else
-                            error(ARRAY_ERROR);
+                        {
+                            error(EXPRESSION_ERROR);
+                            return;
+                        }
                         
                         if(symbol == RBRACK)
                             getsym();
@@ -883,12 +933,15 @@ void Factor()
                 //  不需要再更新tokenmid
             }
             else
+            {
                 error(EXPRESSION_ERROR);
+                return;
+            }
             
             if(symbol == RPARENT)
                 getsym();
             else
-                error(LOSE_RPARENT);
+                error(LOSE_RPARENT);   // 不处理
             break;
             
         case PLUS:
@@ -913,7 +966,8 @@ void Factor()
             break;
             
         default:
-            error(EXPRESSION_ERROR);
+            error(EXPRESSION_ERROR);    // 不可能到这里
+            return;
             break;
     }
 }
@@ -935,12 +989,12 @@ void IfState()
             error(CONDITION_ERROR);
     }
     else
-        error(LOSE_LPARENT);
+        error(LOSE_LPARENT);    // 跳到)
     
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);    // 不处理
     
     if(find_symset(symbol, stateBegSet) == 1)
         Statement();
@@ -1094,12 +1148,12 @@ void DowhileState()
             error(CONDITION_ERROR);
     }
     else
-        error(LOSE_LPARENT);
+        error(LOSE_LPARENT);     // 跳到)
     
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);   // 不处理
 }
 
 // ＜情况语句＞::= switch ‘(’＜表达式＞‘)’ ‘{’＜情况表＞‘}’    checked
@@ -1121,15 +1175,18 @@ void SwitchState()
             switchtype = IOC;
         }
         else
+        {
             error(EXPRESSION_ERROR);
+            return;
+        }
     }
     else
-        error(LOSE_LPARENT);
+        error(LOSE_LPARENT);     // 跳到)
     
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);    // 不处理
     
     sprintf(tokenmid, "~label%d", label_num++);
     strcpy(labelname, tokenmid);
@@ -1255,7 +1312,7 @@ void CallState(int void_or_ret, int state_or_factor)    // void是0，有返回�
     position = LookupTab(func_name, 0);
     if(position == (-1))
     {
-        error(UNDEFINED_FUNC);
+        error(UNDEFINED_FUNC);    // 不可能到这里
         return;
     }
     
@@ -1267,12 +1324,12 @@ void CallState(int void_or_ret, int state_or_factor)    // void是0，有返回�
             ParaValueList(position);
     }
     else
-        error(LOSE_LPARENT);
+        error(LOSE_LPARENT);    // 跳到)
     
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);    // 不处理
     
     if(state_or_factor == 0)
         gen_midcode(mid_op[CALLOP], func_name, 0, 0);
@@ -1292,7 +1349,10 @@ void ParaValueList(int position)    // postion为当前函数在符号表中的�
             gen_midcode(mid_op[VALUEPARAOP], 0, 0, tokenmid);
         }
         else
+        {
             error(EXPRESSION_ERROR);
+            return;
+        }
         
         count++;
     } while (symbol == COMMA);
@@ -1322,10 +1382,8 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
             }
             else
             {
-                if(symbol == LBRACK)
-                    error(IDENT_TYPE_ERROR);
-                else
-                    error(EXPRESSION_ERROR);
+                error(EXPRESSION_ERROR);
+                return;
             }
         }
         else
@@ -1345,15 +1403,21 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
                 strcpy(temp1, tokenmid);
             }
             else
+            {
                 error(EXPRESSION_ERROR);
+                return;
+            }
         }
         else
-            error(ARRAY_ERROR);
+        {
+            error(ASSIGN_ARRAY_ERROR);    // 跳到下一个;
+            return;
+        }
         
         if(symbol == RBRACK)
             getsym();
         else
-            error(ARRAY_ERROR);
+            error(LOSE_RBRACK);
         
         if(symbol == BECOMES)
         {
@@ -1365,7 +1429,10 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
                 gen_midcode(mid_op[ASSIGNARRAY], ident_name, temp1, temp2);
             }
             else
+            {
                 error(EXPRESSION_ERROR);
+                return;
+            }
         }
         else
         {
@@ -1403,9 +1470,9 @@ void ScanfState()
             else if(table[position].type == CONSTTYPE)
                 error(ASSIGN_CONST);
             else if (table[position].type == FUNCTIONTYPE)
-                error(IDENT_TYPE_ERROR);
+                error(SCANF_FUNC);     // 不处理
             else if(table[position].length != 0)
-                error(ARRAY_ERROR);
+                error(ARRAY_LOSE_INDEX);     // 不处理
             else
                 getsym();
             
@@ -1426,7 +1493,7 @@ void ScanfState()
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);    // 不处理
 }
 
 // ＜写语句＞::= printf ‘(’＜字符串＞,＜表达式＞‘)’| printf ‘(’＜字符串＞‘)’| printf‘(’＜表达式＞‘)’   checked
@@ -1482,12 +1549,12 @@ void PrintfState()
         }
     }
     else
-        error(LOSE_LPARENT);
+        error(LOSE_LPARENT);     // 跳到)
     
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);     // 不处理
 }
 
 // ＜返回语句＞::= return[‘(’＜表达式＞‘)’]
@@ -1504,7 +1571,10 @@ void ReturnState()
             gen_midcode(mid_op[RETURNOP], 0, 0, tokenmid);
         }
         else
+        {
             error(EXPRESSION_ERROR);
+            return;
+        }
     }
     else
     {
@@ -1515,7 +1585,7 @@ void ReturnState()
     if(symbol == RPARENT)
         getsym();
     else
-        error(LOSE_RPARENT);
+        error(LOSE_RPARENT);    // 不处理
 }
 
 

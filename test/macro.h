@@ -61,55 +61,62 @@
 
 
 /*-----------------------------错误处理----------------------------*/
-#define FILE_ERROR 0
-#define TOOLONG_LL 1
-#define TOOLONG_WL 2
-#define TOOBIG_NUMBER 3
-#define UNDEFINED_IDENT 4
-#define REPEATDEF_IDENT 5
-#define LOSE_IDENT 6
-#define ILLEGAL_CHAR 7
-#define ILLEGAL_STRING 8
-#define LOSE_COLON 10
-#define LOSE_SEMICOLON 11
-#define LOSE_LBRACK 12
-#define LOSE_RBRACK 13
-#define LOSE_LCURLY 14
-#define LOSE_RCURLY 15
-#define LOSE_LPARENT 16
-#define LOSE_RPARENT 17
-#define LOSE_ASSIGN 18
-#define LOSE_CHAR 19
-#define LOSE_STRING 20
-#define UNDEFINED_FUNC 21
-#define NO_MAIN 22
-#define PARANUMBER_ERROR 24
-#define LOSE_RETURN 25
-#define LOSE_TYPE 26
-#define CLEAN_ZERO 27
-#define DIV_ZERO 28
-#define CLEAN_OPERATECH 29
-#define ASSIGN_CONST 30
-#define ARRAY_ERROR 32
+#define FILE_ERROR 0     //
+#define TOOLONG_LL 1     //
+#define TOOLONG_WL 2   //
+#define TOOBIG_NUMBER 3    //
+#define UNDEFINED_IDENT 4    //
+#define REPEATDEF_IDENT 5    //
+#define ILLEGAL_IDENT 6    //
+#define ILLEGAL_CHAR 7         //
+#define ILLEGAL_STRING 8    //
+#define LOSE_COLON 10    //
+#define LOSE_SEMICOLON 11    //
+#define LOSE_LBRACK 12    //
+#define LOSE_RBRACK 13    //
+#define LOSE_LCURLY 14    //
+#define LOSE_RCURLY 15    //
+#define LOSE_LPARENT 16    //
+#define LOSE_RPARENT 17    //
+#define LOSE_ASSIGN 18    //
+#define LOSE_CHAR 19    //
+#define UNDEFINED_FUNC 21    //
+#define NO_MAIN 22    //
+#define PARANUMBER_ERROR 24    //
+#define LOSE_RETURN 25    //
+#define LOSE_TYPE 26    //
+#define CLEAN_ZERO 27    //
+#define DIV_ZERO 28    // .....//
+#define CLEAN_OPERATECH 29    //
+#define ASSIGN_CONST 30    //
+#define ARRAY_ERROR 32    //
 #define ARRAY_OVERFLOW 33
-#define TABLE_FULL 34
-#define STATEMENT_ERROR 35
-#define CONDITION_ERROR 36
-#define CASE_NOT_MATCH 37
-#define REPEAT_CASE 38
-#define CASE_NOCONSTANT 39
-#define SCANF_ERROR 40
-#define PRINTF_ERROR 41
-#define ILLEGAL_FOLLOWER 43
-#define EXPRESSION_ERROR 44
-#define CONSTDEF_ERROR 45
-#define MAIN_NOTEND 46
-#define EXPR_HAS_VOIDFUNC 47
-#define STRING_NEWLINE 48
-#define IDENT_TYPE_ERROR 49
-#define NO_CASE_TABLE 51
-#define BEFORE_ZERO 52
-#define CONSTDEF_LOSETYPE 53
+#define TABLE_FULL 34    //
+#define STATEMENT_ERROR 35    //
+#define CONDITION_ERROR 36    //
+#define CASE_NOT_MATCH 37    //
+#define REPEAT_CASE 38    //
+#define CASE_NOCONSTANT 39    //
+#define SCANF_ERROR 40    //
+#define PRINTF_ERROR 41    //
+#define VARDEF_ERROR 43    //
+#define EXPRESSION_ERROR 44    //
+#define MAIN_NOTEND 46    //
+#define EXPR_HAS_VOIDFUNC 47    //
+#define STRING_NEWLINE 48    //
+#define IDENT_TYPE_ERROR 49    //
+#define NO_CASE_TABLE 51    //
+#define BEFORE_ZERO 52    //
+#define CONSTDEF_LOSETYPE 53    //
+#define REPEATDEF_FUNC 54    //
+#define ILLEGAL_FUNCNAME 55    //
+#define ILLEGAL_IDENT_HD 56    //
+#define ILLEGAL_PARANAME 57    //
+#define FUNCDEF_LOSE_LPARENT 58    //
+#define ARRAYLEN_ZERO 59    //
+#define ARRAY_LOSE_INDEX 60    //
+#define ASSIGN_ARRAY_ERROR 61    //
+#define SCANF_FUNC 62    //
 
 /*-----------------------------符号表项的类型----------------------------*/
 #define CONSTTYPE 1

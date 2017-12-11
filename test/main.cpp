@@ -38,6 +38,7 @@ symset undefined_identEndSet;
 symset expr_arrayerrorEndSet;
 symset casenotableEndSet;
 symset conditionerrorEndSet;
+symset identtypeEndSet;
 
 SymItem table[tablelMAX];
 int tableindex[tablelMAX];
@@ -208,8 +209,8 @@ int main() {
     if(file == NULL)
         error(FILE_ERROR);
     
-    midcode_out = fopen("midcode.txt", "w");
-    ASMOUT = fopen("asmcode.asm", "w");
+    midcode_out = fopen("midcode3.txt", "w");
+    ASMOUT = fopen("asmcode3.asm", "w");
     
     getch();
     program();
@@ -225,7 +226,7 @@ int main() {
     gen_asm();
     
     fclose(ASMOUT);    // 第二遍
-    ASMOUT = fopen("asmcode.asm", "w");
+    ASMOUT = fopen("asmcode3.asm", "w");
     round++;
     new_to_scan();
     gen_asm();

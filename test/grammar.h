@@ -27,6 +27,7 @@ extern symset undefined_identEndSet;
 extern symset expr_arrayerrorEndSet;
 extern symset casenotableEndSet;
 extern symset conditionerrorEndSet;
+extern symset identtypeEndSet;
 // extern SymItem table[tablelMAX];
 extern int tableindex[tablelMAX];
 extern char tokenmid[wlMAX];
