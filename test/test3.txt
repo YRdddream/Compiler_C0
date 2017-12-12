@@ -2,7 +2,7 @@ const int i = 100;
 const int j = 200;
 int d[10];
 
-void sort (int k, int k1, int k2, int k3, int i, int j)
+void sort (int k0, int k, int k1, int k2, int k3, int i, int j)
 {
     int x,y,z;
     int tmp;
@@ -34,9 +34,9 @@ void sort (int k, int k1, int k2, int k3, int i, int j)
     }while(x<=y)
 
     if(x<j)
-        sort(0,0,0,0,x,j);
+        sort(1,0,0,0,0,x,j);
     if(i<y)
-        sort(0,2,0,5,i,y);
+        sort(9,0,2,0,5,i,y);
 }
 
 void main()
@@ -44,18 +44,19 @@ void main()
     int i;
     i = 0;
 
-    d[0]=9;
-    d[1]=-8;
-    d[2]=2;
-    d[3]=7;
-    d[4]=109;
-    d[5]=-29;
-    d[6]=17;
-    d[7]=0;
-    d[8]=2
-    ;
-    d[9]=11;
-    sort(0,0,0,0,0,9);
+    d[0]=17;
+    d[1]=10;
+    d[2]=21;
+    d[3]=-4;
+    d[4]=-3;
+    d[5]=0;
+    d[6]=-3;
+    d[7]=-4;
+    d[8]=5
+    ;;;;
+    d[9]=19;
+
+    sort(4,0,0,0,0,0,9);
 
     do
     {

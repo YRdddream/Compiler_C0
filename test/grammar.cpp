@@ -45,7 +45,7 @@ void init_symset()
     case_errorBegSet.fsym[1] = CASESY;
     case_errorBegSet.setlen = 2;
     
-    // 标识符未定义跳到的地方
+    // 标识符未定义跳到的地方    修改成了跳到下一个;
     undefined_identEndSet.fsym[0] = IFSY;
     undefined_identEndSet.fsym[1] = DOSY;
     undefined_identEndSet.fsym[2] = SWITCHSY;
@@ -1472,7 +1472,7 @@ void ScanfState()
             else if (table[position].type == FUNCTIONTYPE)
                 error(SCANF_FUNC);     // 不处理
             else if(table[position].length != 0)
-                error(ARRAY_LOSE_INDEX);     // 不处理
+                error(ARRAY_LOSE_INDEX);     // scanf不能scanf一个数组，跳到下一个;
             else
                 getsym();
             

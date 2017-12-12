@@ -252,7 +252,8 @@ void error(int i)
             break;
             
         case ARRAY_LOSE_INDEX:
-            printf("ERROR[%d] in LINE%d: The array must have the index!\n", i, lc);
+            printf("ERROR[%d] in LINE%d: You can not scanf an array!\n", i, lc);
+            skip_sym(RPARENT);
             break;
             
         case ASSIGN_ARRAY_ERROR:

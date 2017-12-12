@@ -132,6 +132,8 @@ endfunction,  ,  ,
 function, void,  , main
 const, char, 42, mult
 const, int, 42, multc
+int,  ,  , str11
+int,  ,  , label1
 int,  ,  , a1
 int,  ,  , b1
 int,  ,  , c1
@@ -143,6 +145,8 @@ char,  ,  , ch2
 char,  ,  , ch3
 char, 3,  , ch4
 =, 1,  , sum
+=, 1,  , str11
+=, 2,  , label1
 -, 0,  , ~t40
 =, ~t40,  , i
 =, sum,  , i
@@ -344,5 +348,7 @@ call, tolower,  , ~t108
 -, ~t107, ~t108, ~t109
 printf, ~t109,  , 0
 printf, ~str40,  , 
++, label1, str11, ~t110
+printf, ~t110,  , 0
 return,  ,  , 
 endfunction,  ,  , 

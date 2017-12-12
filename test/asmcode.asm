@@ -467,16 +467,22 @@ Label11:
 		jr $ra
 		nop
 main:	
-		addi $sp, $sp, -112
-		sw $ra, 108($sp)
-		sw $fp, 104($sp)
+		addi $sp, $sp, -120
+		sw $ra, 116($sp)
+		sw $fp, 112($sp)
 		move $fp, $sp
 		li $v1, 42
-		sw $v1, 100($sp)
+		sw $v1, 108($sp)
 		li $v1, 42
-		sw $v1, 96($sp)
+		sw $v1, 104($sp)
 		li $v1, 1
 		addi $t9, $sp, 72
+		sw $v1, 0($t9)
+		li $v1, 1
+		addi $t9, $sp, 100
+		sw $v1, 0($t9)
+		li $v1, 2
+		addi $t9, $sp, 96
 		sw $v1, 0($t9)
 		li $v1, 0
 		sub $t0, $0, $v1
@@ -861,12 +867,12 @@ Label17:
 		li $v0, 4
 		la $a0, Str34
 		syscall
-		lw $v1, 100($sp)
-		lw $t9, 96($sp)
+		lw $v1, 108($sp)
+		lw $t9, 104($sp)
 		sub $t0, $v1, $t9
 		bnez $t0, Label21
 		nop
-		lw $t8, 100($sp)
+		lw $t8, 108($sp)
 		beqz $t8, Label22
 		nop
 		la $t8, int1
@@ -956,8 +962,8 @@ Label23:
 		la $t9, a
 		sw $t0, 0($t9)
 Label24:	
-		lw $v1, 100($sp)
-		lw $t9, 96($sp)
+		lw $v1, 108($sp)
+		lw $t9, 104($sp)
 		sub $t0, $v1, $t9
 		bnez $t0, Label23
 		nop
@@ -1044,4 +1050,10 @@ Label26:
 		syscall
 		li $v0, 4
 		la $a0, Str40
+		syscall
+		lw $v1, 96($sp)
+		lw $t9, 100($sp)
+		add $t0, $v1, $t9
+		li $v0, 1
+		move $a0, $t0
 		syscall

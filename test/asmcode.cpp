@@ -46,9 +46,11 @@ void delete_wave_line(char a[])   // 把~label0和~string0的~都去掉
             a[i-1] = a[i];
             i++;
         }
+        if(a[0]=='l' || a[0]=='s')
+            a[0] -= 32;
     }
     else
-        a[0] -= 32;
+        return;
 }
 
 int max_valuepara_num(int position)   // 函数中出现的最大值参数的个数，要在栈中开辟这块空间
@@ -919,18 +921,18 @@ void func_asm()    // 以函数为单位生成目标代码
             // 有字符串先输出字符串
             if(round == 1)
             {
-                if(MIDLIST[midpointer+1][1] == 's')    // 第一个操作数是字符串
+                if((MIDLIST[midpointer+1][0] == '~') && (MIDLIST[midpointer+1][1] == 's'))    // 第一个操作数是字符串[我怎么能这么傻逼呢？？？]   第一遍就把label和str的第一个字母变成大写,第二遍什么都不做
                 {
                     if_has_string = 1;
                     fprintf(ASMOUT, "\t\tli $v0, 4\n");
-                    delete_wave_line(MIDLIST[midpointer+1]);
+                    delete_wave_line(MIDLIST[midpointer+1]);  
                     fprintf(ASMOUT, "\t\tla $a0, %s\n", MIDLIST[midpointer+1]);
                     fprintf(ASMOUT, "\t\tsyscall\n");
                 }
             }
             else
             {
-                if(MIDLIST[midpointer+1][0] == 's')    // 第一个操作数是字符串
+                if(MIDLIST[midpointer+1][0] == 'S')    // 第一个操作数是字符串
                 {
                     if_has_string = 1;
                     fprintf(ASMOUT, "\t\tli $v0, 4\n");

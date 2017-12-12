@@ -1,107 +1,313 @@
-const, int, 100, i
-const, int, 200, j
-int, 10,  , d
-function, void,  , sort
+const, int, 7, _global_constint
+const, char, 42, _message_to_the_world
+int, 10,  , _global_int_arr
+int,  ,  , _global_int
+char, 10,  , _global_char_arr
+char,  ,  , _global_char
+function, void,  , init
+printf, ~str0,  , 
+printf, ~str1,  , 
+scanf, _global_int,  , 0
+scanf, _global_char,  , 1
+printf, ~str2, _global_int, 0
+printf, ~str3, _global_char, 1
+printf, ~str4, _message_to_the_world, 1
+endfunction,  ,  , 
+function, int,  , fib
 parameter, int,  , k
-parameter, int,  , k1
-parameter, int,  , k2
-parameter, int,  , k3
-parameter, int,  , i
-parameter, int,  , j
-int,  ,  , x
-int,  ,  , y
-int,  ,  , z
-int,  ,  , tmp
-=, i,  , x
-=, j,  , y
-+, i, j, ~t0
-/, ~t0, 2, ~t1
-=[], d, ~t1, ~t2
-=, ~t2,  , z
+>, k, 1, ~t0
+blez, ~t0,  , ~label0
+-, k, 1, ~t1
+valuepara,  ,  , ~t1
+call, fib,  , ~t2
+-, k, 2, ~t3
+valuepara,  ,  , ~t3
+call, fib,  , ~t4
++, ~t2, ~t4, ~t5
+*, -1, 0, ~t6
++, ~t5, ~t6, ~t7
+return,  ,  , ~t7
 setlabel,  ,  , ~label0
+==, k, 0, ~t8
+bnez, ~t8,  , ~label1
+return,  ,  , 1
 setlabel,  ,  , ~label1
-=[], d, y, ~t3
-<, z, ~t3, ~t4
-bgez, ~t4,  , ~label2
--, y, 1, ~t5
-=, ~t5,  , y
+==, k, 1, ~t9
+bnez, ~t9,  , ~label2
+return,  ,  , 1
 setlabel,  ,  , ~label2
-=[], d, y, ~t6
-<, z, ~t6, ~t7
-bltz, ~t7,  , ~label1
+endfunction,  ,  , 
+function, void,  , if_test
+int,  ,  , tester
+printf, ~str5,  , 
+printf, ~str6,  , 
+scanf, tester,  , 0
+beqz, 1,  , ~label3
 setlabel,  ,  , ~label3
-=[], d, x, ~t8
->, z, ~t8, ~t9
-blez, ~t9,  , ~label4
-+, x, 1, ~t10
-=, ~t10,  , x
+beqz, 0,  , ~label4
 setlabel,  ,  , ~label4
-=[], d, x, ~t11
->, z, ~t11, ~t12
-bgtz, ~t12,  , ~label3
-<=, x, y, ~t13
-bgtz, ~t13,  , ~label5
-=[], d, x, ~t14
-=, ~t14,  , tmp
-=[], d, y, ~t15
-[]=, d, x, ~t15
-[]=, d, y, tmp
-+, x, 1, ~t16
-=, ~t16,  , x
--, y, 1, ~t17
-=, ~t17,  , y
+beqz, 1,  , ~label5
 setlabel,  ,  , ~label5
-<=, x, y, ~t18
-blez, ~t18,  , ~label0
-<, x, j, ~t19
-bgez, ~t19,  , ~label6
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , x
-valuepara,  ,  , j
-call, sort,  , 
-setlabel,  ,  , ~label6
-<, i, y, ~t20
-bgez, ~t20,  , ~label7
-valuepara,  ,  , 0
-valuepara,  ,  , 2
-valuepara,  ,  , 0
-valuepara,  ,  , 5
-valuepara,  ,  , i
-valuepara,  ,  , y
-call, sort,  , 
+beqz, tester,  , ~label6
+beqz, 1,  , ~label7
+printf, ~str7,  , 
+*, 2, 1, ~t10
++, 0, ~t10, ~t11
+beqz, ~t11,  , ~label8
+printf, ~str8,  , 
+*, 3, 1, ~t12
+beqz, ~t12,  , ~label9
+printf, ~str9,  , 
+*, 1, 4, ~t13
+beqz, ~t13,  , ~label10
+printf, ~str10,  , 
+/, 5, 1, ~t14
+beqz, ~t14,  , ~label11
+printf, ~str11,  , 
++, 6, 0, ~t15
+beqz, ~t15,  , ~label12
+printf, ~str12,  , 
+*, 1, 7, ~t16
++, 0, ~t16, ~t17
+beqz, ~t17,  , ~label13
+printf, ~str13,  , 
+/, 8, 1, ~t18
++, ~t18, 0, ~t19
+-, ~t19, 0, ~t20
+beqz, ~t20,  , ~label14
+printf, ~str14,  , 
++, 9, 9, ~t21
+*, 9, 1, ~t22
+-, ~t21, ~t22, ~t23
+beqz, ~t23,  , ~label15
+printf, ~str15,  , 
+*, 1000, 0, ~t24
+/, 10, 1, ~t25
++, ~t24, ~t25, ~t26
+beqz, ~t26,  , ~label16
+printf, ~str16,  , 
+setlabel,  ,  , ~label16
+setlabel,  ,  , ~label15
+setlabel,  ,  , ~label14
+setlabel,  ,  , ~label13
+setlabel,  ,  , ~label12
+setlabel,  ,  , ~label11
+setlabel,  ,  , ~label10
+setlabel,  ,  , ~label9
+setlabel,  ,  , ~label8
 setlabel,  ,  , ~label7
+setlabel,  ,  , ~label6
+printf, ~str17,  , 
+printf, ~str18, tester, 0
+endfunction,  ,  , 
+function, int,  , loop_test
+parameter, int,  , loop_initvar
+parameter, int,  , loop_step
+parameter, int,  , loop_cnt
+int,  ,  , i
+int,  ,  , j
+=, loop_initvar,  , i
+=, i,  , j
+setlabel,  ,  , ~label17
++, i, loop_step, ~t27
+=, ~t27,  , i
+-, loop_cnt, 1, ~t28
+=, ~t28,  , loop_cnt
+>, loop_cnt, 0, ~t29
+bgtz, ~t29,  , ~label17
+printf, ~str19, i, 0
+setlabel,  ,  , ~label18
+-, j, 1, ~t30
+=, ~t30,  , j
+>, j, 0, ~t31
+bgtz, ~t31,  , ~label18
+printf, ~str20, j, 0
+return,  ,  , i
+endfunction,  ,  , 
+function, char,  , mytoupper
+parameter, char,  , inputchar
+==, inputchar, 97, ~t32
+bnez, ~t32,  , ~label19
+return,  ,  , 65
+setlabel,  ,  , ~label19
+==, inputchar, 98, ~t33
+bnez, ~t33,  , ~label20
+return,  ,  , 66
+setlabel,  ,  , ~label20
+==, inputchar, 99, ~t34
+bnez, ~t34,  , ~label21
+return,  ,  , 67
+setlabel,  ,  , ~label21
+==, inputchar, 100, ~t35
+bnez, ~t35,  , ~label22
+return,  ,  , 68
+setlabel,  ,  , ~label22
+==, inputchar, 101, ~t36
+bnez, ~t36,  , ~label23
+return,  ,  , 69
+setlabel,  ,  , ~label23
+endfunction,  ,  , 
+function, void,  , case_test
+int,  ,  , test_num
+char,  ,  , test_char
+printf, ~str21,  , 
+printf, ~str22,  , 
+scanf, test_num,  , 0
+scanf, test_char,  , 1
+switchhead,  ,  , test_num
+bne, test_num, 0, ~label25
++, test_num, test_char, ~t37
+printf, ~str23, ~t37, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label25
+bne, test_num, 1, ~label26
++, test_num, test_char, ~t38
+printf, ~str24, ~t38, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label26
+bne, test_num, 2, ~label27
++, test_num, test_char, ~t39
+printf, ~str25, ~t39, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label27
+bne, test_num, 3, ~label28
++, test_num, test_char, ~t40
+printf, ~str26, ~t40, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label28
+bne, test_num, 4, ~label29
++, test_num, test_char, ~t41
+printf, ~str27, ~t41, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label29
+bne, test_num, 5, ~label30
++, test_num, test_char, ~t42
+printf, ~str28, ~t42, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label30
+bne, test_num, 6, ~label31
++, test_num, test_char, ~t43
+printf, ~str29, ~t43, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label31
+bne, test_num, 7, ~label32
++, test_num, test_char, ~t44
+printf, ~str30, ~t44, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label32
+bne, test_num, 8, ~label33
++, test_num, test_char, ~t45
+printf, ~str31, ~t45, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label33
+bne, test_num, 9, ~label34
++, test_num, test_char, ~t46
+printf, ~str32, ~t46, 0
+jump,  ,  , ~label24
+setlabel,  ,  , ~label34
+setlabel,  ,  , ~label24
+printf, ~str33,  , 
+switchhead,  ,  , test_char
+bne, test_char, 97, ~label36
+valuepara,  ,  , test_char
+call, mytoupper,  , ~t47
+printf, ~str34, ~t47, 1
+jump,  ,  , ~label35
+setlabel,  ,  , ~label36
+bne, test_char, 98, ~label37
+valuepara,  ,  , test_char
+call, mytoupper,  , ~t48
+printf, ~str35, ~t48, 1
+jump,  ,  , ~label35
+setlabel,  ,  , ~label37
+bne, test_char, 99, ~label38
+valuepara,  ,  , test_char
+call, mytoupper,  , ~t49
+printf, ~str36, ~t49, 1
+jump,  ,  , ~label35
+setlabel,  ,  , ~label38
+bne, test_char, 100, ~label39
+valuepara,  ,  , test_char
+call, mytoupper,  , ~t50
+printf, ~str37, ~t50, 1
+jump,  ,  , ~label35
+setlabel,  ,  , ~label39
+bne, test_char, 101, ~label40
+valuepara,  ,  , test_char
+call, mytoupper,  , ~t51
+printf, ~str38, ~t51, 1
+jump,  ,  , ~label35
+setlabel,  ,  , ~label40
+setlabel,  ,  , ~label35
+printf, ~str39,  , 
+endfunction,  ,  , 
+function, void,  , array_test
+int,  ,  , i
+int,  ,  , temp_int
+char,  ,  , temp_char
+printf, ~str40,  , 
+=, 0,  , i
+=, 0,  , temp_int
+=, 48,  , temp_char
+printf, ~str41,  , 
+setlabel,  ,  , ~label41
+scanf, temp_char,  , 1
+[]=, _global_char_arr, i, temp_char
++, i, 1, ~t52
+=, ~t52,  , i
+<, i, 10, ~t53
+bltz, ~t53,  , ~label41
+=[], _global_int_arr, 0, ~t54
+=, ~t54,  , temp_int
+printf, ~str42, temp_int, 0
+printf, ~str43,  , 
+endfunction,  ,  , 
+function, void,  , setaverage
+int,  ,  , sum
+int,  ,  , ret
+int,  ,  , i
+=, 0,  , sum
+=, 0,  , i
+setlabel,  ,  , ~label42
+=[], _global_char_arr, i, ~t55
++, sum, ~t55, ~t56
+=, ~t56,  , sum
++, i, 1, ~t57
+=, ~t57,  , i
+<, i, 10, ~t58
+bltz, ~t58,  , ~label42
+/, sum, 10, ~t59
+=, ~t59,  , ret
+=, 0,  , i
+setlabel,  ,  , ~label43
+[]=, _global_int_arr, i, ret
++, i, 1, ~t60
+=, ~t60,  , i
+<, i, 10, ~t61
+bltz, ~t61,  , ~label43
+printf, ~str44,  , 
 endfunction,  ,  , 
 function, void,  , main
-int,  ,  , i
-=, 0,  , i
-[]=, d, 0, 9
--, 8,  , ~t21
-[]=, d, 1, ~t21
-[]=, d, 2, 2
-[]=, d, 3, 7
-[]=, d, 4, 109
--, 29,  , ~t22
-[]=, d, 5, ~t22
-[]=, d, 6, 17
-[]=, d, 7, 0
-[]=, d, 8, 2
-[]=, d, 9, 11
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 9
-call, sort,  , 
-setlabel,  ,  , ~label8
-=[], d, i, ~t23
-printf, ~str0, ~t23, 0
-+, i, 1, ~t24
-=, ~t24,  , i
-+, i, 0, ~t25
-<=, ~t25, 9, ~t26
-blez, ~t26,  , ~label8
+int,  ,  , loop_initvar
+int,  ,  , loo_step
+int,  ,  , loop_cnt
+call, init,  , 
+printf, ~str45,  , 
+valuepara,  ,  , _global_constint
+call, fib,  , ~t62
+printf, ~t62,  , 0
+call, if_test,  , 
+printf, ~str46,  , 
+printf, ~str47,  , 
+scanf, loop_initvar,  , 0
+printf, ~str48, loop_initvar, 0
+valuepara,  ,  , loop_initvar
+valuepara,  ,  , loop_initvar
+call, loop_test,  , ~t63
+=, ~t63,  , loop_initvar
+printf, ~str49, loop_initvar, 0
+call, case_test,  , 
+call, array_test,  , 
+printf, ~str50,  , 
+printf, ~str51,  , 
 endfunction,  ,  , 
