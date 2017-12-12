@@ -28,7 +28,21 @@ VOID print_error(int e_number)
 					;
 					printf(2);
 				}
-		case 3: printf("Error3 ", +e_number*1);
+		case 3: {
+				switch(e_number){
+				case 1: {
+							printf("Error1 ");
+							printf(E_numBer);
+						}
+				case 2: {
+							printf("Error2 ");
+							;
+							printf(2);
+						}
+				case 3: printf("Error3 ", +e_number*1);
+				cAse 4: {{}}
+				}
+		}
 		cAse 4: {{}}
 	}
 	rEturn;

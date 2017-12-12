@@ -42,8 +42,9 @@ void init_symset()
     /*跳读的头符号集合*/
     // case出错后跳到的符号集
     case_errorBegSet.fsym[0] = RCURLY;
+    case_errorBegSet.fsym[0] = SEMICOLON;
     case_errorBegSet.fsym[1] = CASESY;
-    case_errorBegSet.setlen = 2;
+    case_errorBegSet.setlen = 3;
     
     // 标识符未定义跳到的地方    修改成了跳到下一个;
     undefined_identEndSet.fsym[0] = IFSY;
@@ -1221,22 +1222,25 @@ void CaseList(char *labelend, char *basevar, int switchtype)
 {
     char nextlabel[wlMAX];
     int casenum = 0;   // case的个数
+    int casetable[100] = {0};
+    int casevalue = 0;
     
     while(symbol == CASESY)
     {
         sprintf(tokenmid, "~label%d", label_num++);
         strcpy(nextlabel, tokenmid);
-        CaseState(labelend, nextlabel, basevar, switchtype, casenum);
+        casevalue = CaseState(labelend, nextlabel, basevar, switchtype, casenum, casetable);
+        casetable[casenum] = casevalue;
         casenum++;
     }
-    memset(casetable, 0, 100*sizeof(int));
 }
 
 // ＜情况子语句＞::= case＜常量＞：＜语句＞   checked
-void CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, int casenum)
+int CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, int casenum, int casetable[])
 {
     char constvalue[wlMAX];
     int i = 0;
+    int casevalue = 0;
     
     getsym();
     if(symbol == PLUS || symbol == MINUS || symbol == NUMBER)
@@ -1245,38 +1249,38 @@ void CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, i
             error(CASE_NOT_MATCH);
         Integer();
         sprintf(constvalue, "%d", num);
+        casevalue = num;
         while(i < casenum)
         {
             if(num == casetable[i])
             {
                 error(REPEAT_CASE);
-                return;
+                return casevalue;
             }
             i++;
         }
-        casetable[casenum] = num;
     }
     else if(symbol == CHAR)
     {
         if(switchtype == 0)
             error(CASE_NOT_MATCH);
         sprintf(constvalue, "%d", token[0]);
+        casevalue = token[0];
         while(i < casenum)
         {
             if(token[0] == casetable[i])
             {
                 error(REPEAT_CASE);
-                return;
+                return casevalue;
             }
             i++;
         }
-        casetable[casenum] = token[0];
         getsym();
     }
     else
     {
         error(CASE_NOCONSTANT);
-        return;
+        return casevalue;
     }
     
     gen_midcode(mid_op[BNEOP], basevar, constvalue, nextlabel);
@@ -1286,7 +1290,7 @@ void CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, i
     else
     {
         error(LOSE_COLON);
-        return;
+        return casevalue;
     }
     
     if(find_symset(symbol, stateBegSet) == 1)
@@ -1294,11 +1298,13 @@ void CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, i
     else
     {
         error(STATEMENT_ERROR);
-        return;
+        return casevalue;
     }
     
     gen_midcode(mid_op[JUMPOP], 0, 0, labelend);
     gen_midcode(mid_op[SETLABELOP], 0, 0, nextlabel);
+    
+    return casevalue;
 }
 
 // ＜有返回值函数调用语句＞ ::= ＜标识符＞‘(’＜值参数表＞‘)’       checked
@@ -1339,6 +1345,8 @@ void CallState(int void_or_ret, int state_or_factor)    // void是0，有返回�
 void ParaValueList(int position)    // postion为当前函数在符号表中的位置
 {
     int count = 0;
+    char *paralist[100];   // 参数队列，防止歧义！！！
+    int i = 0;
     
     do {
         if(count != 0)
@@ -1346,16 +1354,20 @@ void ParaValueList(int position)    // postion为当前函数在符号表中的�
         if(find_symset(symbol, item_fac_exprBegSet) == 1)
         {
             Expression();
-            gen_midcode(mid_op[VALUEPARAOP], 0, 0, tokenmid);
+            // gen_midcode(mid_op[VALUEPARAOP], 0, 0, tokenmid);
         }
         else
         {
             error(EXPRESSION_ERROR);
             return;
         }
-        
+        paralist[count] = (char *)malloc(50*sizeof(char));
+        strcpy(paralist[count], tokenmid);
         count++;
     } while (symbol == COMMA);
+    
+    for(i=0; i<count; i++)
+        gen_midcode(mid_op[VALUEPARAOP], 0, 0, paralist[i]);
     
     if(count != table[position].length)
         error(PARANUMBER_ERROR);

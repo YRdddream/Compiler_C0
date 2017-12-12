@@ -35,7 +35,6 @@ extern int elenum;
 extern int levelnum;
 extern char *StringList[200];
 extern int if_return;
-extern int casetable[100];
 
 int find_symset(int symvalue, symset Aset);
 void program();
@@ -60,7 +59,7 @@ void Condition(char *label, int if_or_dowhile);
 void DowhileState();
 void SwitchState();
 void CaseList(char *labelend, char *basevar, int switchtype);
-void CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, int casenum);
+int CaseState(char *labelend, char *nextlabel, char *basevar, int switchtype, int casenum, int casetable[]);
 void CallState(int void_or_ret, int state_or_factor);
 void ParaValueList(int position);
 void AssignState(int var_or_array);

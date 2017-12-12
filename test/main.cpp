@@ -79,7 +79,7 @@ int func_cnt = 0;
 
 // 出错处理相关
 int if_has_error = 0;   // 有error就不生成汇编码
-int casetable[100] = {0};   // 主要是为了看有没有相同的case
+// int casetable[100] = {0};   // 主要是为了看有没有相同的case，！！不应该定义成全局的
 
 void new_to_scan()
 {
@@ -215,6 +215,7 @@ int main() {
     getch();
     program();
     
+    // 这里放优化的函数
     if(if_has_error != 0)   //  如果源程序出错
     {
         fclose(file);
