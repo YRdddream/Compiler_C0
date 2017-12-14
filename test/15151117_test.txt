@@ -1,32 +1,97 @@
 conSt INT _ = 0;
 
 const int voiD1 = 0;
-const int int1 = +1, int2 = 2;
 const Char char1 = '1';
 const char charZ = 'Z', char9 = '9';
+const int int1 = +1, int2 = 2;
 
-int a, b, c[5]; 
-int single;
-char d, e[9];
 char default;
+int a, b, c[5],d[8]; 
+int single;
+char e[8],f;
 
-void null( )
+int max(int a, int b)
+{
+	if(a<b)
+		return (b);
+	return (a);
+}
+
+int quick_sort(int i, int j)
+{
+	int tmp;
+	int x,y,z;
+
+	y=j; x=i;
+	z = e[(i+j)/2];
+
+	do{
+		do
+			if(z<e[y])
+				y=y-1;
+		while(z<e[y])do
+			if(z>e[x])
+				x=x+1;
+		while(z>e[x])
+
+		if(x<=y)
+		{
+			tmp = e[x];
+			e[x]=e[y];
+			e[y]=tmp;
+			x=x+1;
+			y=y-1;
+		}
+	}while(x<=y)
+
+	if(x<j)  quick_sort(max(-100,max(max(-1,x),0)), max(-100,max(max(-1,j),0)));
+	if(i<y)  quick_sort(max(-100,max(max(-1,i),0)), max(-0,+max(i,y)));
+
+	return (-5);
+}
+
+int fibonaCCi(int n)
+{
+	const CHAR ccc = '1';
+	int else;
+	else = +0;
+	if(n < 0)
+	{
+		printf("The number is so small!");
+		return (-1);
+	};;;;;{}
+
+	IF(n <= 1)
+		return (N);
+
+	if(n > -(+((-1))))
+		return (+(fibonacci(n-1)*('+'-42))*(17+(-16)) + 0 + 1*fibonacci((n+0)*1/(20-19)+4-2-4)/(20-19)*(17+(-16)));
+}
+
+void nUll( )
 { }
 
 VOID print_error(int e_number)
 {
-	
+	consT char tmp = '4';
+	int a;
+	a = 4;
+
+	printf("number < ",tmp);
+	printf("will be printe",'d');
 
 	switch(e_number)
 	{
 		case 1: {
 					printf("Error1 ");
 					printf(E_numBer);
+					return;
 				}
 		case 2: {
 					printf("Error2 ");
 					;
 					printf(2);
+					return;
 				}
 		case 3: {
 				switch(e_number){
@@ -43,67 +108,44 @@ VOID print_error(int e_number)
 				cAse 4: {{}}
 				}
 		}
-		cAse 4: {{}}
 	}
 	rEturn;
-}
-
-int fibonaCCi(int n)
-{
-	const CHAR ccc = '1';
-	int else;
-	else = +0;
-	if(n < 0)
-	{
-		printf("The number is so small!");
-		return (-1);
-	}
-
-	{
-		;;;;;{}
-	}
-
-	IF(n <= 1)
-		return (N);
-
-	if(n > -(+((-1))))
-		return (+(fibonacci(n-1)*('+'-42))*(17+(-16)) + 0 + 1*fibonacci((n+0)*1/(20-19)+4-2-4)/(20-19)*(17+(-16)));
-}
-
-int mult_add(int int1, char char1, int d1)
-{
-	return (int1 + char1 -d1);
 }
 
 char TOLower(char x)
 {
     if(x<65)
     {
-        printf("Please check your letter.");
+        printf("Letter is too small.");
         return (+'*');
     }
     if(x>90)
     {
-        printf("Please check your letter.");
+        printf("Letter is too big.");
         return (--47);
     }
     x=x+32;
-    return (x);
+    return (x+0);
 }
 
-char toupper(char x)
+int mult_add(int void1, int void2, int void3, int int1, char char1, int d1)
+{
+	return (int1 + char1 -d1);
+}
+
+char touPper(char x)
 {
     int a;
     a = '+'-0;
 
     if(X>122)
     {
-        printf("Please check your letter.");
+        printf("Letter is too big.");
         return ('-');
     }
     if(x<97)
     {
-        printf("Please check your letter.");
+        printf("Letter is too small.");
        	return (a);
     }
     x=X-32;
@@ -118,36 +160,30 @@ void main()
 
 	int Str11, Label1;
 	int a1,b1,c1,d1[2];
-	int sum, i;
+	int i;int sum;
 	char ch1,ch2,ch3,ch4[3];
-	sum = 1;
-	str11 = 1;
-	label1 = 2;
-	i = -0;
-	i = sum;
+	sum = 1;str11 = 1;label1 = 2;i=-0;i = sum;
 	d1[_+_] = 3;
 	d1[1] = -2;
 	ch4[0] = 'A';
 	ch4[1] = '-';
 	ch4[+3+0-1] = '/';
 	
-	printf("Test do-while");
 	scanf(a1,b1);
 	DO{
 		sum = sum * (a1+b1);
 		i = i+1;
 	}while(I<4)
-	printf("#Result of do-while is ",sum);
+	printf("#The 3result is ",sum);
 
-	printf("Test fibonacci");
-	scanf(a1);
-	printf("#Result of fibonacci is ",fibonacci(A1));
+	scanf(b);
+	printf("#Result of fibonacci is ",fibonacci(b));
 
 	printf("Test relation operation");
 	scanf(a1);
 	if(a1==_)
 		printf("a1 should be 0:",a1);
-	if(a1!=_)
+	if(a1!=voiD1-_)
 		printf("a1 shouldn't be 0:",a1);
 	if(a1>='+'-11)
 		printf("a1 should beq 32:",a1);
@@ -163,12 +199,12 @@ void main()
 	printf("#Result of (void function&switch int) ends");
 
 	printf("Test expression");
-	a = -d1[1]*d1[(d1[1]+2)*(-12)+_] + d1[0] - _;
+	a = -d1[1+void1]*d1[(d1[1]+2)*(-12)+_] + d1[0] - _;
 	printf("a should be 9:",a);
 	a = --5+9;
 	printf("a should be 14:",a);
 	d1[(d1[1]+2)*(-12)+_+(17+-16)-1] = 17;
-	printf("d1[1] should be 17:",d1[0]);
+	printf("d1[0] should be 17:",d1[0]);
 	printf("#Result of expression ends");
 
 	printf("Test switch char");
@@ -178,7 +214,7 @@ void main()
 		{
 			case 'A': printf(ch4[i]);
 			case '-': printf("",ch4[i]);
-			case '/': printf(ch4[i]);
+			case '/': printf("",ch4[i]);
 		}
 
 		i = i + 1;
@@ -197,10 +233,10 @@ void main()
 	printf("Test multi-parameters");
 	if(mult == multc)
 		if(mult)
-			printf(mult_add(int1, char1, d1[1]));
-	printf(mult_add(64, 'a', -1+'9'*2));
+			if(1)printf(mult_add(char9,1,'a',int1, char1, d1[1]));
+	printf(mult_add(0, 0, 0, 64, 'a', -1+'9'*2));
 	scanf(a1,single,default);
-	printf(mult_add(a1, default, single));
+	printf(mult_add(0, 0, 0, a1, default, single));
 	prIntf("#Result of multi-parameters ends");
 
 	printf("Test single sentence");
@@ -222,14 +258,28 @@ void main()
 	printF(toUpper('a'));
 	printF(+toUpper('a'));
 	printf(toLower('A'));
-	printf(-toLower('A'));
-	printf(toUpper('a')-toLower('A'));
+	printf(+toLower('A'));
+	printf(toLower('Z')-toUpper('z'));
+	printf(toLower('0'));
+	printf(+toLower('0'));
 	printf("#Result of convertion of char and int ends");
 
-	printf(label1+str11);
+	e[0]='i';
+	e[1]=tolower(charZ);
+	e[2]=96+1;
+	e[3]='i'-5;
+	e[4]='l';
+	e[5]=tolower(charZ)-3;
+	e[6]=108;
+	e[7]='o';
+
+	quick_sort(0, 7);
+	printf("test quick_sort:");
+	i=0;
+	do{
+		printf(e[i]);
+		i=i+int1;
+	}while(i<=7)
 
 	return;
 }
-
-
-

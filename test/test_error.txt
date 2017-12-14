@@ -136,7 +136,7 @@ void main()
 
 	printf("Test multi-parameters");
 	if(mult == multc)
-		if(mult)
+		if(mult>'0')
 			printf(mult_add(int1, char1, d1[1]));
 	printf(mult_add(64, 'a', -1+'9'*2));
 	scanf(a1,single,default);
