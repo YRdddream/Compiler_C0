@@ -15,6 +15,7 @@
 #include "semantic.h"
 #include "midcode.h"
 #include "asmcode.h"
+#include "optimize.h"
 
 char ch = ' ';   // 当前字符
 int num = 0;   // 存放当前的数值
@@ -80,6 +81,12 @@ int func_cnt = 0;
 // 出错处理相关
 int if_has_error = 0;   // 有error就不生成汇编码
 // int casetable[100] = {0};   // 主要是为了看有没有相同的case，！！不应该定义成全局的
+
+// 优化相关
+char *in_dag[midcodeMAX];     // 以每个基本块为单位
+int dagincnt = 0;
+char *out_dag[midcodeMAX];     // dag图导出的中间代码
+int dagoutcnt = 0;
 
 void new_to_scan()
 {
@@ -224,6 +231,7 @@ int main() {
         return 0;
     }
     
+    // opt();
     gen_asm();
     
     fclose(ASMOUT);    // 第二遍

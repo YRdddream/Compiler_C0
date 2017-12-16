@@ -246,14 +246,19 @@ void func_asm()    // 以函数为单位生成目标代码
         sp -= 4;
         position++;
     }
-    // recv_addr = sp;
+    recv_addr = sp;
+    
+    int if_have_variable = 0;
     
     while (table[position].type == VARIABLETYPE)     // 变量只需要更新其在符号表的位置
     {
+        if_have_variable = 1;
         table[position].address += sp_base;
         position++;
     }
-    recv_addr = table[position-1].address - 4;
+    
+    if(if_have_variable == 1)
+        recv_addr = table[position-1].address - 4;
     
     char temp1[wlMAX];   // 四元式的三个操作数
     char temp2[wlMAX];

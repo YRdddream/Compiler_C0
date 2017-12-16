@@ -14,6 +14,7 @@
 		14BC162D1FC3BEA500AF6C94 /* lex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14BC162C1FC3BEA500AF6C94 /* lex.cpp */; };
 		14CE1AAA1FC9E789005AF37F /* grammar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CE1AA81FC9E789005AF37F /* grammar.cpp */; };
 		14CE1AAD1FC9E95F005AF37F /* semantic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14CE1AAC1FC9E95F005AF37F /* semantic.cpp */; };
+		14D3B8441FE2C8BC004056C0 /* optimize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14D3B8431FE2C8BC004056C0 /* optimize.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +45,8 @@
 		14CE1AAB1FC9E81B005AF37F /* grammar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = grammar.h; sourceTree = "<group>"; };
 		14CE1AAC1FC9E95F005AF37F /* semantic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = semantic.cpp; sourceTree = "<group>"; };
 		14CE1AAE1FC9E971005AF37F /* semantic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = semantic.h; sourceTree = "<group>"; };
+		14D3B8431FE2C8BC004056C0 /* optimize.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = optimize.cpp; sourceTree = "<group>"; };
+		14D3B8451FE2C8F7004056C0 /* optimize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = optimize.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				14CE1AAE1FC9E971005AF37F /* semantic.h */,
 				1477568C1FCEB24E00EBB345 /* error.cpp */,
 				1477568E1FCEB26300EBB345 /* error.h */,
+				14D3B8431FE2C8BC004056C0 /* optimize.cpp */,
+				14D3B8451FE2C8F7004056C0 /* optimize.h */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 				14CE1AAD1FC9E95F005AF37F /* semantic.cpp in Sources */,
 				14CE1AAA1FC9E789005AF37F /* grammar.cpp in Sources */,
 				14BC162D1FC3BEA500AF6C94 /* lex.cpp in Sources */,
+				14D3B8441FE2C8BC004056C0 /* optimize.cpp in Sources */,
 				1477568D1FCEB24E00EBB345 /* error.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

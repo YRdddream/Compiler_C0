@@ -52,9 +52,6 @@ int quick_sort(int i, int j)
 
 int fibonaCCi(int n)
 {
-	const CHAR ccc = '1';
-	int else;
-	else = +0;
 	if(n < 0)
 	{
 		printf("The number is so small!");
@@ -65,11 +62,15 @@ int fibonaCCi(int n)
 		return (N);
 
 	if(n > -(+((-1))))
-		return (+(fibonacci(n-1)*('+'-42))*(17+(-16)) + 0 + 1*fibonacci((n+0)*1/(20-19)+4-2-4)/(20-19)*(17+(-16)));
+		return (fibonacci(n-1)+fibonacci(n-2));
 }
 
 void nUll( )
-{ }
+{ 
+	b = 17+0+-17+fibonacci(max(10,0));
+	printf("null result is ", b);
+	b = 0;
+}
 
 VOID print_error(int e_number)
 {
