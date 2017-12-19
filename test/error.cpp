@@ -285,6 +285,10 @@ void error(int i)
             skip_sym(SEMICOLON);
             break;
             
+        case ARRAY_OVERFLOW:
+            printf("ERROR[%d] in LINE%d: Array Overflow!\n", i, lc);
+            break;
+            
         default:
             printf("ERROR[%d] in LINE%d: There has error!\n", i, lc);
             break;

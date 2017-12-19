@@ -9,8 +9,7 @@
 #ifndef optimize_h
 #define optimize_h
 
-/*
-struct dagNode {
+typedef struct dagNode {
     int op;
     int left_child;
     int right_child;
@@ -28,6 +27,6 @@ extern int dagincnt;
 
 void opt();
 void func_block();
-void dag_proc(int block_size);*/
+void dag_proc(int block_size);
 
 #endif /* optimize_h */

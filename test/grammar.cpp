@@ -835,7 +835,9 @@ void Item()
 void Factor()
 {
     int type = 0;
+    int arraylen = 0;
     int position = 0;
+    int position1 = 0;
     char ident_name[wlMAX];
     char temp1[wlMAX];
     
@@ -871,10 +873,37 @@ void Factor()
                             return;
                         }
                         
-                        if(find_symset(symbol, item_fac_exprBegSet) == 1)
+                        if(find_symset(symbol, item_fac_exprBegSet) == 1)   // 数组索引
                         {
                             Expression();
                             strcpy(temp1, tokenmid);
+                            if(isDigit(temp1[0]))    // 如果索引是数字常量
+                            {
+                                if(atoi(temp1) > (table[position].length - 1))
+                                    error(ARRAY_OVERFLOW);
+                            }
+                            else if(temp1[0] == '-')     // 下标为负数
+                            {
+                                error(ARRAY_OVERFLOW);
+                            }
+                            else if(isLetter(temp1[0]))   // 下标是标识符
+                            {
+                                arraylen = table[position].length - 1;
+                                position1 = LookupTab(temp1, 0);  // 下标标识符的位置
+                                if(table[position1].type == CONSTTYPE)
+                                {
+                                    if(table[position1].kind == CHARSY)
+                                    {
+                                        if(table[position1].charval > arraylen)
+                                            error(ARRAY_OVERFLOW);
+                                    }
+                                    else if(table[position1].kind == INTSY)
+                                    {
+                                        if(table[position1].intval > arraylen)
+                                            error(ARRAY_OVERFLOW);
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -1379,7 +1408,11 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
     char ident_name[wlMAX];
     char temp1[wlMAX];
     char temp2[wlMAX];
+    int position = 0;
+    int position1 = 0;
+    int arraylen = 0;
     strcpy(ident_name, token);
+    position = LookupTab(ident_name, 0);
     
     getsym();
     if(var_or_array == 0)     // 普通变量
@@ -1413,6 +1446,34 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
             {
                 Expression();
                 strcpy(temp1, tokenmid);
+                if(isDigit(temp1[0]))    // 如果索引是数字常量
+                {
+                    if(atoi(temp1) > (table[position].length - 1))
+                        error(ARRAY_OVERFLOW);
+                }
+                else if(temp1[0] == '-')     // 下标为负数
+                {
+                    error(ARRAY_OVERFLOW);
+                }
+                else if(isLetter(temp1[0]))   // 下标是标识符
+                {
+                    arraylen = table[position].length - 1;
+                    position1 = LookupTab(temp1, 0);  // 下标标识符的位置
+                    if(table[position1].type == CONSTTYPE)
+                    {
+                        if(table[position1].kind == CHARSY)
+                        {
+                            if(table[position1].charval > arraylen)
+                                error(ARRAY_OVERFLOW);
+                        }
+                        else if(table[position1].kind == INTSY)
+                        {
+                            if(table[position1].intval > arraylen)
+                                error(ARRAY_OVERFLOW);
+                        }
+                    }
+                }
+                
             }
             else
             {

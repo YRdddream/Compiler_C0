@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "macro.h"
 #include "optimize.h"
-/*
+
 void opt()
 {
     //int func_num = 0;
@@ -112,4 +112,4 @@ void func_block()
 void dag_proc(int block_size)
 {
     
-}*/
+}
