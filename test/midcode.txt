@@ -1,534 +1,568 @@
-const, int, 0, _
-const, int, 0, void1
-const, char, 49, char1
-const, char, 90, charz
-const, char, 57, char9
+const, int, 1, cst1
+const, int, 2, cst2
+const, int, 3, cst3
+const, char, 97, csta
+const, char, 98, cstb
+const, char, 99, cstc
+int,  ,  , g_a
+int,  ,  , g_b
+int, 2048,  , g_arr
+char, 1024,  , g_stra
+char, 2048,  , g_strb
+function, void,  , const_define
+const, int, 1, a
+const, int, 0, b
+const, int, -1, c
+const, char, 120, cst23
+const, char, 122, cst24
+const, char, 65, consta0
+const, char, 49, csta1
+const, char, 47, cst_div
+printf, a,  , 0
+printf, cst_div,  , 1
+endfunction,  ,  , 
+function, void,  , const_define_test
+call, const_define,  , 
+endfunction,  ,  , 
+function, void,  , var_define
+int,  ,  , a
+int, 1,  , arr
+int,  ,  , _a
+int, 2,  , _arr
+int,  ,  , a1
+int, 3,  , arr1
+char,  ,  , b
+char, 1,  , strb
+char,  ,  , _b
+char, 2,  , _bstr
+char,  ,  , _b1
+char, 3,  , _bstr1
+int,  ,  , c
+char,  ,  , z
+endfunction,  ,  , 
+function, void,  , var_define_test
+call, var_define,  , 
+endfunction,  ,  , 
+function, void,  , define
 const, int, 1, int1
-const, int, 2, int2
-char,  ,  , default
+const, char, 122, cst24
+const, char, 65, consta0
+int,  ,  , val1
+char,  ,  , b
+char, 1,  , strb
+endfunction,  ,  , 
+function, void,  , define_test
+call, var_define_test,  , 
+call, const_define_test,  , 
+call, define,  , 
+printf, ~str0,  , 
+endfunction,  ,  , 
+function, void,  , operator
 int,  ,  , a
 int,  ,  , b
-int, 5,  , c
-int, 8,  , d
-int,  ,  , single
-char, 8,  , e
-char,  ,  , f
-function, int,  , max
-parameter, int,  , a
-parameter, int,  , b
-<, a, b, ~t0
-bgez, ~t0,  , ~label0
-return,  ,  , b
+int,  ,  , c
+int,  ,  , d
+int,  ,  , e
+int,  ,  , f
+=, 1,  , a
++, 1, 2, ~t0
+=, ~t0,  , b
+*, 3, 1, ~t1
+=, ~t1,  , c
+-, 4,  , ~t2
+=, ~t2,  , d
+=, 5,  , e
+=, 6,  , f
+*, b, 3, ~t3
++, ~t3, c, ~t4
+/, d, 4, ~t5
+-, ~t4, ~t5, ~t6
+/, a, a, ~t7
++, ~t6, ~t7, ~t8
+=, ~t8,  , a
++, 0, a, ~t9
+*, a, 3, ~t10
++, ~t9, ~t10, ~t11
++, ~t11, c, ~t12
+/, d, 4, ~t13
+-, ~t12, ~t13, ~t14
+*, e, f, ~t15
++, ~t14, ~t15, ~t16
+=, ~t16,  , b
+-, a,  , ~t17
+*, b, 0, ~t18
++, ~t17, ~t18, ~t19
+-, 1, 0, ~t20
+-, ~t19, ~t20, ~t21
+=, ~t21,  , e
+endfunction,  ,  , 
+function, void,  , operator_test
+call, operator,  , 
+printf, ~str1,  , 
+endfunction,  ,  , 
+function, void,  , string
+printf, ~str2,  , 
+printf, ~str3,  , 
+endfunction,  ,  , 
+function, void,  , string_test
+call, string,  , 
+endfunction,  ,  , 
+function, void,  , dowhile
+int,  ,  , i
+=, 100,  , i
 setlabel,  ,  , ~label0
-return,  ,  , a
-endfunction,  ,  , 
-function, int,  , quick_sort
-parameter, int,  , i
-parameter, int,  , j
-int,  ,  , tmp
-int,  ,  , x
-int,  ,  , y
-int,  ,  , z
-=, j,  , y
-=, i,  , x
-+, i, j, ~t1
-/, ~t1, 2, ~t2
-=[], e, ~t2, ~t3
-=, ~t3,  , z
+>=, i, 50, ~t22
+bltz, ~t22,  , ~label1
+/, i, 2, ~t23
+=, ~t23,  , i
 setlabel,  ,  , ~label1
+<, i, 50, ~t24
+bgez, ~t24,  , ~label2
++, i, 10, ~t25
+/, ~t25, 10, ~t26
+=, ~t26,  , i
 setlabel,  ,  , ~label2
-=[], e, y, ~t4
-<, z, ~t4, ~t5
-bgez, ~t5,  , ~label3
--, y, 1, ~t6
-=, ~t6,  , y
+>=, i, 10, ~t27
+bgez, ~t27,  , ~label0
 setlabel,  ,  , ~label3
-=[], e, y, ~t7
-<, z, ~t7, ~t8
-bltz, ~t8,  , ~label2
-setlabel,  ,  , ~label4
-=[], e, x, ~t9
->, z, ~t9, ~t10
-blez, ~t10,  , ~label5
-+, x, 1, ~t11
-=, ~t11,  , x
-setlabel,  ,  , ~label5
-=[], e, x, ~t12
->, z, ~t12, ~t13
-bgtz, ~t13,  , ~label4
-<=, x, y, ~t14
-bgtz, ~t14,  , ~label6
-=[], e, x, ~t15
-=, ~t15,  , tmp
-=[], e, y, ~t16
-[]=, e, x, ~t16
-[]=, e, y, tmp
-+, x, 1, ~t17
-=, ~t17,  , x
--, y, 1, ~t18
-=, ~t18,  , y
-setlabel,  ,  , ~label6
-<=, x, y, ~t19
-blez, ~t19,  , ~label1
-<, x, j, ~t20
-bgez, ~t20,  , ~label7
--, 100,  , ~t21
--, 1,  , ~t22
-valuepara,  ,  , ~t22
-valuepara,  ,  , x
-call, max,  , ~t23
-valuepara,  ,  , ~t23
-valuepara,  ,  , 0
-call, max,  , ~t24
-valuepara,  ,  , ~t21
-valuepara,  ,  , ~t24
-call, max,  , ~t25
--, 100,  , ~t26
--, 1,  , ~t27
-valuepara,  ,  , ~t27
-valuepara,  ,  , j
-call, max,  , ~t28
-valuepara,  ,  , ~t28
-valuepara,  ,  , 0
-call, max,  , ~t29
-valuepara,  ,  , ~t26
-valuepara,  ,  , ~t29
-call, max,  , ~t30
-valuepara,  ,  , ~t25
-valuepara,  ,  , ~t30
-call, quick_sort,  , 
-setlabel,  ,  , ~label7
-<, i, y, ~t31
-bgez, ~t31,  , ~label8
--, 100,  , ~t32
--, 1,  , ~t33
-valuepara,  ,  , ~t33
-valuepara,  ,  , i
-call, max,  , ~t34
-valuepara,  ,  , ~t34
-valuepara,  ,  , 0
-call, max,  , ~t35
-valuepara,  ,  , ~t32
-valuepara,  ,  , ~t35
-call, max,  , ~t36
--, 0,  , ~t37
-valuepara,  ,  , i
-valuepara,  ,  , y
-call, max,  , ~t38
-valuepara,  ,  , ~t37
-valuepara,  ,  , ~t38
-call, max,  , ~t39
-valuepara,  ,  , ~t36
-valuepara,  ,  , ~t39
-call, quick_sort,  , 
-setlabel,  ,  , ~label8
--, 5,  , ~t40
-return,  ,  , ~t40
+-, i, 1, ~t28
+=, ~t28,  , i
+printf, ~str4,  , 
+bnez, 0,  , ~label3
 endfunction,  ,  , 
-function, int,  , fibonacci
-parameter, int,  , n
-const, char, 49, ccc
-int,  ,  , else
-=, 0,  , else
-<, n, 0, ~t41
-bgez, ~t41,  , ~label9
-printf, ~str0,  , 
--, 1,  , ~t42
-return,  ,  , ~t42
+function, void,  , dowhile_test
+call, dowhile,  , 
+endfunction,  ,  , 
+function, void,  , ifcondition
+int,  ,  , a
+int,  ,  , rightnumber
+=, 1,  , a
+=, 0,  , rightnumber
+==, a, 1, ~t29
+bnez, ~t29,  , ~label4
++, rightnumber, 1, ~t30
+=, ~t30,  , rightnumber
+setlabel,  ,  , ~label4
+=, 2,  , a
+>, a, 1, ~t31
+blez, ~t31,  , ~label5
++, rightnumber, 1, ~t32
+=, ~t32,  , rightnumber
+setlabel,  ,  , ~label5
+=, 0,  , a
+<, a, 1, ~t33
+bgez, ~t33,  , ~label6
++, rightnumber, 1, ~t34
+=, ~t34,  , rightnumber
+setlabel,  ,  , ~label6
+!=, a, 1, ~t35
+beqz, ~t35,  , ~label7
++, rightnumber, 1, ~t36
+=, ~t36,  , rightnumber
+setlabel,  ,  , ~label7
+>=, a, 0, ~t37
+bltz, ~t37,  , ~label8
++, rightnumber, 1, ~t38
+=, ~t38,  , rightnumber
+setlabel,  ,  , ~label8
+<=, a, 0, ~t39
+bgtz, ~t39,  , ~label9
++, rightnumber, 1, ~t40
+=, ~t40,  , rightnumber
 setlabel,  ,  , ~label9
-<=, n, 1, ~t43
-bgtz, ~t43,  , ~label10
-return,  ,  , n
++, 1, 1, ~t41
++, ~t41, 1, ~t42
+*, 1, 3, ~t43
++, ~t42, ~t43, ~t44
+!=, rightnumber, ~t44, ~t45
+beqz, ~t45,  , ~label10
+printf, ~str5,  , 
 setlabel,  ,  , ~label10
--, 1,  , ~t44
--, ~t44,  , ~t45
->, n, ~t45, ~t46
-blez, ~t46,  , ~label11
--, n, 1, ~t47
-valuepara,  ,  , ~t47
-call, fibonacci,  , ~t48
--, 43, 42, ~t49
-*, ~t48, ~t49, ~t50
--, 16,  , ~t51
-+, 17, ~t51, ~t52
-*, ~t50, ~t52, ~t53
-+, ~t53, 0, ~t54
-+, n, 0, ~t55
-*, ~t55, 1, ~t56
--, 20, 19, ~t57
-/, ~t56, ~t57, ~t58
-+, ~t58, 4, ~t59
--, ~t59, 2, ~t60
--, ~t60, 4, ~t61
-valuepara,  ,  , ~t61
-call, fibonacci,  , ~t62
-*, 1, ~t62, ~t63
--, 20, 19, ~t64
-/, ~t63, ~t64, ~t65
--, 16,  , ~t66
-+, 17, ~t66, ~t67
-*, ~t65, ~t67, ~t68
-+, ~t54, ~t68, ~t69
-return,  ,  , ~t69
+!=, rightnumber, rightnumber, ~t46
+beqz, ~t46,  , ~label11
+printf, ~str6,  , 
 setlabel,  ,  , ~label11
 endfunction,  ,  , 
-function, void,  , null
-endfunction,  ,  , 
-function, void,  , print_error
-parameter, int,  , e_number
-const, char, 52, tmp
-int,  ,  , a
-=, 4,  , a
-printf, ~str1, tmp, 1
-printf, ~str2, 100, 1
-switchhead,  ,  , e_number
-bne, e_number, 1, ~label13
-printf, ~str3,  , 
-printf, e_number,  , 0
-return,  ,  , 
+function, int,  , switchcodintionans
+parameter, int,  , x
+switchhead,  ,  , x
+bne, x, 1, ~label13
+return,  ,  , 2
 jump,  ,  , ~label12
 setlabel,  ,  , ~label13
-bne, e_number, 2, ~label14
-printf, ~str4,  , 
-printf, 2,  , 0
-return,  ,  , 
+bne, x, 2, ~label14
+return,  ,  , 3
 jump,  ,  , ~label12
 setlabel,  ,  , ~label14
-bne, e_number, 3, ~label15
-switchhead,  ,  , e_number
-bne, e_number, 1, ~label17
-printf, ~str5,  , 
-printf, e_number,  , 0
-jump,  ,  , ~label16
-setlabel,  ,  , ~label17
-bne, e_number, 2, ~label18
-printf, ~str6,  , 
-printf, 2,  , 0
-jump,  ,  , ~label16
-setlabel,  ,  , ~label18
-bne, e_number, 3, ~label19
-*, e_number, 1, ~t70
-printf, ~str7, ~t70, 0
-jump,  ,  , ~label16
-setlabel,  ,  , ~label19
-bne, e_number, 4, ~label20
-jump,  ,  , ~label16
-setlabel,  ,  , ~label20
-setlabel,  ,  , ~label16
+bne, x, 3, ~label15
+return,  ,  , 4
 jump,  ,  , ~label12
 setlabel,  ,  , ~label15
 setlabel,  ,  , ~label12
-return,  ,  , 
+return,  ,  , 5
 endfunction,  ,  , 
-function, char,  , tolower
-parameter, char,  , x
-<, x, 65, ~t71
-bgez, ~t71,  , ~label21
+function, int,  , switchcodintion
+int,  ,  , i
+int,  ,  , rightnumber
+=, 1,  , i
+=, 0,  , rightnumber
+setlabel,  ,  , ~label16
++, i, 1, ~t47
+valuepara,  ,  , i
+call, switchcodintionans,  , ~t48
+==, ~t47, ~t48, ~t49
+bnez, ~t49,  , ~label17
++, rightnumber, 1, ~t50
+=, ~t50,  , rightnumber
+setlabel,  ,  , ~label17
++, i, 1, ~t51
+=, ~t51,  , i
+<, i, 5, ~t52
+bltz, ~t52,  , ~label16
+!=, rightnumber, 4, ~t53
+beqz, ~t53,  , ~label18
+printf, ~str7,  , 
+setlabel,  ,  , ~label18
+beqz, rightnumber,  , ~label19
+return,  ,  , i
+setlabel,  ,  , ~label19
 printf, ~str8,  , 
-return,  ,  , 42
-setlabel,  ,  , ~label21
->, x, 90, ~t72
-blez, ~t72,  , ~label22
+endfunction,  ,  , 
+function, void,  , condition
+const, int, 5, intermax
+int,  ,  , iter
+=, 0,  , iter
+setlabel,  ,  , ~label20
+switchhead,  ,  , iter
+bne, iter, 0, ~label22
+!=, iter, 0, ~t54
+beqz, ~t54,  , ~label23
 printf, ~str9,  , 
--, -47,  , ~t73
-return,  ,  , ~t73
-setlabel,  ,  , ~label22
-+, x, 32, ~t74
-=, ~t74,  , x
-+, x, 0, ~t75
-return,  ,  , ~t75
-endfunction,  ,  , 
-function, int,  , mult_add
-parameter, int,  , void1
-parameter, int,  , void2
-parameter, int,  , void3
-parameter, int,  , int1
-parameter, char,  , char1
-parameter, int,  , d1
-+, int1, char1, ~t76
--, ~t76, d1, ~t77
-return,  ,  , ~t77
-endfunction,  ,  , 
-function, char,  , toupper
-parameter, char,  , x
-int,  ,  , a
--, 43, 0, ~t78
-=, ~t78,  , a
->, x, 122, ~t79
-blez, ~t79,  , ~label23
-printf, ~str10,  , 
-return,  ,  , 45
 setlabel,  ,  , ~label23
-<, x, 97, ~t80
-bgez, ~t80,  , ~label24
-printf, ~str11,  , 
-return,  ,  , a
+jump,  ,  , ~label21
+setlabel,  ,  , ~label22
+bne, iter, 1, ~label24
+!=, iter, 1, ~t55
+beqz, ~t55,  , ~label25
+printf, ~str10,  , 
+setlabel,  ,  , ~label25
+jump,  ,  , ~label21
 setlabel,  ,  , ~label24
--, x, 32, ~t81
-=, ~t81,  , x
-return,  ,  , x
+bne, iter, 2, ~label26
+!=, iter, 2, ~t56
+beqz, ~t56,  , ~label27
+printf, ~str11,  , 
+setlabel,  ,  , ~label27
+jump,  ,  , ~label21
+setlabel,  ,  , ~label26
+setlabel,  ,  , ~label21
++, iter, 1, ~t57
+=, ~t57,  , iter
+<, iter, intermax, ~t58
+bltz, ~t58,  , ~label20
+endfunction,  ,  , 
+function, void,  , condition_test
+call, ifcondition,  , 
+call, switchcodintion,  , 
+call, condition,  , 
+printf, ~str12,  , 
+endfunction,  ,  , 
+function, void,  , miscellaneous
+int,  ,  , _
+int,  ,  , a
+int, 23,  , array
+int,  ,  , i
+int,  ,  , endid
+char,  ,  , ch1
+char, 256,  , buf
+=, 1,  , _
+=, 2,  , a
+setlabel,  ,  , ~label28
+[]=, array, i, i
++, i, 1, ~t59
+=, ~t59,  , i
+<, i, 23, ~t60
+bltz, ~t60,  , ~label28
+=, 97,  , ch1
+=, 127,  , i
+=, i,  , endid
+=, 0,  , _
+setlabel,  ,  , ~label29
+*, _, 1, ~t61
+-, ~t61, _, ~t62
+-, ~t62, 1, ~t63
+/, 2, 1, ~t64
++, ~t63, ~t64, ~t65
+-, ~t65, 1, ~t66
+/, ~t66, 2, ~t67
+[]=, buf, ~t67, 97
++, _, 1, ~t68
+=, ~t68,  , _
+<, _, endid, ~t69
+bltz, ~t69,  , ~label29
+=[], buf, 0, ~t70
+==, ~t70, 97, ~t71
+bnez, ~t71,  , ~label30
+printf, ~str13,  , 
+setlabel,  ,  , ~label30
+endfunction,  ,  , 
+function, void,  , miscellaneous_test
+call, miscellaneous,  , 
+endfunction,  ,  , 
+function, int,  , fibonaci
+parameter, int,  , n
+switchhead,  ,  , n
+bne, n, 0, ~label32
+return,  ,  , 0
+jump,  ,  , ~label31
+setlabel,  ,  , ~label32
+bne, n, 1, ~label33
+return,  ,  , 1
+jump,  ,  , ~label31
+setlabel,  ,  , ~label33
+bne, n, 2, ~label34
+return,  ,  , 1
+jump,  ,  , ~label31
+setlabel,  ,  , ~label34
+setlabel,  ,  , ~label31
+-, n, 1, ~t72
+valuepara,  ,  , ~t72
+call, fibonaci,  , ~t73
+-, n, 2, ~t74
+valuepara,  ,  , ~t74
+call, fibonaci,  , ~t75
++, ~t73, ~t75, ~t76
+return,  ,  , ~t76
+endfunction,  ,  , 
+function, void,  , fibonaci_test
+int,  ,  , n
+printf, ~str14,  , 
+scanf, n,  , 0
+setlabel,  ,  , ~label35
+<, n, 0, ~t77
+bgez, ~t77,  , ~label36
+printf, ~str15,  , 
+scanf, n,  , 0
+setlabel,  ,  , ~label36
+>=, n, 0, ~t78
+bltz, ~t78,  , ~label37
+valuepara,  ,  , n
+call, fibonaci,  , ~t79
+printf, ~str16, ~t79, 0
+setlabel,  ,  , ~label37
+<, n, 0, ~t80
+bltz, ~t80,  , ~label35
+endfunction,  ,  , 
+function, int,  , mod
+parameter, int,  , n
+parameter, int,  , m
+/, n, m, ~t81
+*, ~t81, m, ~t82
+-, n, ~t82, ~t83
+return,  ,  , ~t83
+endfunction,  ,  , 
+function, int,  , gcd
+parameter, int,  , n
+parameter, int,  , m
+int,  ,  , rem
+=, 0,  , rem
+==, n, 0, ~t84
+bnez, ~t84,  , ~label38
+return,  ,  , m
+setlabel,  ,  , ~label38
+==, m, 0, ~t85
+bnez, ~t85,  , ~label39
+return,  ,  , n
+setlabel,  ,  , ~label39
+valuepara,  ,  , n
+valuepara,  ,  , m
+call, mod,  , ~t86
+valuepara,  ,  , m
+valuepara,  ,  , ~t86
+call, gcd,  , ~t87
+return,  ,  , ~t87
+endfunction,  ,  , 
+function, int,  , iswronggcd
+parameter, int,  , n
+parameter, int,  , m
+<=, n, 0, ~t88
+bgtz, ~t88,  , ~label40
+return,  ,  , 1
+setlabel,  ,  , ~label40
+<=, m, 0, ~t89
+bgtz, ~t89,  , ~label41
+return,  ,  , 1
+setlabel,  ,  , ~label41
+return,  ,  , 0
+endfunction,  ,  , 
+function, void,  , gcd_test
+int,  ,  , n
+int,  ,  , m
+printf, ~str17,  , 
+scanf, n,  , 0
+scanf, m,  , 0
+valuepara,  ,  , n
+valuepara,  ,  , m
+call, iswronggcd,  , ~t90
+beqz, ~t90,  , ~label42
+setlabel,  ,  , ~label43
+printf, ~str18,  , 
+scanf, n,  , 0
+scanf, m,  , 0
+valuepara,  ,  , n
+valuepara,  ,  , m
+call, iswronggcd,  , ~t91
+bnez, ~t91,  , ~label43
+setlabel,  ,  , ~label42
+valuepara,  ,  , n
+valuepara,  ,  , m
+call, gcd,  , ~t92
+printf, ~str19, ~t92, 0
+endfunction,  ,  , 
+function, int,  , is_prime
+parameter, int,  , x
+int,  ,  , i
+=, 2,  , i
+==, x, 2, ~t93
+bnez, ~t93,  , ~label44
+return,  ,  , 1
+setlabel,  ,  , ~label44
+setlabel,  ,  , ~label45
+valuepara,  ,  , x
+valuepara,  ,  , i
+call, mod,  , ~t94
+==, ~t94, 0, ~t95
+bnez, ~t95,  , ~label46
+return,  ,  , 0
+setlabel,  ,  , ~label46
++, i, 1, ~t96
+=, ~t96,  , i
+*, i, i, ~t97
+<, ~t97, x, ~t98
+bltz, ~t98,  , ~label45
+return,  ,  , 1
+endfunction,  ,  , 
+function, void,  , prime_factorization
+parameter, int,  , n
+int,  ,  , i
+int,  ,  , first
+=, 2,  , i
+=, 0,  , first
+==, n, 1, ~t99
+bnez, ~t99,  , ~label47
+printf, ~str20,  , 
+return,  ,  , 
+setlabel,  ,  , ~label47
+setlabel,  ,  , ~label48
+valuepara,  ,  , i
+call, is_prime,  , ~t100
+==, ~t100, 1, ~t101
+bnez, ~t101,  , ~label49
+valuepara,  ,  , n
+valuepara,  ,  , i
+call, mod,  , ~t102
+==, ~t102, 0, ~t103
+bnez, ~t103,  , ~label50
+setlabel,  ,  , ~label51
+/, n, i, ~t104
+=, ~t104,  , n
+==, first, 1, ~t105
+bnez, ~t105,  , ~label52
+printf, ~str21,  , 
+setlabel,  ,  , ~label52
+=, 1,  , first
+printf, i,  , 0
+valuepara,  ,  , n
+valuepara,  ,  , i
+call, mod,  , ~t106
+==, ~t106, 0, ~t107
+beqz, ~t107,  , ~label51
+setlabel,  ,  , ~label50
+setlabel,  ,  , ~label49
++, i, 1, ~t108
+=, ~t108,  , i
+*, i, i, ~t109
+<, ~t109, n, ~t110
+bltz, ~t110,  , ~label48
+!=, n, 1, ~t111
+beqz, ~t111,  , ~label53
+==, first, 1, ~t112
+bnez, ~t112,  , ~label54
+printf, ~str22,  , 
+setlabel,  ,  , ~label54
+printf, n,  , 0
+setlabel,  ,  , ~label53
+endfunction,  ,  , 
+function, void,  , prime_factorization_test
+int,  ,  , n
+printf, ~str23,  , 
+scanf, n,  , 0
+setlabel,  ,  , ~label55
+<, n, 0, ~t113
+bgez, ~t113,  , ~label56
+printf, ~str24,  , 
+scanf, n,  , 0
+setlabel,  ,  , ~label56
+<, n, 0, ~t114
+bltz, ~t114,  , ~label55
+printf, ~str25,  , 
+valuepara,  ,  , n
+call, prime_factorization,  , 
+endfunction,  ,  , 
+function, int,  , iswrong
+parameter, char,  , a
+==, 69, a, ~t115
+bnez, ~t115,  , ~label57
+return,  ,  , 0
+setlabel,  ,  , ~label57
+==, 77, a, ~t116
+bnez, ~t116,  , ~label58
+return,  ,  , 0
+setlabel,  ,  , ~label58
+==, 72, a, ~t117
+bnez, ~t117,  , ~label59
+return,  ,  , 0
+setlabel,  ,  , ~label59
+return,  ,  , 1
 endfunction,  ,  , 
 function, void,  , main
-const, char, 42, mult
-const, int, 42, multc
-int,  ,  , str11
-int,  ,  , label1
-int,  ,  , a1
-int,  ,  , b1
-int,  ,  , c1
-int, 2,  , d1
-int,  ,  , i
-int,  ,  , sum
-char,  ,  , ch1
-char,  ,  , ch2
-char,  ,  , ch3
-char, 3,  , ch4
-=, 1,  , sum
-=, 1,  , str11
-=, 2,  , label1
--, 0,  , ~t82
-=, ~t82,  , i
-=, sum,  , i
-+, _, _, ~t83
-[]=, d1, ~t83, 3
--, 2,  , ~t84
-[]=, d1, 1, ~t84
-[]=, ch4, 0, 65
-[]=, ch4, 1, 45
-+, 3, 0, ~t85
--, ~t85, 1, ~t86
-[]=, ch4, ~t86, 47
-scanf, a1,  , 0
-scanf, b1,  , 0
-setlabel,  ,  , ~label25
-+, a1, b1, ~t87
-*, sum, ~t87, ~t88
-=, ~t88,  , sum
-+, i, 1, ~t89
-=, ~t89,  , i
-<, i, 4, ~t90
-bltz, ~t90,  , ~label25
-printf, ~str12, sum, 0
-scanf, b,  , 0
-valuepara,  ,  , b
-call, fibonacci,  , ~t91
-printf, ~str13, ~t91, 0
-printf, ~str14,  , 
-scanf, a1,  , 0
-==, a1, _, ~t92
-bnez, ~t92,  , ~label26
-printf, ~str15, a1, 0
-setlabel,  ,  , ~label26
--, void1, _, ~t93
-!=, a1, ~t93, ~t94
-beqz, ~t94,  , ~label27
-printf, ~str16, a1, 0
-setlabel,  ,  , ~label27
--, 43, 11, ~t95
->=, a1, ~t95, ~t96
-bltz, ~t96,  , ~label28
-printf, ~str17, a1, 0
-setlabel,  ,  , ~label28
-printf, ~str18,  , 
-printf, ~str19,  , 
-scanf, a,  , 0
-scanf, b1,  , 0
-scanf, c1,  , 0
-valuepara,  ,  , a
-call, print_error,  , 
-call, null,  , 
-valuepara,  ,  , b1
-call, print_error,  , 
-valuepara,  ,  , c1
-call, print_error,  , 
-valuepara,  ,  , 4
-call, print_error,  , 
-printf, ~str20,  , 
-printf, ~str21,  , 
-+, 1, void1, ~t97
-=[], d1, ~t97, ~t98
-=[], d1, 1, ~t99
-+, ~t99, 2, ~t100
--, 12,  , ~t101
-*, ~t100, ~t101, ~t102
-+, ~t102, _, ~t103
-=[], d1, ~t103, ~t104
-*, ~t98, ~t104, ~t105
--, ~t105,  , ~t106
-=[], d1, 0, ~t107
-+, ~t106, ~t107, ~t108
--, ~t108, _, ~t109
-=, ~t109,  , a
-printf, ~str22, a, 0
--, -5,  , ~t110
-+, ~t110, 9, ~t111
-=, ~t111,  , a
-printf, ~str23, a, 0
-=[], d1, 1, ~t112
-+, ~t112, 2, ~t113
--, 12,  , ~t114
-*, ~t113, ~t114, ~t115
-+, ~t115, _, ~t116
-+, 17, -16, ~t117
-+, ~t116, ~t117, ~t118
--, ~t118, 1, ~t119
-[]=, d1, ~t119, 17
-=[], d1, 0, ~t120
-printf, ~str24, ~t120, 0
-printf, ~str25,  , 
+char,  ,  , kind
 printf, ~str26,  , 
-=, 0,  , i
-setlabel,  ,  , ~label29
-=[], ch4, i, ~t121
-switchhead,  ,  , ~t121
-bne, ~t121, 65, ~label31
-=[], ch4, i, ~t122
-printf, ~t122,  , 1
-jump,  ,  , ~label30
-setlabel,  ,  , ~label31
-bne, ~t121, 45, ~label32
-=[], ch4, i, ~t123
-printf, ~str27, ~t123, 1
-jump,  ,  , ~label30
-setlabel,  ,  , ~label32
-bne, ~t121, 47, ~label33
-=[], ch4, i, ~t124
-printf, ~str28, ~t124, 1
-jump,  ,  , ~label30
-setlabel,  ,  , ~label33
-setlabel,  ,  , ~label30
-+, i, 1, ~t125
-=, ~t125,  , i
-<, i, 3, ~t126
-bltz, ~t126,  , ~label29
-printf, ~str29,  , 
-printf, ~str30,  , 
--, 43, 11, ~t127
-printf, ~str31, ~t127, 0
-+, 97, 1, ~t128
--, ~t128, 98, ~t129
-printf, ~str32, ~t129, 0
-printf, ~str33, 97, 1
-printf, ~str34, charz, 1
-printf, ~str35,  , 
-printf, ~str36,  , 
-printf, ~str37,  , 
-==, mult, multc, ~t130
-bnez, ~t130,  , ~label34
-beqz, mult,  , ~label35
-beqz, 1,  , ~label36
-=[], d1, 1, ~t131
-valuepara,  ,  , char9
-valuepara,  ,  , 1
-valuepara,  ,  , 97
-valuepara,  ,  , int1
-valuepara,  ,  , char1
-valuepara,  ,  , ~t131
-call, mult_add,  , ~t132
-printf, ~t132,  , 0
-setlabel,  ,  , ~label36
-setlabel,  ,  , ~label35
-setlabel,  ,  , ~label34
--, 1,  , ~t133
-*, 57, 2, ~t134
-+, ~t133, ~t134, ~t135
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 64
-valuepara,  ,  , 97
-valuepara,  ,  , ~t135
-call, mult_add,  , ~t136
-printf, ~t136,  , 0
-scanf, a1,  , 0
-scanf, single,  , 0
-scanf, default,  , 1
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , 0
-valuepara,  ,  , a1
-valuepara,  ,  , default
-valuepara,  ,  , single
-call, mult_add,  , ~t137
-printf, ~t137,  , 0
-printf, ~str38,  , 
-printf, ~str39,  , 
-scanf, a,  , 0
-setlabel,  ,  , ~label37
-beqz, a,  , ~label38
-+, a, 1, ~t138
-=, ~t138,  , a
-setlabel,  ,  , ~label38
--, mult, multc, ~t139
-bnez, ~t139,  , ~label37
-printf, a,  , 0
-setlabel,  ,  , ~label39
--, a, 0, ~t140
-switchhead,  ,  , ~t140
-bne, ~t140, 0, ~label41
-printf, ~str40,  , 
-jump,  ,  , ~label40
-setlabel,  ,  , ~label41
-setlabel,  ,  , ~label40
--, -1,  , ~t141
-=[], d1, ~t141, ~t142
--, ~t142,  , ~t143
-+, ~t143, 9, ~t144
-+, ~t144, -11, ~t145
-bnez, ~t145,  , ~label39
-printf, ~str41,  , 
-printf, ~str42,  , 
-valuepara,  ,  , 97
-call, toupper,  , ~t146
-printf, ~t146,  , 1
-valuepara,  ,  , 97
-call, toupper,  , ~t147
-printf, ~t147,  , 0
-valuepara,  ,  , 65
-call, tolower,  , ~t148
-printf, ~t148,  , 1
-valuepara,  ,  , 65
-call, tolower,  , ~t149
-printf, ~t149,  , 0
-valuepara,  ,  , 90
-call, tolower,  , ~t150
-valuepara,  ,  , 122
-call, toupper,  , ~t151
--, ~t150, ~t151, ~t152
-printf, ~t152,  , 0
-valuepara,  ,  , 48
-call, tolower,  , ~t153
-printf, ~t153,  , 1
-valuepara,  ,  , 48
-call, tolower,  , ~t154
-printf, ~t154,  , 0
-printf, ~str43,  , 
-[]=, e, 0, 105
-valuepara,  ,  , charz
-call, tolower,  , ~t155
-[]=, e, 1, ~t155
-+, 96, 1, ~t156
-[]=, e, 2, ~t156
--, 105, 5, ~t157
-[]=, e, 3, ~t157
-[]=, e, 4, 108
-valuepara,  ,  , charz
-call, tolower,  , ~t158
--, ~t158, 3, ~t159
-[]=, e, 5, ~t159
-[]=, e, 6, 108
-[]=, e, 7, 111
-valuepara,  ,  , 0
-valuepara,  ,  , 7
-call, quick_sort,  , 
-printf, ~str44,  , 
-=, 0,  , i
-setlabel,  ,  , ~label42
-=[], e, i, ~t160
-printf, ~t160,  , 1
-+, i, int1, ~t161
-=, ~t161,  , i
-<=, i, 7, ~t162
-blez, ~t162,  , ~label42
+scanf, kind,  , 1
+valuepara,  ,  , kind
+call, iswrong,  , ~t118
+beqz, ~t118,  , ~label60
+setlabel,  ,  , ~label61
+printf, ~str27,  , 
+scanf, kind,  , 1
+valuepara,  ,  , kind
+call, iswrong,  , ~t119
+bnez, ~t119,  , ~label61
+setlabel,  ,  , ~label60
+switchhead,  ,  , kind
+bne, kind, 69, ~label63
+call, define_test,  , 
+call, operator_test,  , 
+call, fibonaci_test,  , 
+jump,  ,  , ~label62
+setlabel,  ,  , ~label63
+bne, kind, 77, ~label64
+call, dowhile_test,  , 
+call, condition_test,  , 
+call, string_test,  , 
+call, gcd_test,  , 
+jump,  ,  , ~label62
+setlabel,  ,  , ~label64
+bne, kind, 72, ~label65
+call, define_test,  , 
+call, operator_test,  , 
+call, dowhile_test,  , 
+call, condition_test,  , 
+call, string_test,  , 
+call, miscellaneous_test,  , 
+call, prime_factorization_test,  , 
+jump,  ,  , ~label62
+setlabel,  ,  , ~label65
+setlabel,  ,  , ~label62
 return,  ,  , 
 endfunction,  ,  , 

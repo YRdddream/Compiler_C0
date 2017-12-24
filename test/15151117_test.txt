@@ -17,7 +17,7 @@ int max(int a, int b)
 	return (a);
 }
 
-int quick_sort(int i, int j)
+void quick_sort(int i, int j)
 {
 	int tmp;
 	int x,y,z;

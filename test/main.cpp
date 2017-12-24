@@ -27,6 +27,7 @@ char line[llMAX];    // 当前行的内容
 FILE *file;     // 全局的文件指针，为需要编译的文件
 FILE *midcode_out;   // 中间代码(四元式)
 FILE *ASMOUT;
+FILE *midcode_new_out;   // 优化后输出的中间代码
 
 char* sym_name[50];   // 需要输出的信息
 char* op[50];    // 操作符和关系符的内容
@@ -87,6 +88,13 @@ char *in_dag[midcodeMAX];     // 以每个基本块为单位
 int dagincnt = 0;
 char *out_dag[midcodeMAX];     // dag图导出的中间代码
 int dagoutcnt = 0;
+int optmid_flag = 0;
+dagNode dagNodeSet[200];    // dag图
+int dagNodeNum = 0;     // dag图节点的数目
+NodeList NodeListSet[200];   // dag图的结点列表
+int NodeListNum = 0;   // 结点列表的长度
+char *MIDLIST_NEW[midcodeMAX];  // 从第一个function开始的midcodenew序列
+int midnewcnt = 0;
 
 void new_to_scan()
 {
@@ -217,12 +225,12 @@ int main() {
         error(FILE_ERROR);
     
     midcode_out = fopen("midcode.txt", "w");
+    midcode_new_out = fopen("midcode_new.txt", "w");
     ASMOUT = fopen("asmcode.asm", "w");
     
     getch();
     program();
     
-    // 这里放优化的函数
     if(if_has_error != 0)   //  如果源程序出错
     {
         fclose(file);
@@ -231,6 +239,7 @@ int main() {
         return 0;
     }
     
+    // optmid_flag = 1;
     // opt();
     gen_asm();
     
@@ -242,6 +251,7 @@ int main() {
     
     fclose(file);
     fclose(midcode_out);
+    fclose(midcode_new_out);
     fclose(ASMOUT);
     
     return 0;

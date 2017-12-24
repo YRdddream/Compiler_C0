@@ -13,7 +13,7 @@
 #define wlMAX 100    // 单词的最大长度
 #define llMAX 2000    // 一行的最大长度
 #define tablelMAX 2000 // 符号表最大长度
-#define midcodeMAX 8000  // 中间代码最大长度，每一个中间代码需要四个空间，实际是2000
+#define midcodeMAX 8000  // 每个函数中间代码最大长度，每一个中间代码需要四个空间，实际是2000
 
 /*---------------Key Words-保留字---------------*/
 #define MAIN 0
@@ -132,11 +132,11 @@
 
 
 /*-----------------------------四元式生成相关----------------------------*/
-#define CONSTOP 1
-#define INTOP 2
-#define CHAROP 3
-#define FUNCOP 4
-#define PARAOP 5
+#define CONSTOP 1   //
+#define INTOP 2   //
+#define CHAROP 3   //
+#define FUNCOP 4     //
+#define PARAOP 5     //
 #define VALUEPARAOP 6
 #define CALLOP 7
 #define RETURNOP 8
@@ -161,11 +161,11 @@
 #define BGEZOP 27
 #define BLTZOP 28
 #define BLEZOP 29
-#define SETLABELOP 30
+#define SETLABELOP 30   // 块内第一条语句
 #define SCANFOP 31
 #define PRINTFOP 32
-#define ENDFUNC 33
-#define VOIDOP 34
-#define SWTICHOP 35
+#define ENDFUNC 33    // 
+#define VOIDOP 34    //
+#define SWTICHOP 35   // delete
 
 #endif /* keyWord_h */

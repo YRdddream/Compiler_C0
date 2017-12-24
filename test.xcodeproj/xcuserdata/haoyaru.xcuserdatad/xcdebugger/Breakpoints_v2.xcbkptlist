@@ -6,32 +6,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "test/asmcode.cpp"
-            timestampString = "535137546.659878"
+            filePath = "test/midcode.cpp"
+            timestampString = "535781963.925906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
-            landmarkName = "func_asm()"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "gen_midcode(char *op, char *a, char *b, char *c)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "test/asmcode.cpp"
-            timestampString = "535137546.660117"
+            filePath = "test/midcode.cpp"
+            timestampString = "535781963.928648"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
-            landmarkName = "func_asm()"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "gen_midcode(char *op, char *a, char *b, char *c)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "test/midcode.cpp"
+            timestampString = "535781963.928865"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "gen_midcode(char *op, char *a, char *b, char *c)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
