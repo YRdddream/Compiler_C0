@@ -42,9 +42,9 @@ void init_symset()
     /*跳读的头符号集合*/
     // case出错后跳到的符号集
     case_errorBegSet.fsym[0] = RCURLY;
-    case_errorBegSet.fsym[0] = SEMICOLON;
+    //case_errorBegSet.fsym[1] = SEMICOLON;
     case_errorBegSet.fsym[1] = CASESY;
-    case_errorBegSet.setlen = 3;
+    case_errorBegSet.setlen = 2;
     
     // 标识符未定义跳到的地方    修改成了跳到下一个;
     undefined_identEndSet.fsym[0] = IFSY;
@@ -791,6 +791,7 @@ void Item()
     char temp1[wlMAX];
     char temp2[wlMAX];
     int type = 0;
+    int position = 0;
     
     if(find_symset(symbol, item_fac_exprBegSet) == 1)
     {
@@ -824,6 +825,12 @@ void Item()
         {
             if(strcmp(temp2, "0") == 0)
                 error(DIV_ZERO);
+            else if(isLetter(temp2[0]))
+            {
+                position = LookupTab(temp2, 0);
+                if((table[position].type == CONSTTYPE) && (table[position].intval == 0))
+                    error(DIV_ZERO);
+            }
             gen_midcode(mid_op[DIVOP], temp1, temp2, tokenmid);
         }
         strcpy(temp1, tokenmid);
@@ -929,7 +936,7 @@ void Factor()
                 {
                     if(table[position].kind == VOIDSY)
                         error(EXPR_HAS_VOIDFUNC);
-                    else
+                    //else
                     {
                         CallState(1, 1);
                         sprintf(tokenmid, "~t%d", reg_num++);
@@ -1224,17 +1231,17 @@ void SwitchState()
     if(symbol == LCURLY)
     {
         getsym();
-        if(symbol == CASESY)
-            CaseList(labelname, basevar, switchtype);
-        else
-        {
-            error(STATEMENT_ERROR);
-            return;
-        }
     }
     else
     {
-        error(NO_CASE_TABLE);
+        error(LOSE_LCURLY);
+    }
+    
+    if(symbol == CASESY)
+        CaseList(labelname, basevar, switchtype);
+    else
+    {
+        error(STATEMENT_ERROR);
         return;
     }
     
@@ -1468,7 +1475,7 @@ void AssignState(int var_or_array)    // 0是普通变量，1是数组
                         }
                         else if(table[position1].kind == INTSY)
                         {
-                            if(table[position1].intval > arraylen)
+                            if((table[position1].intval > arraylen) || (table[position1].intval < 0))
                                 error(ARRAY_OVERFLOW);
                         }
                     }

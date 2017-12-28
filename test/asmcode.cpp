@@ -122,7 +122,7 @@ void gen_asm()
     fprintf(ASMOUT, "\t\t.globl main\n");
     midpointer = 0;
     
-    while(midpointer < midcnt)
+    while(midpointer < midnewcnt)
     {
         if(strcmp(MIDLIST[midpointer], mid_op[FUNCOP]) == 0)
         {

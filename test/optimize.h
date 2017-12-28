@@ -26,6 +26,8 @@ typedef struct NodeList {
 
 extern int midpointer;
 extern int midcnt;
+extern int midnewcnt;
+extern char *MIDLIST_OLD[midcodeMAX];
 extern char *MIDLIST[midcodeMAX];
 extern char* mid_op[50];
 extern char *out_dag[midcodeMAX];
@@ -40,7 +42,7 @@ extern int NodeListNum;
 
 void opt();
 void func_block();
-void dag_proc(int block_size);
+void dag_proc(int in_pos, int out_pos);
 void dag_subproc(int start, int end);
 int belong_block(char a[]);
 void print_subproc(int i);

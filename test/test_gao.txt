@@ -152,7 +152,7 @@ void condition_test(){
 void miscellaneous(){
     int _, a, array[23], i, endid;
     char ch1, buf[256];
-    _ = 1; a = 2;
+    _ = 1; a = 2; i= 0;
     do {
         array[i] = i;
         i = i + 1;
@@ -167,7 +167,7 @@ void miscellaneous(){
         _ = _ + 1;
     }while (_ < endid);
 
-    ;;;;;;;;;{}{};;;;;{}{}{;;;;;;};;;
+    ;;;;;;;;;{;}{;};;;;;{;}{;}{;;;;;;};;;
     if (buf[0] == 'a')
     printf("miscellaneous test passed");
 }
@@ -243,7 +243,7 @@ int is_prime(int x){
         if (mod(x, i) == 0)
             return (0);
         i = i + 1;
-    }while (i * i < x);
+    }while (i * i <= x);
     return (1);
 }
 
@@ -268,7 +268,7 @@ void prime_factorization(int n){
             }
         }
         i = i + 1;
-    } while(i * i < n)
+    } while(i * i <= n)
 
     if (n != 1){
         if (first == 1)

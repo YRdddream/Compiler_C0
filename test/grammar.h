@@ -17,7 +17,7 @@ typedef struct symset
 
 extern int IOC;
 extern int symbol;
-extern FILE *file_out;
+// extern FILE *file_out;
 extern char* sym_name[50];
 extern char* mid_op[50];
 extern symset stateBegSet;

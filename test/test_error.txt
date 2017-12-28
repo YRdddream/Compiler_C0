@@ -3,7 +3,7 @@ conSt INT _ = 0;
 const int voiD1 = 0;
 const Char char1 = '1';
 const char charZ = 'Z', char9 = '9';
-const int int1 = +1, int2 = 2;
+const int int1 = -1, int2 = 2;
 
 char default;
 int a, b, c[5],d[8]; 
@@ -78,7 +78,7 @@ VOID print_error(int e_number)
 	a = 4;
 
 	printf("number < ",tmp);
-	printf("will be printe",'d');
+	printf("will be printed",'d');
 
 	switch(e_number)
 	{
@@ -171,7 +171,7 @@ void main()
 	
 	scanf(a1,b1);
 	DO{
-		sum = sum * (a1+b1);
+		sum = sum*(a1+b1);
 		i = i+1;
 	}while(I<4)
 	printf("#The 3result is ",sum);
@@ -204,7 +204,7 @@ void main()
 	a = --5+9;
 	printf("a should be 14:",a);
 	d1[(d1[1]+2)*(-12)+_+(17+-16)-1] = 17;
-	printf("d1[0] should be 17:",d1[0]);
+	printf("d1[0] should be 17:",a);
 	printf("#Result of expression ends");
 
 	printf("Test switch char");
@@ -212,8 +212,18 @@ void main()
 	do{
 		switch(ch4[i])
 		{
+			case 'A': switch(ch4[i])
+		{
 			case 'A': printf(ch4[i]);
 			case '-': printf("",ch4[i]);
+			case '/': printf("",ch4[i]);
+		}
+			case '-': switch(ch4[i])
+		{
+			case 'A': printf(ch4[i]);
+			case '-': printf("",ch4[i]);
+			case '/': printf("",ch4[i]);
+		}
 			case '/': printf("",ch4[i]);
 		}
 
@@ -251,7 +261,7 @@ void main()
 		{
 			case 0:printf("test0");
 		}
-	while(-d1[--1]+9+(+-11))
+	while(-d1[--1] +9+(+-11))
 	prIntf("#Result of single sentence ends");
 
 	printf("Test convertion of char and int");

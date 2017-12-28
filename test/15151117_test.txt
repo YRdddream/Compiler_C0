@@ -62,7 +62,7 @@ int fibonaCCi(int n)
 		return (N);
 
 	if(n > -(+((-1))))
-		return (fibonacci(n-1)+fibonacci(n-2));
+		return (+(fibonacci(n-1)*('+'-42))*(17+(-16)) + 0 + 1*fibonacci((n+0)*1/(20-19)+4-2-4)/(20-19)*(17+(-16)));
 }
 
 void nUll( )
@@ -235,7 +235,7 @@ void main()
 	if(mult == multc)
 		if(mult)
 			if(1)printf(mult_add(char9,1,'a',int1, char1, d1[1]));
-	printf(mult_add(0, 0, 0, 64, 'a', -1+'9'*2));
+	printf(mult_add(0, 0, 0, max(63,64), 'a', max(-1+'9'*2,0)));
 	scanf(a1,single,default);
 	printf(mult_add(0, 0, 0, a1, default, single));
 	prIntf("#Result of multi-parameters ends");
@@ -278,7 +278,7 @@ void main()
 	printf("test quick_sort:");
 	i=0;
 	do{
-		printf(e[i]);
+		printf(+e[i]);
 		i=i+int1;
 	}while(i<=7)
 

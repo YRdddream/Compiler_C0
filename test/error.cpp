@@ -88,7 +88,7 @@ void error(int i)
             break;
             
         case CASE_NOCONSTANT:     // 跳到下一个case或者}
-            printf("ERROR[%d] in LINE%d: Case and Switch type NOT MATCH!\n", i, lc);
+            printf("ERROR[%d] in LINE%d: Case Value is not CONSTANT!\n", i, lc);
             skip_symset(case_errorBegSet);
             break;
             

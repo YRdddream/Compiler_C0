@@ -9,8 +9,8 @@
 #ifndef midcode_h
 #define midcode_h
 
-extern FILE *midcode_out;
-extern FILE *midcode_new_out;
+extern FILE *midcode_old;
+extern FILE *midcode_new;
 
 extern int reg_num;
 extern int str_num;
@@ -18,7 +18,7 @@ extern int label_num;
 extern char midcode[llMAX];
 extern char *mid_op[50];
 extern char *MIDLIST[midcodeMAX];
-extern char *MIDLIST_NEW[midcodeMAX];
+extern char *MIDLIST_OLD[midcodeMAX];
 extern int midcnt;
 extern int midnewcnt;
 extern int funcFlag;

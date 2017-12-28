@@ -44,26 +44,26 @@ void gen_midcode(char *op, char *a, char *b, char *c)
     {
         if(funcFlag == 1)
         {
-            MIDLIST[midcnt] = (char *)malloc(50*sizeof(char));
-            strcpy(MIDLIST[midcnt], op);
+            MIDLIST_OLD[midcnt] = (char *)malloc(50*sizeof(char));
+            strcpy(MIDLIST_OLD[midcnt], op);
             
-            MIDLIST[midcnt+1] = (char *)malloc(50*sizeof(char));
+            MIDLIST_OLD[midcnt+1] = (char *)malloc(50*sizeof(char));
             if(a != 0)
-                strcpy(MIDLIST[midcnt+1], a);
+                strcpy(MIDLIST_OLD[midcnt+1], a);
             else
-                strcpy(MIDLIST[midcnt+1], "\0");
+                strcpy(MIDLIST_OLD[midcnt+1], "\0");
             
-            MIDLIST[midcnt+2] = (char *)malloc(50*sizeof(char));
+            MIDLIST_OLD[midcnt+2] = (char *)malloc(50*sizeof(char));
             if(b != 0)
-                strcpy(MIDLIST[midcnt+2], b);
+                strcpy(MIDLIST_OLD[midcnt+2], b);
             else
-                strcpy(MIDLIST[midcnt+2], "\0");
+                strcpy(MIDLIST_OLD[midcnt+2], "\0");
             
-            MIDLIST[midcnt+3] = (char *)malloc(50*sizeof(char));
+            MIDLIST_OLD[midcnt+3] = (char *)malloc(50*sizeof(char));
             if(c != 0)
-                strcpy(MIDLIST[midcnt+3], c);
+                strcpy(MIDLIST_OLD[midcnt+3], c);
             else
-                strcpy(MIDLIST[midcnt+3], "\0");
+                strcpy(MIDLIST_OLD[midcnt+3], "\0");
             
             midcnt += 4;
         }
@@ -72,33 +72,33 @@ void gen_midcode(char *op, char *a, char *b, char *c)
     {
         if(funcFlag == 1)
         {
-            MIDLIST_NEW[midnewcnt] = (char *)malloc(50*sizeof(char));
-            strcpy(MIDLIST_NEW[midnewcnt], op);
+            MIDLIST[midnewcnt] = (char *)malloc(50*sizeof(char));
+            strcpy(MIDLIST[midnewcnt], op);
             
-            MIDLIST_NEW[midnewcnt+1] = (char *)malloc(50*sizeof(char));
+            MIDLIST[midnewcnt+1] = (char *)malloc(50*sizeof(char));
             if(a != 0)
-                strcpy(MIDLIST_NEW[midnewcnt+1], a);
+                strcpy(MIDLIST[midnewcnt+1], a);
             else
-                strcpy(MIDLIST_NEW[midnewcnt+1], "\0");
+                strcpy(MIDLIST[midnewcnt+1], "\0");
             
-            MIDLIST_NEW[midnewcnt+2] = (char *)malloc(50*sizeof(char));
+            MIDLIST[midnewcnt+2] = (char *)malloc(50*sizeof(char));
             if(b != 0)
-                strcpy(MIDLIST_NEW[midnewcnt+2], b);
+                strcpy(MIDLIST[midnewcnt+2], b);
             else
-                strcpy(MIDLIST_NEW[midnewcnt+2], "\0");
+                strcpy(MIDLIST[midnewcnt+2], "\0");
             
-            MIDLIST_NEW[midnewcnt+3] = (char *)malloc(50*sizeof(char));
+            MIDLIST[midnewcnt+3] = (char *)malloc(50*sizeof(char));
             if(c != 0)
-                strcpy(MIDLIST_NEW[midnewcnt+3], c);
+                strcpy(MIDLIST[midnewcnt+3], c);
             else
-                strcpy(MIDLIST_NEW[midnewcnt+3], "\0");
+                strcpy(MIDLIST[midnewcnt+3], "\0");
             
             midnewcnt += 4;
         }
     }
     
     if(optmid_flag == 0)
-        fprintf(midcode_out, "%s\n", midcode);
+        fprintf(midcode_old, "%s\n", midcode);
     else
-        fprintf(midcode_new_out, "%s\n", midcode);
+        fprintf(midcode_new, "%s\n", midcode);
 }

@@ -25,9 +25,9 @@ char token[wlMAX];   // 存放单词的字符串
 char tokenmid[wlMAX];  // 存放当前四元式操作数
 char line[llMAX];    // 当前行的内容
 FILE *file;     // 全局的文件指针，为需要编译的文件
-FILE *midcode_out;   // 中间代码(四元式)
+FILE *midcode_old;   // 中间代码(四元式) -----对应midlist_old
 FILE *ASMOUT;
-FILE *midcode_new_out;   // 优化后输出的中间代码
+FILE *midcode_new;   // 优化后输出的中间代码  ------对应midlist
 
 char* sym_name[50];   // 需要输出的信息
 char* op[50];    // 操作符和关系符的内容
@@ -65,7 +65,7 @@ int funcFlag = 0;   // 函数开始的标记
 int if_return = 0;     // 有无返回值标记
 int tempReg = 0;   // 当前用了多少临时寄存器
 int moveReg = 0;   // 需要被挪走的寄存器
-char *MIDLIST[midcodeMAX];  // 从第一个function开始的midcode序列
+char *MIDLIST_OLD[midcodeMAX];  // 从第一个function开始的midcode序列
 int midcnt = 0;    // MIDLIST的计数指针
 int midpointer = 0;   // MIDLIST的读取指针(汇编到了哪里)
 int mainFlag = 0;    // 汇编是否编到了main函数
@@ -93,7 +93,7 @@ dagNode dagNodeSet[200];    // dag图
 int dagNodeNum = 0;     // dag图节点的数目
 NodeList NodeListSet[200];   // dag图的结点列表
 int NodeListNum = 0;   // 结点列表的长度
-char *MIDLIST_NEW[midcodeMAX];  // 从第一个function开始的midcodenew序列
+char *MIDLIST[midcodeMAX];  // 从第一个function开始的midcodenew序列
 int midnewcnt = 0;
 
 void new_to_scan()
@@ -213,8 +213,6 @@ void init_symname()    // 初始化类别码
 int main() {
     
     char file_name[100];    // 需要读取的文件名
-    char *hao_test;
-    hao_test = 0;
     
     init_symname();
     
@@ -224,8 +222,8 @@ int main() {
     if(file == NULL)
         error(FILE_ERROR);
     
-    midcode_out = fopen("midcode.txt", "w");
-    midcode_new_out = fopen("midcode_new.txt", "w");
+    midcode_old = fopen("midcode.txt", "w");
+    midcode_new = fopen("midcode_new.txt", "w");
     ASMOUT = fopen("asmcode.asm", "w");
     
     getch();
@@ -234,12 +232,14 @@ int main() {
     if(if_has_error != 0)   //  如果源程序出错
     {
         fclose(file);
-        fclose(midcode_out);
+        fclose(midcode_old);
+        fclose(midcode_new);
         fclose(ASMOUT);
         return 0;
     }
     
     // optmid_flag = 1;
+    // funcFlag = 0;
     // opt();
     gen_asm();
     
@@ -250,8 +250,8 @@ int main() {
     gen_asm();
     
     fclose(file);
-    fclose(midcode_out);
-    fclose(midcode_new_out);
+    fclose(midcode_old);
+    fclose(midcode_new);
     fclose(ASMOUT);
     
     return 0;

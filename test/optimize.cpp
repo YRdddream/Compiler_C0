@@ -30,30 +30,31 @@ void opt()
     
     while(midpointer < midcnt)
     {
-        if(strcmp(MIDLIST[midpointer], mid_op[FUNCOP]) == 0)    // 首先划分基本块
+        if(strcmp(MIDLIST_OLD[midpointer], mid_op[FUNCOP]) == 0)    // 首先划分基本块
         {
-            gen_midcode(MIDLIST[midpointer], MIDLIST[midpointer+1], MIDLIST[midpointer+2], MIDLIST[midpointer+3]);
+            gen_midcode(MIDLIST_OLD[midpointer], MIDLIST_OLD[midpointer+1], MIDLIST_OLD[midpointer+2], MIDLIST_OLD[midpointer+3]);
             midpointer += 4;
-            while(strcmp(MIDLIST[midpointer], mid_op[CONSTOP])==0 || strcmp(MIDLIST[midpointer], mid_op[INTOP])==0 || strcmp(MIDLIST[midpointer], mid_op[CHAROP])==0 || strcmp(MIDLIST[midpointer], mid_op[PARAOP])==0)
+            while(strcmp(MIDLIST_OLD[midpointer], mid_op[CONSTOP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[INTOP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[CHAROP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[PARAOP])==0)
             {
-                gen_midcode(MIDLIST[midpointer], MIDLIST[midpointer+1], MIDLIST[midpointer+2], MIDLIST[midpointer+3]);
+                gen_midcode(MIDLIST_OLD[midpointer], MIDLIST_OLD[midpointer+1], MIDLIST_OLD[midpointer+2], MIDLIST_OLD[midpointer+3]);
                 midpointer += 4;
             }
             func_block();
         }
-        gen_midcode(MIDLIST[midpointer], MIDLIST[midpointer+1], MIDLIST[midpointer+2], MIDLIST[midpointer+3]); // endfunction
+        gen_midcode(MIDLIST_OLD[midpointer], MIDLIST_OLD[midpointer+1], MIDLIST_OLD[midpointer+2], MIDLIST_OLD[midpointer+3]); // endfunction和全局数据声明
         midpointer += 4;
     }
 }
 
 void func_block()
 {
-    int if_entry[midcodeMAX]={0};  // 从常量变量声明后的第一条语句开始
-    int midcode_len = 0;
+    int if_entry[midcodeMAX/4]={0};  // 从常量变量声明后的第一条语句开始  4个为一个单位
+    int midcode_len = 0;   // 函数内中间代码的总长度，不包括参数和变量常量定义的部分
     int len_cnt = 0;
     int midtmp_pointer = 0;
-    int block_size = 0;    // 基本块大小
-    int i = 0;
+    // int block_size = 0;    // 基本块大小
+    int dag_in_pos = 0;    // midlist_old中基本块入口的pos
+    int dag_out_pos = 0;   // 出口的pos
     
     midtmp_pointer = midpointer;
     while(strcmp(MIDLIST[midpointer], mid_op[ENDFUNC]) != 0)   // 确定入口语句
@@ -67,67 +68,40 @@ void func_block()
             else if(strcmp(MIDLIST[midpointer], mid_op[SETLABELOP]) == 0)
                 if_entry[midcode_len] = 1;
         }
+        midpointer += 4;
         midcode_len++;
     }
     
-    while(len_cnt < midcode_len)
+    while(dag_out_pos < midpointer)
     {
-        dagincnt = 0;
-        block_size = 0;
-        if(if_entry[len_cnt] == 1)     // ??? 无用的if
+        dag_in_pos = midtmp_pointer;
+        len_cnt++;
+        midtmp_pointer += 4;
+        while((if_entry[len_cnt] == 0) && (midtmp_pointer < midpointer))
         {
-            i = 0;
-            while(i < 4)
-            {
-                in_dag[dagincnt+i] = (char *)malloc(50*sizeof(char));
-                strcpy(in_dag[dagincnt+i], MIDLIST[midtmp_pointer+i]);
-                i++;
-            }
-            dagincnt += 4;
             midtmp_pointer += 4;
             len_cnt++;
-            block_size++;
-            
-            while(if_entry[len_cnt] == 0)
-            {
-                i = 0;
-                while(i < 4)
-                {
-                    in_dag[dagincnt+i] = (char *)malloc(50*sizeof(char));
-                    strcpy(in_dag[dagincnt+i], MIDLIST[midtmp_pointer+i]);
-                    i++;
-                }
-                dagincnt += 4;
-                midtmp_pointer += 4;
-                len_cnt++;
-                block_size++;
-            }
-            dag_proc(block_size);
-            
-            for (i=0; i<block_size*4; i+=4)
-            {
-                free(in_dag[i]);
-                free(in_dag[i+1]);
-                free(in_dag[i+2]);
-                free(in_dag[i+3]);
-            }
         }
+        dag_out_pos = midtmp_pointer;
+        dag_proc(dag_in_pos, dag_out_pos);
+        midtmp_pointer += 4;
+        len_cnt++;
     }
 }
 
-void dag_proc(int block_size)   // 基本块再按函数调用分子块
+void dag_proc(int in_pos, int out_pos)   // 基本块再按函数调用分子块
 {
-    int i = 0;
+    int i = in_pos;
     int start = 0;
     int end = 0;
     
-    while(i < block_size*4)
+    while(i < out_pos)
     {
         if(belong_block(in_dag[i]) == 1)
         {
             start = i;
             i += 4;
-            while((belong_block(in_dag[i]) == 1) && (i < block_size*4))
+            while((belong_block(in_dag[i]) == 1) && (i < out_pos))
                 i += 4;
             end = i;
             dag_subproc(start, end);
