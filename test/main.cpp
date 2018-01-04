@@ -84,9 +84,9 @@ int if_has_error = 0;   // 有error就不生成汇编码
 // int casetable[100] = {0};   // 主要是为了看有没有相同的case，！！不应该定义成全局的
 
 // 优化相关
-char *in_dag[midcodeMAX];     // 以每个基本块为单位
+// char *in_dag[midcodeMAX];     // 以每个基本块为单位
 int dagincnt = 0;
-char *out_dag[midcodeMAX];     // dag图导出的中间代码
+// char *out_dag[midcodeMAX];     // dag图导出的中间代码
 int dagoutcnt = 0;
 int optmid_flag = 0;
 dagNode dagNodeSet[200];    // dag图
@@ -95,6 +95,9 @@ NodeList NodeListSet[200];   // dag图的结点列表
 int NodeListNum = 0;   // 结点列表的长度
 char *MIDLIST[midcodeMAX];  // 从第一个function开始的midcodenew序列
 int midnewcnt = 0;
+initNode leafvarSet[200];
+int leafvarNum = 0;
+int reg_num_new = 0;    // 新的从头开始的寄存器编号
 
 void new_to_scan()
 {

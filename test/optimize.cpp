@@ -34,7 +34,7 @@ void opt()
         {
             gen_midcode(MIDLIST_OLD[midpointer], MIDLIST_OLD[midpointer+1], MIDLIST_OLD[midpointer+2], MIDLIST_OLD[midpointer+3]);
             midpointer += 4;
-            while(strcmp(MIDLIST_OLD[midpointer], mid_op[CONSTOP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[INTOP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[CHAROP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[PARAOP])==0)
+            while((strcmp(MIDLIST_OLD[midpointer], mid_op[CONSTOP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[INTOP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[CHAROP])==0 || strcmp(MIDLIST_OLD[midpointer], mid_op[PARAOP])==0) && (midpointer < midcnt))
             {
                 gen_midcode(MIDLIST_OLD[midpointer], MIDLIST_OLD[midpointer+1], MIDLIST_OLD[midpointer+2], MIDLIST_OLD[midpointer+3]);
                 midpointer += 4;
@@ -57,15 +57,15 @@ void func_block()
     int dag_out_pos = 0;   // 出口的pos
     
     midtmp_pointer = midpointer;
-    while(strcmp(MIDLIST[midpointer], mid_op[ENDFUNC]) != 0)   // 确定入口语句
+    while(strcmp(MIDLIST_OLD[midpointer], mid_op[ENDFUNC]) != 0)   // 确定入口语句
     {
         if(midcode_len == 0)
             if_entry[midcode_len] = 1;
         else
         {
-            if((strcmp(MIDLIST[midpointer], mid_op[BEQZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BNEZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BGTZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BGEZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BLTZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BLEZOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[BNEOP]) == 0) || (strcmp(MIDLIST[midpointer], mid_op[JUMPOP]) == 0))
+            if((strcmp(MIDLIST_OLD[midpointer], mid_op[BEQZOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[BNEZOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[BGTZOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[BGEZOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[BLTZOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[BLEZOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[BNEOP]) == 0) || (strcmp(MIDLIST_OLD[midpointer], mid_op[JUMPOP]) == 0))
                 if_entry[midcode_len+1] = 1;
-            else if(strcmp(MIDLIST[midpointer], mid_op[SETLABELOP]) == 0)
+            else if(strcmp(MIDLIST_OLD[midpointer], mid_op[SETLABELOP]) == 0)
                 if_entry[midcode_len] = 1;
         }
         midpointer += 4;
@@ -89,7 +89,7 @@ void func_block()
     }
 }
 
-void dag_proc(int in_pos, int out_pos)   // 基本块再按函数调用分子块
+void dag_proc(int in_pos, int out_pos)   // 基本块再按函数调用等分子块
 {
     int i = in_pos;
     int start = 0;
@@ -97,11 +97,11 @@ void dag_proc(int in_pos, int out_pos)   // 基本块再按函数调用分子块
     
     while(i < out_pos)
     {
-        if(belong_block(in_dag[i]) == 1)
+        if(belong_block(MIDLIST_OLD[i]) == 1)
         {
             start = i;
             i += 4;
-            while((belong_block(in_dag[i]) == 1) && (i < out_pos))
+            while((belong_block(MIDLIST_OLD[i]) == 1) && (i < out_pos))
                 i += 4;
             end = i;
             dag_subproc(start, end);
@@ -114,7 +114,7 @@ void dag_proc(int in_pos, int out_pos)   // 基本块再按函数调用分子块
     }
 }
 
-void dag_subproc(int start, int end)    // in_dag的start和end
+void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
 {
     int node_cnt = 0;
     int i = 0;
@@ -129,27 +129,30 @@ void dag_subproc(int start, int end)    // in_dag的start和end
     int find = 0;   // 在结点列表中找没找到
     int no_rchild = 0;   // 为1代表没有右孩子
     int op_type = 0;   // op的类型（序号）
-    node_cnt = start;
+    node_cnt = start; //*****
     NodeListNum = 0;
     dagNodeNum = 0;
+    leafvarNum = 0;
     
     while(node_cnt < end)
     {
-        if(strcmp(in_dag[node_cnt], mid_op[PLUSOP])==0 || strcmp(in_dag[node_cnt], mid_op[MULTIOP])==0 || strcmp(in_dag[node_cnt], mid_op[DIVOP])==0 || strcmp(in_dag[node_cnt], mid_op[MINUSOP])==0 || strcmp(in_dag[node_cnt], mid_op[EQLCON])==0 || strcmp(in_dag[node_cnt], mid_op[NEQCON])==0 || strcmp(in_dag[node_cnt], mid_op[GTCON])==0 || strcmp(in_dag[node_cnt], mid_op[GTECON])==0 || strcmp(in_dag[node_cnt], mid_op[LSCON])==0 || strcmp(in_dag[node_cnt], mid_op[LSECON])==0)
-        {        // 如果是+，/，*则必有两个操作数
+        no_rchild = 0;
+        if(strcmp(MIDLIST_OLD[node_cnt], MIDLIST_OLD[PLUSOP])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[MULTIOP])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[DIVOP])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[MINUSOP])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[EQLCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[NEQCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[GTCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[GTECON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[LSCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[LSECON])==0)
+        {        // 如果是+，/，*则必有两个操作数     + - * / 的运算
             find = 0;
             i = 0;
             // 先处理左孩子
-            if(isDigit(in_dag[node_cnt+1][0]) || in_dag[node_cnt+1][0]=='-')  // 如果左孩子是数字
+            if(isDigit(MIDLIST_OLD[node_cnt+1][0]) || MIDLIST_OLD[node_cnt+1][0]=='-')  // 如果左孩子是数字
             {
-                tmp_value = atoi(in_dag[node_cnt+1]);
+                tmp_value = atoi(MIDLIST_OLD[node_cnt+1]);
                 find_const_var = 0;
             }
-            else if(isLetter(in_dag[node_cnt+1][0]) || in_dag[node_cnt+1][0]=='~')    // 如果左孩子是标识符或寄存器
+            else if(isLetter(MIDLIST_OLD[node_cnt+1][0]) || MIDLIST_OLD[node_cnt+1][0]=='~')    // 如果左孩子是标识符或寄存器
             {
-                strcpy(tmp_var, in_dag[node_cnt+1]);
+                strcpy(tmp_var, MIDLIST_OLD[node_cnt+1]);
                 find_const_var = 1;
             }
+            
             while(i < NodeListNum)    // 在结点列表中寻找其左孩子
             {
                 if(find_const_var == 0)
@@ -181,9 +184,11 @@ void dag_subproc(int start, int end)    // in_dag的start和end
                     }
                 }
             }
-            if(find == 0)   // 新建一个结点存放左孩子,dag图中和结点列表中都需要新建
+            
+            if(find == 0)   // 新建一个结点存放左孩子,dag图中和结点列表中都需要新建  // 如果没有找到就说明是个叶子节点,需要给其赋初值
             {
                 dagNodeSet[dagNodeNum].op = 0;    // 代表是叶子节点    // 这里dagnodenum还不能++
+                dagNodeSet[dagNodeNum].dadnum = 0;
                 if(find_const_var == 0)
                 {
                     NodeListSet[NodeListNum].constorvar = 0;
@@ -192,9 +197,18 @@ void dag_subproc(int start, int end)    // in_dag的start和end
                 }
                 else
                 {
+                    strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
                     NodeListSet[NodeListNum].constorvar = 1;
                     strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
                     NodeListSet[NodeListNum].position = dagNodeNum;
+                    
+                    if(isLetter(MIDLIST_OLD[node_cnt+1][0]))   // 如果叶子节点是一个变量名，那么就记录到叶子变量集合中（这时候没办法判断其是常量还是变量，只好都弄进去）
+                    {
+                        leafvarSet[leafvarNum].if_change = 0;
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, MIDLIST_OLD[node_cnt+1]);
+                        strcpy(leafvarSet[leafvarNum].var_name, MIDLIST_OLD[node_cnt+1]);
+                        leafvarNum++;
+                    }
                 }
                 lchild_position = dagNodeNum;
                 NodeListNum++;
@@ -204,18 +218,19 @@ void dag_subproc(int start, int end)    // in_dag的start和end
             find = 0;
             i = 0;
             // 再处理右孩子
-            if(isDigit(in_dag[node_cnt+2][0]) || in_dag[node_cnt+2][0]=='-')  // 如果右孩子是数字
+            if(isDigit(MIDLIST_OLD[node_cnt+2][0]) || MIDLIST_OLD[node_cnt+2][0]=='-')  // 如果右孩子是数字
             {
-                tmp_value = atoi(in_dag[node_cnt+2]);
+                tmp_value = atoi(MIDLIST_OLD[node_cnt+2]);
                 find_const_var = 0;
             }
-            else if(isLetter(in_dag[node_cnt+2][0]) || in_dag[node_cnt+2][0]=='~')     // 如果右孩子是标识符或寄存器
+            else if(isLetter(MIDLIST_OLD[node_cnt+2][0]) || MIDLIST_OLD[node_cnt+2][0]=='~')     // 如果右孩子是标识符或寄存器
             {
-                strcpy(tmp_var, in_dag[node_cnt+2]);
+                strcpy(tmp_var, MIDLIST_OLD[node_cnt+2]);
                 find_const_var = 1;
             }
-            else if(in_dag[node_cnt+2][0] == '\0')   // 没有右孩子
+            else if(MIDLIST_OLD[node_cnt+2][0] == '\0')   // 没有右孩子
                 no_rchild = 1;
+            
             if(no_rchild == 0)      // 如果有右孩子，则开始寻找
             {
                 while(i < NodeListNum)    // 在结点列表中寻找其右孩子
@@ -249,9 +264,11 @@ void dag_subproc(int start, int end)    // in_dag的start和end
                         }
                     }
                 }
+                
                 if(find == 0)   // 新建一个结点存放右孩子,dag图中和结点列表中都需要新建
                 {
                     dagNodeSet[dagNodeNum].op = 0;    // 代表是叶子节点    // 这里dagnodenum还不能++
+                    dagNodeSet[dagNodeNum].dadnum = 0;
                     if(find_const_var == 0)
                     {
                         NodeListSet[NodeListNum].constorvar = 0;
@@ -260,9 +277,18 @@ void dag_subproc(int start, int end)    // in_dag的start和end
                     }
                     else
                     {
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
                         NodeListSet[NodeListNum].constorvar = 1;
                         strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
                         NodeListSet[NodeListNum].position = dagNodeNum;
+                        
+                        if(isLetter(MIDLIST_OLD[node_cnt+2][0]))
+                        {
+                            leafvarSet[leafvarNum].if_change = 0;
+                            strcpy(dagNodeSet[dagNodeNum].dag_name, MIDLIST_OLD[node_cnt+2]);
+                            strcpy(leafvarSet[leafvarNum].var_name, MIDLIST_OLD[node_cnt+2]);
+                            leafvarNum++;
+                        }
                     }
                     rchild_position = dagNodeNum;
                     NodeListNum++;
@@ -272,22 +298,16 @@ void dag_subproc(int start, int end)    // in_dag的start和end
             
             find = 0;
             i = 0;
-            op_type = 0;
-            // 处理dag图中的节点 即寻找op
-            if(strcmp(in_dag[node_cnt], mid_op[PLUSOP]) == 0)
+            op_type = 0;     // 处理dag图中的节点 即寻找op
+            if(strcmp(MIDLIST_OLD[node_cnt], mid_op[PLUSOP]) == 0)
                 op_type = PLUSOP;
-            else if(strcmp(in_dag[node_cnt], mid_op[MINUSOP])==0 || strcmp(in_dag[node_cnt], mid_op[EQLCON])==0 || strcmp(in_dag[node_cnt], mid_op[NEQCON])==0 || strcmp(in_dag[node_cnt], mid_op[GTCON])==0 || strcmp(in_dag[node_cnt], mid_op[GTECON])==0 || strcmp(in_dag[node_cnt], mid_op[LSCON])==0 || strcmp(in_dag[node_cnt], mid_op[LSECON])==0)
+            else if(strcmp(MIDLIST_OLD[node_cnt], mid_op[MINUSOP])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[EQLCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[NEQCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[GTCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[GTECON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[LSCON])==0 || strcmp(MIDLIST_OLD[node_cnt], mid_op[LSECON])==0)
                 op_type = MINUSOP;
-            else if(strcmp(in_dag[node_cnt], mid_op[MULTIOP]) == 0)
+            else if(strcmp(MIDLIST_OLD[node_cnt], mid_op[MULTIOP]) == 0)
                 op_type = MULTIOP;
-            else if(strcmp(in_dag[node_cnt], mid_op[DIVOP]) == 0)
+            else if(strcmp(MIDLIST_OLD[node_cnt], mid_op[DIVOP]) == 0)
                 op_type = DIVOP;
-            else if(strcmp(in_dag[node_cnt], mid_op[ASSIGNOP]) == 0)
-                op_type = ASSIGNOP;
-            else if(strcmp(in_dag[node_cnt], mid_op[GETARRAY]) == 0)
-                op_type = GETARRAY;
-            else if(strcmp(in_dag[node_cnt], mid_op[ASSIGNARRAY]) == 0)
-                op_type = ASSIGNARRAY;
+            
             while(i < dagNodeNum)
             {
                 if(no_rchild == 0)   // 如果有右孩子
@@ -321,6 +341,9 @@ void dag_subproc(int start, int end)    // in_dag的start和end
             }
             if(find == 0)    // 如果没找到，DAG图中新建一个中间节点，操作为op_type
             {
+                dagNodeSet[lchild_position].dadnum++;     // 子节点的爸爸数量增加1
+                if(no_rchild == 0)
+                    dagNodeSet[rchild_position].dadnum++;
                 dagNodeSet[dagNodeNum].op = op_type;
                 dagNodeSet[dagNodeNum].left_child = lchild_position;
                 dagNodeSet[dagNodeNum].right_child = rchild_position;
@@ -330,8 +353,8 @@ void dag_subproc(int start, int end)    // in_dag的start和end
             
             find = 0;
             i = 0;
-            // 处理第三个操作数，即结果。第三个操作数不可能是数字,只能是标识符或者寄存器
-            strcpy(tmp_var, in_dag[node_cnt+1]);
+            // 处理第三个操作数，即结果。第三个操作数不可能是数字和标识符,只能是寄存器！！！
+            strcpy(tmp_var, MIDLIST_OLD[node_cnt+3]);
             find_const_var = 1;
             while(i < NodeListNum)
             {
@@ -347,6 +370,7 @@ void dag_subproc(int start, int end)    // in_dag的start和end
                     continue;
                 }
             }
+            
             if(find == 0)  // 如果未找到，则在结点表中新建一项对应关系
             {
                 NodeListSet[NodeListNum].constorvar = 1;
@@ -356,21 +380,22 @@ void dag_subproc(int start, int end)    // in_dag的start和end
             }
             else   // 如果找到了，将其节点号更改
             {
+                printf("Debug/Error:the third should not be found!!!\n");
                 NodeListSet[nodelist_position].position = dagnode_position;
             }
         }
-        else if(strcmp(in_dag[node_cnt], mid_op[ASSIGNOP]) == 0)   // 赋值没有右孩子
+        else if(strcmp(MIDLIST_OLD[node_cnt], mid_op[ASSIGNOP]) == 0)   // 赋值没有右孩子
         {
             find = 0;
             i = 0;
-            if(isDigit(in_dag[node_cnt+1][0]) || in_dag[node_cnt+1][0]=='-')  // 如果左孩子是数字
+            if(isDigit(MIDLIST_OLD[node_cnt+1][0]) || MIDLIST_OLD[node_cnt+1][0]=='-')  // 如果左孩子是数字
             {
-                tmp_value = atoi(in_dag[node_cnt+1]);
+                tmp_value = atoi(MIDLIST_OLD[node_cnt+1]);
                 find_const_var = 0;
             }
-            else if(isLetter(in_dag[node_cnt+1][0]) || in_dag[node_cnt+1][0]=='~')    // 如果左孩子是标识符或寄存器
+            else if(isLetter(MIDLIST_OLD[node_cnt+1][0]) || MIDLIST_OLD[node_cnt+1][0]=='~')    // 如果左孩子是标识符或寄存器
             {
-                strcpy(tmp_var, in_dag[node_cnt+1]);
+                strcpy(tmp_var, MIDLIST_OLD[node_cnt+1]);
                 find_const_var = 1;
             }
             while(i < NodeListNum)    // 在结点列表中寻找其左孩子
@@ -407,6 +432,7 @@ void dag_subproc(int start, int end)    // in_dag的start和end
             if(find == 0)   // 新建一个结点存放左孩子,dag图中和结点列表中都需要新建
             {
                 dagNodeSet[dagNodeNum].op = 0;    // 代表是叶子节点    // 这里dagnodenum还不能++
+                dagNodeSet[dagNodeNum].dadnum = 0;
                 if(find_const_var == 0)
                 {
                     NodeListSet[NodeListNum].constorvar = 0;
@@ -418,15 +444,422 @@ void dag_subproc(int start, int end)    // in_dag的start和end
                     NodeListSet[NodeListNum].constorvar = 1;
                     strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
                     NodeListSet[NodeListNum].position = dagNodeNum;
+                    
+                    if(isLetter(MIDLIST_OLD[node_cnt+1][0]))
+                    {
+                        leafvarSet[leafvarNum].if_change = 0;
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, MIDLIST_OLD[node_cnt+1]);
+                        strcpy(leafvarSet[leafvarNum].var_name, MIDLIST_OLD[node_cnt+1]);
+                        leafvarNum++;
+                    }
                 }
                 lchild_position = dagNodeNum;
                 NodeListNum++;
                 dagNodeNum++;
             }
+            
+            // 第四个节点只能是标识符
+            find = 0;
+            i = 0;
+            strcpy(tmp_var, MIDLIST_OLD[midcnt+3]);
+            while (i<NodeListNum)
+            {
+                if((NodeListSet[i].constorvar==1) && (strcmp(NodeListSet[i].var_name, tmp_var)==0))
+                {
+                    find = 1;
+                    nodelist_position = i;
+                    break;
+                }
+                else
+                {
+                    i++;
+                    continue;
+                }
+            }
+            if(find == 0)
+            {
+                NodeListSet[NodeListNum].constorvar = 1;
+                strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                NodeListSet[NodeListNum].position = lchild_position;
+                NodeListNum++;
+            }
+            else
+            {
+                NodeListSet[nodelist_position].position = lchild_position;
+                i = 0;
+                while(i < leafvarNum)
+                {
+                    if(strcmp(leafvarSet[i].var_name, tmp_var)==0)
+                    {
+                        leafvarSet[i].if_change = 1;
+                        break;
+                    }
+                    i++;
+                }
+            }
         }
-        
+        else if(strcmp(MIDLIST_OLD[node_cnt], mid_op[GETARRAY]) == 0)
+        {
+            find = 0;   // 第一个操作数一定是标识符——数组名
+            i = 0;
+            strcpy(tmp_var, MIDLIST_OLD[node_cnt+1]);
+            find_const_var = 1;
+            while(i < NodeListNum)
+            {
+                if((NodeListSet[i].constorvar==1) && (strcmp(NodeListSet[i].var_name, tmp_var)==0))
+                {
+                    find = 1;
+                    lchild_position = NodeListSet[i].position;
+                    break;
+                }
+                else
+                {
+                    i++;
+                    continue;
+                }
+            }
+            
+            if(find == 0)
+            {
+                dagNodeSet[dagNodeNum].op = 0;
+                dagNodeSet[dagNodeNum].dadnum = 0;
+                strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                
+                NodeListSet[NodeListNum].constorvar = 1;    // 这个节点代表数组
+                strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                NodeListSet[NodeListNum].position = dagNodeNum;
+                
+                lchild_position = dagNodeNum;
+                NodeListNum++;
+                dagNodeNum++;
+            }
+            
+            // 再处理第二个操作数，即数组下标(右孩子)
+            find = 0;
+            i = 0;
+            
+            if(isDigit(MIDLIST_OLD[node_cnt+2][0]) || MIDLIST_OLD[node_cnt+2][0]=='-')  // 如果右孩子是数字
+            {
+                tmp_value = atoi(MIDLIST_OLD[node_cnt+2]);
+                find_const_var = 0;
+            }
+            else if(isLetter(MIDLIST_OLD[node_cnt+2][0]) || MIDLIST_OLD[node_cnt+2][0]=='~')     // 如果右孩子是标识符或寄存器
+            {
+                strcpy(tmp_var, MIDLIST_OLD[node_cnt+2]);
+                find_const_var = 1;
+            }
+            
+            while(i < NodeListNum)
+            {
+                if(find_const_var == 0)
+                {
+                    if((NodeListSet[i].constorvar==0) && (NodeListSet[i].constvalue==tmp_value))
+                    {
+                        find = 1;
+                        rchild_position = NodeListSet[i].position;
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+                else
+                {
+                    if((NodeListSet[i].constorvar==1) && (strcmp(NodeListSet[i].var_name, tmp_var)==0))
+                    {
+                        find = 1;
+                        rchild_position = NodeListSet[i].position;
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            
+            if(find == 0)
+            {
+                dagNodeSet[dagNodeNum].op = 0;
+                dagNodeSet[dagNodeNum].dadnum = 0;
+                if(find_const_var == 0)
+                {
+                    NodeListSet[NodeListNum].constorvar = 0;
+                    NodeListSet[NodeListNum].constvalue = atoi(MIDLIST_OLD[node_cnt+2]);
+                    NodeListSet[NodeListNum].position = dagNodeNum;
+                }
+                else
+                {
+                    NodeListSet[NodeListNum].constorvar = 1;
+                    strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                    NodeListSet[NodeListNum].position = dagNodeNum;
+                    
+                    if(isLetter(MIDLIST_OLD[node_cnt+2][0]))
+                    {
+                        leafvarSet[leafvarNum].if_change = 0;
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                        strcpy(leafvarSet[leafvarNum].var_name, tmp_var);
+                        leafvarNum++;
+                    }
+                }
+                
+                rchild_position = dagNodeNum;
+                dagNodeNum++;
+                NodeListNum++;
+            }
+            
+            // 处理中间节点，看有无公共子表达式
+            find = 0;
+            i = 0;
+            op_type = GETARRAY;
+            while(i < dagNodeNum)
+            {
+                if((dagNodeSet[i].op == op_type) && (dagNodeSet[i].left_child==lchild_position) && (dagNodeSet[i].right_child==rchild_position))
+                {
+                    find = 1;
+                    dagnode_position = i;
+                    break;
+                }
+                else
+                {
+                    i++;
+                    continue;
+                }
+            }
+            
+            if(find == 0)
+            {
+                dagNodeSet[lchild_position].dadnum++;
+                dagNodeSet[rchild_position].dadnum++;
+                dagNodeSet[dagNodeNum].op = op_type;
+                dagNodeSet[dagNodeNum].left_child = lchild_position;
+                dagNodeSet[dagNodeNum].right_child = rchild_position;
+                dagnode_position = dagNodeNum;
+                dagNodeNum++;
+            }
+            
+            // 处理第三个操作数，只能是寄存器！！！
+            find = 0;
+            i = 0;
+            strcpy(tmp_var, MIDLIST_OLD[node_cnt+3]);
+            while(i < NodeListNum)
+            {
+                if((NodeListSet[i].constorvar==1) && (strcmp(tmp_var, NodeListSet[i].var_name)==0))
+                {
+                    find = 1;
+                    nodelist_position = i;
+                    break;
+                }
+                else
+                {
+                    i++;
+                    continue;
+                }
+            }
+            
+            if(find == 0)
+            {
+                strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                NodeListSet[NodeListNum].position = dagnode_position;
+                NodeListSet[NodeListNum].constorvar = 1;
+                NodeListNum++;
+            }
+            else
+                NodeListSet[nodelist_position].position = dagnode_position;
+        }
+        else if(strcmp(MIDLIST_OLD[node_cnt], mid_op[ASSIGNARRAY]) == 0)   // 第一个操作数是数组名，第二个是左孩子，第三个是右孩子
+        {
+            find = 0;
+            i = 0;      // 先处理左孩子
+            if(isDigit(MIDLIST_OLD[node_cnt+2][0]) || MIDLIST_OLD[node_cnt+2][0]=='-')  // 如果左孩子是数字
+            {
+                tmp_value = atoi(MIDLIST_OLD[node_cnt+2]);
+                find_const_var = 0;
+            }
+            else if(isLetter(MIDLIST_OLD[node_cnt+2][0]) || MIDLIST_OLD[node_cnt+2][0]=='~')    // 如果左孩子是标识符或寄存器
+            {
+                strcpy(tmp_var, MIDLIST_OLD[node_cnt+2]);
+                find_const_var = 1;
+            }
+            
+            while(i < NodeListNum)    // 在结点列表中寻找其左孩子
+            {
+                if(find_const_var == 0)
+                {
+                    if((NodeListSet[i].constorvar==0) && (NodeListSet[i].constvalue==tmp_value))
+                    {
+                        find = 1;
+                        lchild_position = NodeListSet[i].position;
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+                else
+                {
+                    if((NodeListSet[i].constorvar==1) && (strcmp(tmp_var, NodeListSet[i].var_name)==0))
+                    {
+                        find = 1;
+                        lchild_position = NodeListSet[i].position;
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            
+            if(find == 0)   // 新建一个结点存放左孩子,dag图中和结点列表中都需要新建
+            {
+                dagNodeSet[dagNodeNum].op = 0;    // 代表是叶子节点    // 这里dagnodenum还不能++
+                dagNodeSet[dagNodeNum].dadnum = 0;
+                if(find_const_var == 0)
+                {
+                    NodeListSet[NodeListNum].constorvar = 0;
+                    NodeListSet[NodeListNum].constvalue = tmp_value;
+                    NodeListSet[NodeListNum].position = dagNodeNum;
+                }
+                else
+                {
+                    NodeListSet[NodeListNum].constorvar = 1;
+                    strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                    NodeListSet[NodeListNum].position = dagNodeNum;
+                    
+                    if(isLetter(tmp_var[0]))   // 如果叶子节点是一个变量名，那么就记录到叶子变量集合中（这时候没办法判断其是常量还是变量，只好都弄进去）
+                    {
+                        leafvarSet[leafvarNum].if_change = 0;
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                        strcpy(leafvarSet[leafvarNum].var_name, tmp_var);
+                        leafvarNum++;
+                    }
+                }
+                lchild_position = dagNodeNum;
+                NodeListNum++;
+                dagNodeNum++;
+            }
+            
+            find = 0;    // 再处理右孩子
+            i = 0;
+            if(isDigit(MIDLIST_OLD[node_cnt+3][0]) || MIDLIST_OLD[node_cnt+3][0]=='-')  // 如果左孩子是数字
+            {
+                tmp_value = atoi(MIDLIST_OLD[node_cnt+3]);
+                find_const_var = 0;
+            }
+            else if(isLetter(MIDLIST_OLD[node_cnt+3][0]) || MIDLIST_OLD[node_cnt+3][0]=='~')    // 如果左孩子是标识符或寄存器
+            {
+                strcpy(tmp_var, MIDLIST_OLD[node_cnt+3]);
+                find_const_var = 1;
+            }
+            
+            while(i < NodeListNum)
+            {
+                if(find_const_var == 0)
+                {
+                    if((NodeListSet[i].constorvar==0) && (NodeListSet[i].constvalue==tmp_value))
+                    {
+                        find = 1;
+                        rchild_position = NodeListSet[i].position;
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+                else
+                {
+                    if((NodeListSet[i].constorvar==1) && (strcmp(tmp_var, NodeListSet[i].var_name)==0))
+                    {
+                        find = 1;
+                        rchild_position = NodeListSet[i].position;
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            
+            if(find == 0)
+            {
+                dagNodeSet[dagNodeNum].op = 0;
+                dagNodeSet[dagNodeNum].dadnum = 0;
+                if(find_const_var == 0)
+                {
+                    NodeListSet[NodeListNum].constorvar = 0;
+                    NodeListSet[NodeListNum].constvalue = tmp_value;
+                    NodeListSet[NodeListNum].position = dagNodeNum;
+                }
+                else
+                {
+                    NodeListSet[NodeListNum].constorvar = 1;
+                    strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                    NodeListSet[NodeListNum].position = dagNodeNum;
+                    
+                    if(isLetter(tmp_var[0]))
+                    {
+                        leafvarSet[leafvarNum].if_change = 0;
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                        strcpy(leafvarSet[leafvarNum].var_name, tmp_var);
+                        leafvarNum++;
+                    }
+                }
+                rchild_position = dagNodeNum;
+                NodeListNum++;
+                dagNodeNum++;
+            }
+            
+            find = 0;     // 最后处理数组名，这时必须在dag图中新建节点
+            i = 0;
+            dagNodeSet[lchild_position].dadnum++;
+            dagNodeSet[rchild_position].dadnum++;
+            dagNodeSet[dagNodeNum].left_child = lchild_position;
+            dagNodeSet[dagNodeNum].right_child = rchild_position;
+            dagNodeSet[dagNodeNum].op = ASSIGNARRAY;
+            strcpy(dagNodeSet[dagNodeNum].dag_name, MIDLIST_OLD[node_cnt+1]);
+            
+            strcpy(tmp_var, MIDLIST_OLD[node_cnt+1]);
+            while(i < NodeListNum)
+            {
+                if((NodeListSet[i].constorvar==1) && (strcmp(tmp_var, NodeListSet[i].var_name)==0))
+                {
+                    find = 1;
+                    nodelist_position = i;
+                    break;
+                }
+                else
+                {
+                    i++;
+                    continue;
+                }
+            }
+            
+            if(find == 0)
+            {
+                NodeListSet[NodeListNum].constorvar = 1;
+                NodeListSet[NodeListNum].position = dagNodeNum;
+                strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                NodeListNum++;
+            }
+            else
+                NodeListSet[nodelist_position].position = dagNodeNum;
+            dagNodeNum++;
+        }
         node_cnt += 4;
     }
+    
+    // 将dag图输出到midlist中，即调用gen_midcode函数
 }
 
 void print_subproc(int i)   // 直接输出语句，比如scanf，printf，return，call，valueparameter等等

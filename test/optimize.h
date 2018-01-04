@@ -13,8 +13,10 @@ typedef struct dagNode {
     int op;    // op为0代表是叶节点  op只会出现+  -  *  /  =[]  []=  =
     int left_child;
     int right_child;    // right_child为-1代表没有右孩子
-    int dadnum;    // 节点孩子的数量
+    int dadnum;    // 节点爸爸的数量
     int if_out;    // 这个节点是不是已经输出了
+    
+    char dag_name[100];   // 仅针对op为assignarray的时候使用，用来记录他assign的是哪个array   是这个节点的名字，都是临时变量（除了叶子节点）!!!,赋值等最后dag图都导出了再赋值
 }dagNode;
 
 typedef struct NodeList {
@@ -24,21 +26,29 @@ typedef struct NodeList {
     int position;    // 处在DAG图中节点的序号
 }NodeList;
 
+// 记录初值被改变的叶子节点
+typedef struct initNode {
+    char var_name[100];
+    int if_change = 0;    // 其初值有没有被改变
+}initNode;
+
 extern int midpointer;
 extern int midcnt;
 extern int midnewcnt;
 extern char *MIDLIST_OLD[midcodeMAX];
 extern char *MIDLIST[midcodeMAX];
 extern char* mid_op[50];
-extern char *out_dag[midcodeMAX];
+// extern char *out_dag[midcodeMAX];
 extern int dagoutcnt;
-extern char *in_dag[midcodeMAX];
+// extern char *in_dag[midcodeMAX];
 extern int dagincnt;
 extern char *mid_op[50];
 extern dagNode dagNodeSet[200];
 extern NodeList NodeListSet[200];
 extern int dagNodeNum;
 extern int NodeListNum;
+extern initNode leafvarSet[200];
+extern int leafvarNum;
 
 void opt();
 void func_block();
