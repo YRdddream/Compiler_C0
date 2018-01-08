@@ -8,7 +8,8 @@ const int int1 = +1, int2 = 2;
 char default;
 int a, b, c[5],d[8]; 
 int single;
-char e[8],f;
+char f;
+char e[8];
 
 int max(int a, int b)
 {

@@ -1,12 +1,88 @@
-int fibonaCCi(int n)
+conSt INT _ = 0;
+
+const int voiD1 = 0;
+const Char char1 = '1';
+const char charZ = 'Z', char9 = '9';
+const int int1 = +1, int2 = 2;
+
+char default;
+int a, b, c[5],d[8]; 
+int single;
+char f;
+int e[8];
+
+int max(int a, int b)
 {
-	return (+(fibonacci(n-1)*(17-16))*(17+(-16)*(17+(-16))) + fibonacci(n-2));
+	if(a<b)
+		return (b);
+	return (a);
+}
+
+void quick_sort(int i, int j)
+{
+	int tmp;
+	int x,y,z;
+
+	y=j; x=i;
+	z = e[(i+j)/2];
+
+	do{
+		do
+			if(z<e[y])
+				y=y-1;
+		while(z<e[y])do
+			if(z>e[x])
+				x=x+1;
+		while(z>e[x])
+
+		if(x<=y)
+		{
+			tmp = e[x];
+			e[x]=e[y];
+			e[y]=tmp;
+			x=x+1;
+			y=y-1;
+		}
+	}while(x<=y)
+
+	if(x<j)  quick_sort(x, j);
+	if(i<y)  quick_sort(i, y);
+
+	return (-5);
 }
 
 void main() 
 {
 	const char mult = '*';
 	const int multc = 42;
+
+	int Str11, Label1;
+	int a1,b1,c1,d1[2];
+	int i;int sum;
+	char ch1,ch2,ch3,ch4[3];
+	sum = 1;str11 = 1;label1 = 2;i=-0;i = sum;
+	d1[_+_] = 3;
+	d1[1] = -2;
+	ch4[0] = 'A';
+	ch4[1] = '-';
+	ch4[+3+0-1] = '/';
+
+	e[0]=4;
+	e[1]=7;
+	e[2]=1;
+	e[3]=0;
+	e[4]=3;
+	e[5]=2;
+	e[6]=5;
+	e[7]=6;
+
+	quick_sort(0, 7);
+	printf("test quick_sort:");
+	i=0;
+	do{
+		printf(e[i]);
+		i=i+int1;
+	}while(i<=7)
 
 	return;
 }

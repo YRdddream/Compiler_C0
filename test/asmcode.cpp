@@ -469,7 +469,7 @@ void func_asm()    // 以函数为单位生成目标代码
                 sprintf(temp3, "$t%d", tempReg);
                 loc_t_reg[mid_reg_num][0] = tempReg;
                 loc_t_reg[mid_reg_num][1] = 0;
-                t_register[moveReg] = mid_reg_num;
+                t_register[tempReg] = mid_reg_num;   // 这么一个惊天大bug怎么一直都没测出来！！！
                 tempReg++;
             }
             
@@ -862,7 +862,7 @@ void func_asm()    // 以函数为单位生成目标代码
                     if(moveReg == 8)
                         moveReg = 0;
                     
-                    store_on_data(moveReg);    // 把0号寄存器的东西存回内存
+                    store_on_data(moveReg);    // 把x号寄存器的东西存回内存
                     fprintf(ASMOUT, "\t\tla $t8, %s\n", base_data);
                     fprintf(ASMOUT, "\t\tlw $t%d, %d($t8)\n", moveReg, loc_t_reg[mid_reg_num][0]);
                     loc_t_reg[mid_reg_num][0] = moveReg;
@@ -870,8 +870,8 @@ void func_asm()    // 以函数为单位生成目标代码
                     sprintf(temp2, "$t%d", moveReg);
                     moveReg++;
                 }
-                fprintf(ASMOUT, "\t\tmulu %s, %s, 4\n", temp2, temp2);
-                fprintf(ASMOUT, "\t\tadd $t9, $t9, %s\n", temp2);
+                fprintf(ASMOUT, "\t\tmulu $t8, %s, 4\n", temp2);
+                fprintf(ASMOUT, "\t\tadd $t9, $t9, $t8\n");
             }
             else if(isDigit(MIDLIST[midpointer+2][0]))    // 不可能是负数
                 fprintf(ASMOUT, "\t\taddi $t9, $t9, %d\n", atoi(MIDLIST[midpointer+2])*4);
@@ -887,8 +887,8 @@ void func_asm()    // 以函数为单位生成目标代码
             }
             
             fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
-            tempReg = 0;
-            base_address = 4 + base_addr_offset;
+            /*tempReg = 0;
+            base_address = 4 + base_addr_offset;*/
         }
         else if(strcmp(MIDLIST[midpointer], mid_op[SCANFOP]) == 0)   // scanf
         {

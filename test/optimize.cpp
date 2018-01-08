@@ -232,6 +232,13 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
                         strcpy(leafvarSet[leafvarNum].var_name, MIDLIST_OLD[node_cnt+1]);
                         leafvarNum++;
                     }
+                    else if(MIDLIST_OLD[node_cnt+1][0]=='~')   // 如果叶子节点是寄存器（说明是函数调用的情况，需要更改其寄存器的位置）
+                    {
+                        tmp = trans_regnum(MIDLIST_OLD[node_cnt+1]);
+                        sprintf(tmp_var, "~t%d", replace_reg[tmp]);
+                        strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                    }
                 }
                 lchild_position = dagNodeNum;
                 NodeListNum++;
@@ -317,6 +324,13 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
                             strcpy(dagNodeSet[dagNodeNum].dag_name, MIDLIST_OLD[node_cnt+2]);
                             strcpy(leafvarSet[leafvarNum].var_name, MIDLIST_OLD[node_cnt+2]);
                             leafvarNum++;
+                        }
+                        else if(MIDLIST_OLD[node_cnt+2][0]=='~')   // 如果叶子节点是寄存器（说明是函数调用的情况，需要更改其寄存器的位置）
+                        {
+                            tmp = trans_regnum(MIDLIST_OLD[node_cnt+2]);
+                            sprintf(tmp_var, "~t%d", replace_reg[tmp]);
+                            strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                            strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
                         }
                     }
                     rchild_position = dagNodeNum;
@@ -410,7 +424,7 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
             }
             else   // 如果找到了，将其节点号更改
             {
-                printf("Debug/Error:the third should not be found!!!\n");
+                //printf("Debug/Error:the third should not be found!!!\n");
                 NodeListSet[nodelist_position].position = dagnode_position;
             }
         }
@@ -484,6 +498,13 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
                         strcpy(dagNodeSet[dagNodeNum].dag_name, MIDLIST_OLD[node_cnt+1]);
                         strcpy(leafvarSet[leafvarNum].var_name, MIDLIST_OLD[node_cnt+1]);
                         leafvarNum++;
+                    }
+                    else if(MIDLIST_OLD[node_cnt+1][0]=='~')   // 如果叶子节点是寄存器（说明是函数调用的情况，需要更改其寄存器的位置）
+                    {
+                        tmp = trans_regnum(MIDLIST_OLD[node_cnt+1]);
+                        sprintf(tmp_var, "~t%d", replace_reg[tmp]);
+                        strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
                     }
                 }
                 lchild_position = dagNodeNum;
@@ -642,6 +663,13 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
                         strcpy(leafvarSet[leafvarNum].var_name, tmp_var);
                         leafvarNum++;
                     }
+                    else if(MIDLIST_OLD[node_cnt+2][0]=='~')   // 如果叶子节点是寄存器（说明是函数调用的情况，需要更改其寄存器的位置）
+                    {
+                        tmp = trans_regnum(MIDLIST_OLD[node_cnt+2]);
+                        sprintf(tmp_var, "~t%d", replace_reg[tmp]);
+                        strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                    }
                 }
                 
                 rchild_position = dagNodeNum;
@@ -782,6 +810,13 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
                         strcpy(leafvarSet[leafvarNum].var_name, tmp_var);
                         leafvarNum++;
                     }
+                    else if(tmp_var[0]=='~')   // 如果叶子节点是寄存器（说明是函数调用的情况，需要更改其寄存器的位置）
+                    {
+                        tmp = trans_regnum(tmp_var);
+                        sprintf(tmp_var, "~t%d", replace_reg[tmp]);
+                        strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
+                    }
                 }
                 lchild_position = dagNodeNum;
                 NodeListNum++;
@@ -858,6 +893,13 @@ void dag_subproc(int start, int end)    // MIDLIST_OLD的start和end
                         strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
                         strcpy(leafvarSet[leafvarNum].var_name, tmp_var);
                         leafvarNum++;
+                    }
+                    else if(tmp_var[0]=='~')   // 如果叶子节点是寄存器（说明是函数调用的情况，需要更改其寄存器的位置）
+                    {
+                        tmp = trans_regnum(tmp_var);
+                        sprintf(tmp_var, "~t%d", replace_reg[tmp]);
+                        strcpy(NodeListSet[NodeListNum].var_name, tmp_var);
+                        strcpy(dagNodeSet[dagNodeNum].dag_name, tmp_var);
                     }
                 }
                 rchild_position = dagNodeNum;
