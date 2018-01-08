@@ -1,66 +1,92 @@
 		.data
-		Str0:  .asciiz "The number is so small!\n"
-		Str1:  .asciiz "null result is \n"
-		Str2:  .asciiz "number < \n"
-		Str3:  .asciiz "will be printe\n"
-		Str4:  .asciiz "Error1 \n"
-		Str5:  .asciiz "Error2 \n"
-		Str6:  .asciiz "Error1 \n"
-		Str7:  .asciiz "Error2 \n"
-		Str8:  .asciiz "Error3 \n"
-		Str9:  .asciiz "Letter is too small.\n"
-		Str10:  .asciiz "Letter is too big.\n"
-		Str11:  .asciiz "Letter is too big.\n"
-		Str12:  .asciiz "Letter is too small.\n"
-		Str13:  .asciiz "#The 3result is \n"
-		Str14:  .asciiz "#Result of fibonacci is \n"
-		Str15:  .asciiz "Test relation operation\n"
-		Str16:  .asciiz "a1 should be 0:\n"
-		Str17:  .asciiz "a1 shouldn't be 0:\n"
-		Str18:  .asciiz "a1 should beq 32:\n"
-		Str19:  .asciiz "#Result of relation operation ends\n"
-		Str20:  .asciiz "Test (void function&switch int)\n"
-		Str21:  .asciiz "#Result of (void function&switch int) ends\n"
-		Str22:  .asciiz "Test expression\n"
-		Str23:  .asciiz "a should be 9:\n"
-		Str24:  .asciiz "a should be 14:\n"
-		Str25:  .asciiz "d1[0] should be 17:\n"
-		Str26:  .asciiz "#Result of expression ends\n"
-		Str27:  .asciiz "Test switch char\n"
-		Str28:  .asciiz "\n"
-		Str29:  .asciiz "\n"
-		Str30:  .asciiz "#Result of switch char should be A-/\n"
-		Str31:  .asciiz "Test print char\n"
-		Str32:  .asciiz "1.\n"
-		Str33:  .asciiz "2.\n"
-		Str34:  .asciiz "3.\n"
-		Str35:  .asciiz "4.\n"
-		Str36:  .asciiz "\n"
-		Str37:  .asciiz "#Result of print char ends\n"
-		Str38:  .asciiz "Test multi-parameters\n"
-		Str39:  .asciiz "#Result of multi-parameters ends\n"
-		Str40:  .asciiz "Test single sentence\n"
-		Str41:  .asciiz "test0\n"
-		Str42:  .asciiz "#Result of single sentence ends\n"
-		Str43:  .asciiz "Test convertion of char and int\n"
-		Str44:  .asciiz "#Result of convertion of char and int ends\n"
-		Str45:  .asciiz "test quick_sort:\n"
 
-		_:  .word 0
-		void1:  .word 0
-		char1:  .word 49
-		charz:  .word 90
-		char9:  .word 57
-		int1:  .word 1
-		int2:  .word 2
-		default:  .word 0
-		a:  .word 0
-		b:  .word 0
-		c:  .space 20
-		d:  .space 32
-		single:  .word 0
-		e:  .space 32
-		f:  .word 0
 
 		.text
 		.globl main
+fibonacci:	
+		addi $sp, $sp, -56
+		sw $ra, 52($sp)
+		sw $fp, 48($sp)
+		move $fp, $sp
+		sw $a0, 56($sp)
+		lw $v1, 56($sp)
+		li $t9, 1
+		sub $t0, $v1, $t9
+		move $a0, $t0
+		sw $t0, 44($sp)
+		jal fibonacci
+		nop
+		lw $t0, 44($sp)
+		move $t1, $v0
+		li $v1, 17
+		li $t9, 16
+		sub $t2, $v1, $t9
+		li $v1, 16
+		sub $t3, $0, $v1
+		li $v1, 17
+		add $t4, $v1, $t3
+		mul $t5, $t3, $t4
+		li $v1, 17
+		add $t6, $v1, $t5
+		mul $t7, $t1, $t2
+		la $t8, 
+		sw $t0, 12($t8)
+		mul $t0, $t7, $t6
+		lw $v1, 56($sp)
+		li $t9, 2
+		la $t8, 
+		sw $t1, 16($t8)
+		sub $t1, $v1, $t9
+		move $a0, $t1
+		sw $t0, 44($sp)
+		sw $t1, 40($sp)
+		sw $t2, 36($sp)
+		sw $t3, 32($sp)
+		sw $t4, 28($sp)
+		sw $t5, 24($sp)
+		sw $t6, 20($sp)
+		sw $t7, 16($sp)
+		la $v1, 
+		lw $t8, 4($v1)
+		sw $t8, 12($sp)
+		la $v1, 
+		lw $t8, 8($v1)
+		sw $t8, 8($sp)
+		jal fibonacci
+		nop
+		lw $t0, 44($sp)
+		lw $t1, 40($sp)
+		lw $t2, 36($sp)
+		lw $t3, 32($sp)
+		lw $t4, 28($sp)
+		lw $t5, 24($sp)
+		lw $t6, 20($sp)
+		lw $t7, 16($sp)
+		lw $t8, 12($sp)
+		la $v1, 
+		sw $t8, 4($v1)
+		lw $t8, 8($sp)
+		la $v1, 
+		sw $t8, 8($v1)
+		la $t8, 
+		sw $t2, 20($t8)
+		move $t2, $v0
+		la $t8, 
+		sw $t3, 24($t8)
+		add $t3, $t1, $t0
+		move $v0, $t3
+		move $sp, $fp
+		lw $ra, 52($sp)
+		lw $fp, 48($sp)
+		addi $sp, $sp, 56
+		jr $ra
+		nop
+main:	
+		addi $sp, $sp, -20
+		sw $ra, 16($sp)
+		sw $fp, 12($sp)
+		move $fp, $sp
+		li $v1, 42
+		sw $v1, 8($sp)
+		li $v1, 42
+		sw $v1, 4($sp)

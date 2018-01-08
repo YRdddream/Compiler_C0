@@ -98,6 +98,9 @@ int midnewcnt = 0;
 initNode leafvarSet[200];
 int leafvarNum = 0;
 int reg_num_new = 0;    // 新的从头开始的寄存器编号
+int dagnode_out_list[200] = {0};   // dag图节点启发式算法建立的队列
+int midnode_num = 0;    // dag图中间节点的个数，也就是启发式队列的长度
+int replace_reg[1000] = {0};
 
 void new_to_scan()
 {
@@ -241,9 +244,10 @@ int main() {
         return 0;
     }
     
-    // optmid_flag = 1;
-    // funcFlag = 0;
-    // opt();
+    optmid_flag = 1;
+    funcFlag = 0;
+    opt();
+    
     gen_asm();
     
     fclose(ASMOUT);    // 第二遍

@@ -1,0 +1,12 @@
+int fibonaCCi(int n)
+{
+	return (+(fibonacci(n-1)*(17-16))*(17+(-16)*(17+(-16))) + fibonacci(n-2));
+}
+
+void main() 
+{
+	const char mult = '*';
+	const int multc = 42;
+
+	return;
+}
