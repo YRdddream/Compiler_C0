@@ -113,19 +113,19 @@ void gen_asm()
                 fprintf(ASMOUT, "\t\t%s:  .space %d\n", table[i].name, 4*table[i].length);
         }
     }
-    if(i==0)
-    {
+    /*if(i==0)
+    {*/
         fprintf(ASMOUT, "\t\tAHHH:  .word 0\n");
         strcpy(base_data, "AHHH");
         base_address = 0;
         base_addr_offset = 0;
-    }
+    /*}
     else
     {
         strcpy(base_data, table[i-1].name);   // 如果一个全局常量和变量都没有，那么这个i就是0
         base_address += 4*table[i-1].length;
         base_addr_offset = 4*table[i-1].length;
-    }
+    }*/
     
     fprintf(ASMOUT, "\n");
     fprintf(ASMOUT, "\t\t.text\n");
