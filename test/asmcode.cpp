@@ -1034,7 +1034,10 @@ void func_asm()    // 以函数为单位生成目标代码
             
             position = LookupTab(MIDLIST[midpointer+3], 0);
             if(position < tableindex[1])
+            {
                 fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+3]);
+                fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
+            }
             else
             {
                 add_cnt(MIDLIST[midpointer+3]);
@@ -1054,19 +1057,20 @@ void func_asm()    // 以函数为单位生成目标代码
                     if(find_opt == 0)
                     {
                         fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+                        fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
                     }
                     else
                     {
                         fprintf(ASMOUT, "\t\tmove $s%d, %s\n", ii, temp1);
-                        fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+                        //fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
                     }
                 }
                 else
                 {
                     fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+                    fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
                 }
             }
-            fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
             tempReg = 0;
             base_address = 4 + base_addr_offset;
         }
@@ -1303,7 +1307,7 @@ void func_asm()    // 以函数为单位生成目标代码
                         else
                         {
                             fprintf(ASMOUT, "\t\tmove $s%d, $v0\n", ii);
-                            fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                            // fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
                         }
                     }
                     else
@@ -1340,7 +1344,7 @@ void func_asm()    // 以函数为单位生成目标代码
                         else
                         {
                             fprintf(ASMOUT, "\t\tmove $s%d, $v0\n", ii);
-                            fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                            // fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
                         }
                     }
                     else
