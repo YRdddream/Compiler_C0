@@ -131,6 +131,7 @@ void gen_asm()
     fprintf(ASMOUT, "\t\t.text\n");
     fprintf(ASMOUT, "\t\t.globl main\n");
     midpointer = 0;
+    sregcnt = 0;
     
     while(midpointer < midnewcnt)
     {
@@ -138,14 +139,21 @@ void gen_asm()
         {
             if(strcmp(MIDLIST[midpointer+3], "main") == 0)
                 mainFlag = 1;
+            cccnt = 0;
             levelnum++;
             func_asm();
+            if(reg_opt != 1)
+                sortcnt();      // 将变量排序
+            sregcnt++;
             tempReg = 0;
             base_address = 4 + base_addr_offset;
             func_cnt++;
         }
         midpointer += 4;
     }
+    
+    //if(reg_opt != 1)
+        //memset(sreg, 0, sizeof(func_s_reg));
 }
 
 void func_asm()    // 以函数为单位生成目标代码
@@ -270,6 +278,18 @@ void func_asm()    // 以函数为单位生成目标代码
     if(if_have_variable == 1)
         recv_addr = table[position-1].address - 4;
     
+    int ii = 0;      // 给引用次数最多的变量或常量分配s寄存器
+    int find_opt = 0;    // 在s寄存器中找没找到这个变量
+    if(reg_opt == 1)
+    {
+        while(ii < sreg[sregcnt].svarnum)
+        {
+            position = LookupTab(sreg[sregcnt].s_register[ii], 0);
+            fprintf(ASMOUT, "\t\tlw $s%d, %d($sp)\n", ii, table[position].address);
+            ii++;
+        }
+    }
+    
     char temp1[wlMAX];   // 四元式的三个操作数
     char temp2[wlMAX];
     char temp3[wlMAX];
@@ -307,8 +327,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v1");
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$v1");
+                        }
+                        else
+                        {
+                            sprintf(temp1, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$v1");
+                    }
                 }
             }
             
@@ -341,8 +388,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
-                    sprintf(temp2, "$t9");
+                    add_cnt(MIDLIST[midpointer+2]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+2], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                            sprintf(temp2, "$t9");
+                        }
+                        else
+                        {
+                            sprintf(temp2, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                        sprintf(temp2, "$t9");
+                    }
                 }
             }
             
@@ -416,8 +490,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v1");
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$v1");
+                        }
+                        else
+                        {
+                            sprintf(temp1, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$v1");
+                    }
                 }
             }
             
@@ -453,8 +554,35 @@ void func_asm()    // 以函数为单位生成目标代码
                     }
                     else
                     {
-                        fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
-                        sprintf(temp2, "$t9");
+                        add_cnt(MIDLIST[midpointer+2]);
+                        if(reg_opt == 1)
+                        {
+                            ii = 0;
+                            find_opt = 0;
+                            while(ii < sreg[sregcnt].svarnum)
+                            {
+                                if(strcmp(MIDLIST[midpointer+2], sreg[sregcnt].s_register[ii]) == 0)
+                                {
+                                    find_opt = 1;
+                                    break;
+                                }
+                                ii++;
+                            }
+                            if(find_opt == 0)
+                            {
+                                fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                                sprintf(temp2, "$t9");
+                            }
+                            else
+                            {
+                                sprintf(temp2, "$s%d", ii);
+                            }
+                        }
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                            sprintf(temp2, "$t9");
+                        }
                     }
                 }
             }
@@ -535,8 +663,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
-                    fprintf(ASMOUT, "\t\tmulu $t9, $t9, 4\n");
+                    add_cnt(MIDLIST[midpointer+2]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+2], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                            fprintf(ASMOUT, "\t\tmulu $t9, $t9, 4\n");
+                        }
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tmulu $t9, $s%d, 4\n", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                        fprintf(ASMOUT, "\t\tmulu $t9, $t9, 4\n");
+                    }
                 }
             }
             
@@ -611,8 +766,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v1");
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$v1");
+                        }
+                        else
+                        {
+                            sprintf(temp1, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$v1");
+                    }
                 }
             }
             
@@ -645,8 +827,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
-                    sprintf(temp2, "$t9");
+                    add_cnt(MIDLIST[midpointer+2]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+2], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                            sprintf(temp2, "$t9");
+                        }
+                        else
+                        {
+                            sprintf(temp2, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $t9, %d($sp)\n", table[position].address);
+                        sprintf(temp2, "$t9");
+                    }
                 }
             }
             
@@ -715,9 +924,38 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
-                    fprintf(ASMOUT, "\t\t%s $t8, %s\n", MIDLIST[midpointer], MIDLIST[midpointer+3]);
-                    fprintf(ASMOUT, "\t\tnop\n");
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                            fprintf(ASMOUT, "\t\t%s $t8, %s\n", MIDLIST[midpointer], MIDLIST[midpointer+3]);
+                            fprintf(ASMOUT, "\t\tnop\n");
+                        }
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\t%s $s%d, %s\n", MIDLIST[midpointer], ii, MIDLIST[midpointer+3]);
+                            fprintf(ASMOUT, "\t\tnop\n");
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                        fprintf(ASMOUT, "\t\t%s $t8, %s\n", MIDLIST[midpointer], MIDLIST[midpointer+3]);
+                        fprintf(ASMOUT, "\t\tnop\n");
+                    }
                 }
             }
         }
@@ -762,8 +1000,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v1");
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$v1");
+                        }
+                        else
+                        {
+                            sprintf(temp1, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$v1");
+                    }
                 }
             }
             
@@ -771,7 +1036,36 @@ void func_asm()    // 以函数为单位生成目标代码
             if(position < tableindex[1])
                 fprintf(ASMOUT, "\t\tla $t9, %s\n", MIDLIST[midpointer+3]);
             else
-                fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+            {
+                add_cnt(MIDLIST[midpointer+3]);
+                if(reg_opt == 1)
+                {
+                    ii = 0;
+                    find_opt = 0;
+                    while(ii < sreg[sregcnt].svarnum)
+                    {
+                        if(strcmp(MIDLIST[midpointer+3], sreg[sregcnt].s_register[ii]) == 0)
+                        {
+                            find_opt = 1;
+                            break;
+                        }
+                        ii++;
+                    }
+                    if(find_opt == 0)
+                    {
+                        fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tmove $s%d, %s\n", ii, temp1);
+                        fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+                    }
+                }
+                else
+                {
+                    fprintf(ASMOUT, "\t\taddi $t9, $sp, %d\n", table[position].address);
+                }
+            }
             fprintf(ASMOUT, "\t\tsw %s, 0($t9)\n", temp1);
             tempReg = 0;
             base_address = 4 + base_addr_offset;
@@ -807,8 +1101,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v1");
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$v1");
+                        }
+                        else
+                        {
+                            sprintf(temp1, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$v1");
+                    }
                 }
             }
             
@@ -849,8 +1170,35 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
-                    sprintf(temp1, "$v1");
+                    add_cnt(MIDLIST[midpointer+3]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+3], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$v1");
+                        }
+                        else
+                        {
+                            sprintf(temp1, "$s%d", ii);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(ASMOUT, "\t\tlw $v1, %d($sp)\n", table[position].address);
+                        sprintf(temp1, "$v1");
+                    }
                 }
             }
             
@@ -891,7 +1239,29 @@ void func_asm()    // 以函数为单位生成目标代码
                 if(position < tableindex[1])   // 如果是全局的
                     fprintf(ASMOUT, "\t\tlw $t8, %s\n", MIDLIST[midpointer+2]);
                 else
-                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                {
+                    add_cnt(MIDLIST[midpointer+2]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+2], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                        else
+                            fprintf(ASMOUT, "\t\tmove $t8, $s%d\n", ii);
+                    }
+                    else
+                        fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                }
                 fprintf(ASMOUT, "\t\tmulu $t8, $t8, 4\n");
                 fprintf(ASMOUT, "\t\tadd $t9, $t9, $t8\n");
             }
@@ -913,7 +1283,32 @@ void func_asm()    // 以函数为单位生成目标代码
                     fprintf(ASMOUT, "\t\tsw $v0, 0($v1)\n");
                 }
                 else
-                    fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                {
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                            fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tmove $s%d, $v0\n", ii);
+                            fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                        }
+                    }
+                    else
+                        fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                }
             }
             else   // 读取字符
             {
@@ -925,7 +1320,32 @@ void func_asm()    // 以函数为单位生成目标代码
                     fprintf(ASMOUT, "\t\tsw $v0, 0($v1)\n");
                 }
                 else
-                    fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                {
+                    add_cnt(MIDLIST[midpointer+1]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                            fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tmove $s%d, $v0\n", ii);
+                            fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                        }
+                    }
+                    else
+                        fprintf(ASMOUT, "\t\tsw $v0, %d($sp)\n", table[position].address);
+                }
             }
             tempReg = 0;
             base_address = 4 + base_addr_offset;
@@ -989,8 +1409,33 @@ void func_asm()    // 以函数为单位生成目标代码
                         }
                         else
                         {
-                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
-                            sprintf(temp1, "$t8");
+                            add_cnt(MIDLIST[midpointer+1]);
+                            if(reg_opt == 1)
+                            {
+                                ii = 0;
+                                find_opt = 0;
+                                while(ii < sreg[sregcnt].svarnum)
+                                {
+                                    if(strcmp(MIDLIST[midpointer+1], sreg[sregcnt].s_register[ii]) == 0)
+                                    {
+                                        find_opt = 1;
+                                        break;
+                                    }
+                                    ii++;
+                                }
+                                if(find_opt == 0)
+                                {
+                                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                                    sprintf(temp1, "$t8");
+                                }
+                                else
+                                    sprintf(temp1, "$s%d", ii);
+                            }
+                            else
+                            {
+                                fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                                sprintf(temp1, "$t8");
+                            }
                         }
                     }
                     
@@ -1037,8 +1482,33 @@ void func_asm()    // 以函数为单位生成目标代码
                         }
                         else
                         {
-                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
-                            sprintf(temp1, "$t8");
+                            add_cnt(MIDLIST[midpointer+2]);
+                            if(reg_opt == 1)
+                            {
+                                ii = 0;
+                                find_opt = 0;
+                                while(ii < sreg[sregcnt].svarnum)
+                                {
+                                    if(strcmp(MIDLIST[midpointer+2], sreg[sregcnt].s_register[ii]) == 0)
+                                    {
+                                        find_opt = 1;
+                                        break;
+                                    }
+                                    ii++;
+                                }
+                                if(find_opt == 0)
+                                {
+                                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                                    sprintf(temp1, "$t8");
+                                }
+                                else
+                                    sprintf(temp1, "$s%d", ii);
+                            }
+                            else
+                            {
+                                fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                                sprintf(temp1, "$t8");
+                            }
                         }
                     }
                     
@@ -1091,8 +1561,35 @@ void func_asm()    // 以函数为单位生成目标代码
                     }
                     else
                     {
-                        fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
-                        sprintf(temp1, "$t8");
+                        add_cnt(MIDLIST[midpointer+3]);
+                        if(reg_opt == 1)
+                        {
+                            ii = 0;
+                            find_opt = 0;
+                            while(ii < sreg[sregcnt].svarnum)
+                            {
+                                if(strcmp(MIDLIST[midpointer+3], sreg[sregcnt].s_register[ii]) == 0)
+                                {
+                                    find_opt = 1;
+                                    break;
+                                }
+                                ii++;
+                            }
+                            if(find_opt == 0)
+                            {
+                                fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                                sprintf(temp1, "$t8");
+                            }
+                            else
+                            {
+                                sprintf(temp1, "$s%d", ii);
+                            }
+                        }
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                            sprintf(temp1, "$t8");
+                        }
                     }
                 }
                 
@@ -1168,13 +1665,52 @@ void func_asm()    // 以函数为单位生成目标代码
                 }
                 else
                 {
-                    fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
-                    if(valuepara_cnt < 4)
-                        fprintf(ASMOUT, "\t\tmove $a%d, $t8\n", valuepara_cnt++);
+                    add_cnt(MIDLIST[midpointer+3]);
+                    if(reg_opt == 1)
+                    {
+                        ii = 0;
+                        find_opt = 0;
+                        while(ii < sreg[sregcnt].svarnum)
+                        {
+                            if(strcmp(MIDLIST[midpointer+3], sreg[sregcnt].s_register[ii]) == 0)
+                            {
+                                find_opt = 1;
+                                break;
+                            }
+                            ii++;
+                        }
+                        if(find_opt == 0)
+                        {
+                            fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                            if(valuepara_cnt < 4)
+                                fprintf(ASMOUT, "\t\tmove $a%d, $t8\n", valuepara_cnt++);
+                            else
+                            {
+                                fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
+                                valuepara_inmmr += 4;
+                            }
+                        }
+                        else
+                        {
+                            if(valuepara_cnt < 4)
+                                fprintf(ASMOUT, "\t\tmove $a%d, $s%d\n", valuepara_cnt++, ii);
+                            else
+                            {
+                                fprintf(ASMOUT, "\t\tsw $s%d, %d($sp)\n", ii, valuepara_inmmr);
+                                valuepara_inmmr += 4;
+                            }
+                        }
+                    }
                     else
                     {
-                        fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
-                        valuepara_inmmr += 4;
+                        fprintf(ASMOUT, "\t\tlw $t8, %d($sp)\n", table[position].address);
+                        if(valuepara_cnt < 4)
+                            fprintf(ASMOUT, "\t\tmove $a%d, $t8\n", valuepara_cnt++);
+                        else
+                        {
+                            fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", valuepara_inmmr);
+                            valuepara_inmmr += 4;
+                        }
                     }
                 }
             }
@@ -1186,7 +1722,7 @@ void func_asm()    // 以函数为单位生成目标代码
             int tempvalue = 0;
             if(round == 1)
             {
-                add_stacksize = tempReg*4 + (base_address - 4 - base_addr_offset);
+                add_stacksize = tempReg*4 + (base_address - 4 - base_addr_offset) + 32;   //4*sreg[sregcnt].svarnum
                 if(add_stacksize > func_stacksize[func_cnt])
                     func_stacksize[func_cnt] = add_stacksize;
             }
@@ -1205,6 +1741,14 @@ void func_asm()    // 以函数为单位生成目标代码
                     fprintf(ASMOUT, "\t\tsw $t8, %d($sp)\n", tempvalue);
                     tempvalue -= 4;
                 }
+                if(reg_opt == 1)
+                {
+                    for(i=0; i<sreg[sregcnt].svarnum; i++)
+                    {
+                        fprintf(ASMOUT, "\t\tsw $s%d, %d($sp)\n", i, tempvalue);
+                        tempvalue -= 4;
+                    }
+                }
             }
             
             fprintf(ASMOUT, "\t\tjal %s\n", MIDLIST[midpointer+1]);
@@ -1222,6 +1766,14 @@ void func_asm()    // 以函数为单位生成目标代码
                 fprintf(ASMOUT, "\t\tla $v1, %s\n", base_data);
                 fprintf(ASMOUT, "\t\tsw $t8, %d($v1)\n", i);
                 tempvalue -= 4;
+            }
+            if(reg_opt == 1)
+            {
+                for(i=0; i<sreg[sregcnt].svarnum; i++)
+                {
+                    fprintf(ASMOUT, "\t\tlw $s%d, %d($sp)\n", i, tempvalue);
+                    tempvalue -= 4;
+                }
             }
             
             if(MIDLIST[midpointer+3][0] != '\0')   // 有返回值
@@ -1265,15 +1817,57 @@ void func_asm()    // 以函数为单位生成目标代码
 }
 
 
+void add_cnt(char *name)
+{
+    int i = 0;
+    int find = 0;
+    int pos = 0;
+    
+    while(i < cccnt)
+    {
+        if(strcmp(name, cnt_array[i].varname) == 0)
+        {
+            pos = i;
+            find = 1;
+            break;
+        }
+        i++;
+    }
+    
+    if(find == 1)
+        cnt_array[pos].cnt++;
+    else
+    {
+        strcpy(cnt_array[cccnt].varname, name);
+        cnt_array[cccnt].cnt = 1;
+        cccnt++;
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
+void sortcnt()     // 针对引用计数对变量们排序
+{
+    int i = 0;
+    int j = 0;
+    cite_cnt tmp;
+    
+    for(i = 0; i < (cccnt-1); i++)
+    {
+        for(j = i + 1; j<cccnt; j++)
+        {
+            if(cnt_array[j].cnt > cnt_array[i].cnt)
+            {
+                tmp = cnt_array[i];
+                cnt_array[i] = cnt_array[j];
+                cnt_array[j] = tmp;
+            }
+        }
+    }
+    
+    i = 0;
+    while((i < cccnt) && (i<8))
+    {
+        strcpy(sreg[sregcnt].s_register[i], cnt_array[i].varname);
+        i++;
+    }
+    sreg[sregcnt].svarnum = i;
+}

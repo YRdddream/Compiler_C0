@@ -1,12 +1,10 @@
-const int MAX_NUM = 1024;
+const int MAX_NUM=1024;
 void complete_num()
 {
+	int k[1024];
+	int i,j,n,s,x1;
 
-  int k[1024];
-
-  int i,j,n,s,x1;
-
-  int m,k2,h,leap,x2;
+	int m,k2,h,leap,x2;
 
 
   j=2;
@@ -115,17 +113,9 @@ void complete_num()
 
 
   printf("The total is ",h);
-
-
-
 }
 
-
-
 void main()
-
 {
-
-   complete_num() ;
-
+	complete_num();
 }

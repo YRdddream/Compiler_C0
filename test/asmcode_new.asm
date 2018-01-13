@@ -18,46 +18,52 @@ complete_num:
 		sw $ra, 4144($sp)
 		sw $fp, 4140($sp)
 		move $fp, $sp
+		lw $s0, 40($sp)
+		lw $s1, 36($sp)
+		lw $s2, 20($sp)
+		lw $s3, 32($sp)
+		lw $s4, 28($sp)
+		lw $s5, 8($sp)
+		lw $s6, 12($sp)
+		lw $s7, 16($sp)
 		li $v1, 2
+		move $s1, $v1
 		addi $t9, $sp, 36
 		sw $v1, 0($t9)
 Label0:	
 		li $v1, 1
 		sub $t0, $0, $v1
 		li $v1, 1
+		move $s0, $v1
 		addi $t9, $sp, 40
 		sw $v1, 0($t9)
-		lw $v1, 36($sp)
+		move $s4, $s1
 		addi $t9, $sp, 28
-		sw $v1, 0($t9)
+		sw $s1, 0($t9)
+		move $s3, $t0
 		addi $t9, $sp, 32
 		sw $t0, 0($t9)
 Label1:	
-		lw $v1, 36($sp)
-		lw $t9, 40($sp)
-		div $t0, $v1, $t9
-		lw $t9, 40($sp)
-		mul $t1, $t0, $t9
-		lw $t9, 36($sp)
-		sub $t2, $t1, $t9
+		div $t0, $s1, $s0
+		mul $t1, $t0, $s0
+		sub $t2, $t1, $s1
 		addi $t9, $sp, 24
 		sw $t1, 0($t9)
 		bnez $t2, Label2
 		nop
-		lw $v1, 32($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
-		lw $v1, 28($sp)
+		add $t0, $s3, $t9
 		li $t9, 0
-		add $t1, $v1, $t9
-		lw $t9, 40($sp)
-		sub $t2, $t1, $t9
+		add $t1, $s4, $t9
+		sub $t2, $t1, $s0
 		li $t9, 1
 		add $t3, $t0, $t9
 		li $t9, 1024
 		sub $t4, $t3, $t9
+		move $s4, $t2
 		addi $t9, $sp, 28
 		sw $t2, 0($t9)
+		move $s3, $t3
 		addi $t9, $sp, 32
 		sw $t3, 0($t9)
 		bltz $t4, Label3
@@ -66,33 +72,29 @@ Label1:
 		la $a0, Str0
 		syscall
 Label3:	
-		lw $v1, 32($sp)
 		li $t9, 1024
-		sub $t0, $v1, $t9
+		sub $t0, $s3, $t9
 		bgez $t0, Label4
 		nop
-		lw $v1, 40($sp)
 		addi $t9, $sp, 44
-		lw $t8, 32($sp)
+		move $t8, $s3
 		mulu $t8, $t8, 4
 		add $t9, $t9, $t8
-		sw $v1, 0($t9)
+		sw $s0, 0($t9)
 Label4:	
 Label2:	
-		lw $v1, 40($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
+		add $t0, $s0, $t9
 		li $t9, 1
 		add $t1, $t0, $t9
-		lw $t9, 36($sp)
-		sub $t2, $t1, $t9
+		sub $t2, $t1, $s1
+		move $s0, $t1
 		addi $t9, $sp, 40
 		sw $t1, 0($t9)
 		bltz $t2, Label1
 		nop
-		lw $v1, 28($sp)
 		li $t9, 0
-		sub $t0, $v1, $t9
+		sub $t0, $s4, $t9
 		bnez $t0, Label5
 		nop
 		li $v0, 4
@@ -103,12 +105,12 @@ Label2:
 		move $a0, $t8
 		syscall
 		li $v1, 0
+		move $s0, $v1
 		addi $t9, $sp, 40
 		sw $v1, 0($t9)
 Label6:	
 		addi $v1, $sp, 44
-		lw $t9, 40($sp)
-		mulu $t9, $t9, 4
+		mulu $t9, $s0, 4
 		add $v1, $v1, $t9
 		lw $t0, 0($v1)
 		li $v0, 4
@@ -117,13 +119,12 @@ Label6:
 		li $v0, 1
 		move $a0, $t0
 		syscall
-		lw $v1, 40($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
+		add $t0, $s0, $t9
 		li $t9, 1
 		add $t1, $t0, $t9
-		lw $t9, 32($sp)
-		sub $t2, $t1, $t9
+		sub $t2, $t1, $s3
+		move $s0, $t1
 		addi $t9, $sp, 40
 		sw $t1, 0($t9)
 		blez $t2, Label6
@@ -132,14 +133,14 @@ Label6:
 		la $a0, Str3
 		syscall
 Label5:	
-		lw $v1, 36($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
+		add $t0, $s1, $t9
 		li $t9, 1
 		add $t1, $t0, $t9
 		la $t9, max_num
 		lw $t9, 0($t9)
 		sub $t2, $t1, $t9
+		move $s1, $t1
 		addi $t9, $sp, 36
 		sw $t1, 0($t9)
 		bltz $t2, Label0
@@ -148,53 +149,52 @@ Label5:
 		la $a0, Str4
 		syscall
 		li $v1, 2
+		move $s2, $v1
 		addi $t9, $sp, 20
 		sw $v1, 0($t9)
 		li $v1, 1
+		move $s5, $v1
 		addi $t9, $sp, 8
 		sw $v1, 0($t9)
 		li $v1, 0
+		move $s6, $v1
 		addi $t9, $sp, 12
 		sw $v1, 0($t9)
 Label7:	
-		lw $v1, 20($sp)
 		li $t9, 1
-		sub $t0, $v1, $t9
+		sub $t0, $s2, $t9
 		li $v1, 2
+		move $s0, $v1
 		addi $t9, $sp, 40
 		sw $v1, 0($t9)
+		move $s7, $t0
 		addi $t9, $sp, 16
 		sw $t0, 0($t9)
 Label8:	
-		lw $v1, 20($sp)
-		lw $t9, 40($sp)
-		div $t0, $v1, $t9
-		lw $t9, 40($sp)
-		mul $t1, $t0, $t9
-		lw $t9, 20($sp)
-		sub $t2, $t1, $t9
+		div $t0, $s2, $s0
+		mul $t1, $t0, $s0
+		sub $t2, $t1, $s2
 		addi $t9, $sp, 4
 		sw $t1, 0($t9)
 		bnez $t2, Label9
 		nop
 		li $v1, 0
+		move $s5, $v1
 		addi $t9, $sp, 8
 		sw $v1, 0($t9)
 Label9:	
-		lw $v1, 40($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
+		add $t0, $s0, $t9
 		li $t9, 1
 		add $t1, $t0, $t9
-		lw $t9, 16($sp)
-		sub $t2, $t1, $t9
+		sub $t2, $t1, $s7
+		move $s0, $t1
 		addi $t9, $sp, 40
 		sw $t1, 0($t9)
 		blez $t2, Label8
 		nop
-		lw $v1, 8($sp)
 		li $t9, 1
-		sub $t0, $v1, $t9
+		sub $t0, $s5, $t9
 		bnez $t0, Label10
 		nop
 		li $v0, 4
@@ -204,9 +204,8 @@ Label9:
 		li $v0, 1
 		move $a0, $t8
 		syscall
-		lw $v1, 12($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
+		add $t0, $s6, $t9
 		li $t9, 1
 		add $t1, $t0, $t9
 		li $t9, 10
@@ -216,6 +215,7 @@ Label9:
 		sub $t4, $t3, $t1
 		addi $t9, $sp, 4
 		sw $t3, 0($t9)
+		move $s6, $t1
 		addi $t9, $sp, 12
 		sw $t1, 0($t9)
 		bnez $t4, Label11
@@ -225,17 +225,18 @@ Label9:
 		syscall
 Label11:	
 Label10:	
-		lw $v1, 20($sp)
 		li $t9, 0
-		add $t0, $v1, $t9
+		add $t0, $s2, $t9
 		li $t9, 1
 		add $t1, $t0, $t9
 		la $t9, max_num
 		lw $t9, 0($t9)
 		sub $t2, $t1, $t9
+		move $s2, $t1
 		addi $t9, $sp, 20
 		sw $t1, 0($t9)
 		li $v1, 1
+		move $s5, $v1
 		addi $t9, $sp, 8
 		sw $v1, 0($t9)
 		blez $t2, Label7

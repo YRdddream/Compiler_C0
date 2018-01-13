@@ -1,4 +1,4 @@
-const int MAX_NUM = 1024;
+const int MAX_NUM = 1024 ;
 void complete_num()
 {
 

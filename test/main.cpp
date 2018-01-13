@@ -102,6 +102,13 @@ int dagnode_out_list[200] = {0};   // dag图节点启发式算法建立的队列
 int midnode_num = 0;    // dag图中间节点的个数，也就是启发式队列的长度
 int replace_reg[1000] = {0};
 
+// 引用计数相关
+func_s_reg sreg[50];     // 最多有20个函数，加上main
+int sregcnt = 0;      // 对应sreg这个结构数组
+cite_cnt cnt_array[50];     // 一个函数内最多出现50个变量
+int cccnt = 0;      // 对应cnt_array这个结构数组
+int reg_opt = 0;    // 汇编码优化开关
+
 void new_to_scan()
 {
     if_return = 0;
@@ -255,11 +262,17 @@ int main() {
     round++;
     new_to_scan();
     gen_asm();
+    fclose(ASMOUT);
+    
+    ASMOUT = fopen("asmcode_new.asm", "w");      // 生成优化后的目标代码
+    new_to_scan();
+    reg_opt = 1;
+    gen_asm();
+    fclose(ASMOUT);
     
     fclose(file);
     fclose(midcode_old);
     fclose(midcode_new);
-    fclose(ASMOUT);
     
     return 0;
 }
