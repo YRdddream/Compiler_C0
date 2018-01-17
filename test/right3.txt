@@ -1,0 +1,46 @@
+char touPper(char x)
+{
+    int a;
+    a = '+'-0;
+
+    if(X>122)
+    {
+        printf("Letter is too big.");
+        return ('-');
+    }
+    if(x<97)
+    {
+        printf("Letter is too small.");
+       	return (a);
+    }
+    x=X-32;
+    return (x);
+}
+
+char TOLower(char x)
+{
+    if(x<65)
+    {
+        printf("Letter is too small.");
+        return (+'*');
+    }
+    if(x>90)
+    {
+        printf("Letter is too big.");
+        return (--47);
+    }
+    x=x+32;
+    return (x+0);
+}
+
+void main()
+{
+	printf("Test convertion of char and int");
+	printF(toUpper('a'));
+	printF(+toUpper('a'));
+	printf(toLower('A'));
+	printf(+toLower('A'));
+	printf(toLower('Z')-toUpper('z'));
+	printf(toLower('0'));
+	printf(+toLower('0'));
+}

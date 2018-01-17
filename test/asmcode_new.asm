@@ -1,220 +1,197 @@
 		.data
-		Str0:  .asciiz "OVERFLOW! \n"
-		Str1:  .asciiz "complete number: \n"
-		Str2:  .asciiz "  \n"
-		Str3:  .asciiz "  \n"
-		Str4:  .asciiz "---------------------------------------------------------------\n\n"
-		Str5:  .asciiz " \n"
-		Str6:  .asciiz "  \n"
-		Str7:  .asciiz "The total is \n"
+		Str0:  .asciiz "Test expression\n"
+		Str1:  .asciiz "a should be 9:\n"
+		Str2:  .asciiz "a should be 14:\n"
+		Str3:  .asciiz "d1[0] should be 17:\n"
+		Str4:  .asciiz "#Result of expression ends\n"
 
-		max_num:  .word 1024
+		BHHH:  .word 0
+		void1:  .word 10
+		a:  .word 0
+		b:  .word 0
+		c:  .space 20
+		d:  .space 32
+		a1:  .word 0
+		_:  .word 0
+		default:  .word 0
+		single:  .word 0
 		AHHH:  .word 0
 
 		.text
 		.globl main
-complete_num:	
-		addi $sp, $sp, -4148
-		sw $ra, 4144($sp)
-		sw $fp, 4140($sp)
+mult_add:	
+		addi $sp, $sp, -12
+		sw $ra, 8($sp)
+		sw $fp, 4($sp)
 		move $fp, $sp
-		lw $s0, 40($sp)
-		lw $s1, 36($sp)
-		lw $s2, 20($sp)
-		lw $s3, 32($sp)
-		lw $s4, 28($sp)
-		lw $s5, 8($sp)
-		lw $s6, 12($sp)
-		lw $s7, 16($sp)
-		li $v1, 2
-		move $s1, $v1
-Label0:	
-		li $v1, 1
-		sub $t0, $0, $v1
-		li $v1, 1
-		move $s0, $v1
-		move $s4, $s1
-		move $s3, $t0
-Label1:	
-		div $t0, $s1, $s0
-		mul $t1, $t0, $s0
-		sub $t2, $t1, $s1
-		addi $t9, $sp, 24
-		sw $t1, 0($t9)
-		bnez $t2, Label2
-		nop
-		li $t9, 0
-		add $t0, $s3, $t9
-		li $t9, 0
-		add $t1, $s4, $t9
-		sub $t2, $t1, $s0
-		li $t9, 1
-		add $t3, $t0, $t9
-		li $t9, 1024
-		sub $t4, $t3, $t9
-		move $s4, $t2
-		move $s3, $t3
-		bltz $t4, Label3
-		nop
-		li $v0, 4
-		la $a0, Str0
-		syscall
-Label3:	
-		li $t9, 1024
-		sub $t0, $s3, $t9
-		bgez $t0, Label4
-		nop
-		addi $t9, $sp, 44
-		move $t8, $s3
-		mulu $t8, $t8, 4
-		add $t9, $t9, $t8
-		sw $s0, 0($t9)
-Label4:	
-Label2:	
-		li $t9, 0
-		add $t0, $s0, $t9
-		li $t9, 1
-		add $t1, $t0, $t9
-		sub $t2, $t1, $s1
-		move $s0, $t1
-		bltz $t2, Label1
-		nop
-		li $t9, 0
-		sub $t0, $s4, $t9
-		bnez $t0, Label5
-		nop
-		li $v0, 4
-		la $a0, Str1
-		syscall
-		li $v0, 1
-		move $a0, $s1
-		syscall
-		li $v1, 0
-		move $s0, $v1
-Label6:	
-		addi $v1, $sp, 44
-		mulu $t9, $s0, 4
-		add $v1, $v1, $t9
-		lw $t0, 0($v1)
-		li $v0, 4
-		la $a0, Str2
-		syscall
-		li $v0, 1
-		move $a0, $t0
-		syscall
-		li $t9, 0
-		add $t0, $s0, $t9
-		li $t9, 1
-		add $t1, $t0, $t9
-		sub $t2, $t1, $s3
-		move $s0, $t1
-		blez $t2, Label6
-		nop
-		li $v0, 4
-		la $a0, Str3
-		syscall
-Label5:	
-		li $t9, 0
-		add $t0, $s1, $t9
-		li $t9, 1
-		add $t1, $t0, $t9
-		la $t9, max_num
-		lw $t9, 0($t9)
-		sub $t2, $t1, $t9
-		move $s1, $t1
-		bltz $t2, Label0
-		nop
-		li $v0, 4
-		la $a0, Str4
-		syscall
-		li $v1, 2
-		move $s2, $v1
-		li $v1, 1
-		move $s5, $v1
-		li $v1, 0
-		move $s6, $v1
-Label7:	
-		li $t9, 1
-		sub $t0, $s2, $t9
-		li $v1, 2
-		move $s0, $v1
-		move $s7, $t0
-Label8:	
-		div $t0, $s2, $s0
-		mul $t1, $t0, $s0
-		sub $t2, $t1, $s2
-		addi $t9, $sp, 4
-		sw $t1, 0($t9)
-		bnez $t2, Label9
-		nop
-		li $v1, 0
-		move $s5, $v1
-Label9:	
-		li $t9, 0
-		add $t0, $s0, $t9
-		li $t9, 1
-		add $t1, $t0, $t9
-		sub $t2, $t1, $s7
-		move $s0, $t1
-		blez $t2, Label8
-		nop
-		li $t9, 1
-		sub $t0, $s5, $t9
-		bnez $t0, Label10
-		nop
-		li $v0, 4
-		la $a0, Str5
-		syscall
-		li $v0, 1
-		move $a0, $s2
-		syscall
-		li $t9, 0
-		add $t0, $s6, $t9
-		li $t9, 1
-		add $t1, $t0, $t9
-		li $t9, 10
-		div $t2, $t1, $t9
-		li $t9, 10
-		mul $t3, $t2, $t9
-		sub $t4, $t3, $t1
-		addi $t9, $sp, 4
-		sw $t3, 0($t9)
-		move $s6, $t1
-		bnez $t4, Label11
-		nop
-		li $v0, 4
-		la $a0, Str6
-		syscall
-Label11:	
-Label10:	
-		li $t9, 0
-		add $t0, $s2, $t9
-		li $t9, 1
-		add $t1, $t0, $t9
-		la $t9, max_num
-		lw $t9, 0($t9)
-		sub $t2, $t1, $t9
-		move $s2, $t1
-		li $v1, 1
-		move $s5, $v1
-		blez $t2, Label7
-		nop
-		li $v0, 4
-		la $a0, Str7
-		syscall
-		li $v0, 1
-		move $a0, $s6
-		syscall
+		sw $a0, 12($sp)
+		sw $a1, 16($sp)
+		sw $a2, 20($sp)
+		sw $a3, 24($sp)
+		lw $s0, 24($sp)
+		lw $s1, 28($sp)
+		lw $s2, 32($sp)
+		add $t0, $s0, $s1
+		sub $t1, $t0, $s2
+		move $v0, $t1
 		move $sp, $fp
-		lw $ra, 4144($sp)
-		lw $fp, 4140($sp)
-		addi $sp, $sp, 4148
+		lw $ra, 8($sp)
+		lw $fp, 4($sp)
+		addi $sp, $sp, 12
 		jr $ra
 		nop
 main:	
-		addi $sp, $sp, -44
-		sw $ra, 40($sp)
-		sw $fp, 36($sp)
+		addi $sp, $sp, -80
+		sw $ra, 76($sp)
+		sw $fp, 72($sp)
 		move $fp, $sp
-		jal complete_num
+		lw $s0, 68($sp)
+		li $v1, 0
+		li $t9, 0
+		add $t0, $v1, $t9
+		li $v1, 3
+		addi $t9, $sp, 60
+		mulu $t8, $t0, 4
+		add $t9, $t9, $t8
+		sw $v1, 0($t9)
+		li $v1, 2
+		sub $t1, $0, $v1
+		addi $t9, $sp, 60
+		addi $t9, $t9, 4
+		sw $t1, 0($t9)
+		li $v1, 0
+		la $t9, _
+		sw $v1, 0($t9)
+		li $v1, 0
+		move $s0, $v1
+		li $v0, 4
+		la $a0, Str0
+		syscall
+		li $v1, 1
+		add $t0, $v1, $s0
+		li $v1, 12
+		sub $t1, $0, $v1
+		addi $v1, $sp, 60
+		lw $t2, 4($v1)
+		li $t9, 2
+		add $t3, $t2, $t9
+		mul $t4, $t3, $t1
+		la $t9, _
+		lw $t9, 0($t9)
+		add $t5, $t4, $t9
+		addi $v1, $sp, 60
+		mulu $t9, $t5, 4
+		add $v1, $v1, $t9
+		lw $t6, 0($v1)
+		addi $v1, $sp, 60
+		lw $t7, 0($v1)
+		addi $v1, $sp, 60
+		mulu $t9, $t0, 4
+		la $t8, AHHH
+		sw $t0, 4($t8)
+		add $v1, $v1, $t9
+		lw $t0, 0($v1)
+		la $t8, AHHH
+		sw $t1, 8($t8)
+		mul $t1, $t0, $t6
+		la $t8, AHHH
+		sw $t2, 12($t8)
+		sub $t2, $0, $t1
+		la $t8, AHHH
+		sw $t3, 16($t8)
+		add $t3, $t2, $t7
+		la $t9, _
+		lw $t9, 0($t9)
+		la $t8, AHHH
+		sw $t4, 20($t8)
+		sub $t4, $t3, $t9
+		la $t9, a
+		sw $t4, 0($t9)
+		li $v0, 4
+		la $a0, Str1
+		syscall
+		la $t8, a
+		lw $t8, 0($t8)
+		li $v0, 1
+		move $a0, $t8
+		syscall
+		li $v1, -5
+		sub $t0, $0, $v1
+		li $t9, 9
+		add $t1, $t0, $t9
+		la $t9, a
+		sw $t1, 0($t9)
+		li $v0, 4
+		la $a0, Str2
+		syscall
+		la $t8, a
+		lw $t8, 0($t8)
+		li $v0, 1
+		move $a0, $t8
+		syscall
+		li $v1, 12
+		sub $t0, $0, $v1
+		li $v1, 17
+		li $t9, -16
+		add $t1, $v1, $t9
+		addi $v1, $sp, 60
+		lw $t2, 4($v1)
+		li $t9, 2
+		add $t3, $t2, $t9
+		mul $t4, $t3, $t0
+		la $t9, _
+		lw $t9, 0($t9)
+		add $t5, $t4, $t9
+		add $t6, $t5, $t1
+		li $t9, 1
+		sub $t7, $t6, $t9
+		li $v1, 17
+		addi $t9, $sp, 60
+		mulu $t8, $t7, 4
+		add $t9, $t9, $t8
+		sw $v1, 0($t9)
+		addi $v1, $sp, 60
+		la $t8, AHHH
+		sw $t5, 4($t8)
+		lw $t5, 0($v1)
+		li $v0, 4
+		la $a0, Str3
+		syscall
+		li $v0, 1
+		move $a0, $t5
+		syscall
+		li $v0, 4
+		la $a0, Str4
+		syscall
+		li $v0, 5
+		syscall
+		la $v1, a1
+		sw $v0, 0($v1)
+		li $v0, 5
+		syscall
+		la $v1, single
+		sw $v0, 0($v1)
+		li $v0, 12
+		syscall
+		la $v1, default
+		sw $v0, 0($v1)
+		li $a0, 0
+		li $a1, 0
+		li $a2, 0
+		la $t8, a1
+		lw $t8, 0($t8)
+		move $a3, $t8
+		la $t8, default
+		lw $t8, 0($t8)
+		sw $t8, 16($sp)
+		la $t8, single
+		lw $t8, 0($t8)
+		sw $t8, 20($sp)
+		sw $s0, 56($sp)
+		jal mult_add
 		nop
+		lw $s0, 56($sp)
+		move $t0, $v0
+		li $v0, 1
+		move $a0, $t0
+		syscall

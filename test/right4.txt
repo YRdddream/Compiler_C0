@@ -1,0 +1,60 @@
+const int A = 100;
+const int b = 4;
+int a1,b1;
+
+VOID print_error(int e_number)
+{
+	consT char tmp = '4';
+	int a;
+	a = 4;
+
+	printf("number < ",a);
+	printf("will be printe",'d');
+
+	switch(e_number)
+	{
+		case 1: {
+					printf("Error1 ");
+					printf(E_numBer);
+					return;
+				}
+		case 2: {
+					printf("Error2 ");
+					;
+					printf(2);
+					return;
+				}
+		case 3: {
+				switch(e_number){
+				case 1: {
+							printf("Error1 ");
+							printf(E_numBer);
+						}
+				case 2: {
+							printf("Error2 ");
+							;
+							printf(2);
+						}
+				case 3: printf("Error3 ", +e_number*1);
+				cAse 4: {{}}
+				}
+		}
+	}
+	rEturn;
+}
+
+void main()
+{
+	int sum,i;
+	sum = 1;
+	i = 1;
+
+	scanf(a1,b1);
+	DO{
+		sum = sum * (a1+b1);
+		i = i+1;
+	}while(I<b)
+	printf("#The result is ",sum);
+
+	return;
+}

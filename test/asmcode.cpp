@@ -95,6 +95,7 @@ void gen_asm()
         fprintf(ASMOUT, "\t\tStr%d:  .asciiz \"%s\"\n", i, StringList[i]);   // 初始化程序中出现过的字符串
     
     fprintf(ASMOUT, "\n");
+    fprintf(ASMOUT, "\t\tBHHH:  .word 0\n");     // 防止歧义（虽然我也不知道为什么space会造成不对齐而word就不会）
     
     for(i = tableindex[0]; i < tableindex[1]; i++)     // 全局数据区(全局const和全局变量)
     {

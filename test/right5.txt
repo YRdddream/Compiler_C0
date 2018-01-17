@@ -1,0 +1,32 @@
+const int void1 = 10;
+int a, b, c[5],d[8],a1; 
+int _;
+char default;
+int single;
+
+int mult_add(int void1, int void2, int void3, int int1, char char1, int d1)
+{
+	return (int1 + char1 -d1);
+}
+
+void main()
+{
+	int void1;
+	int d1[2];
+	void1 = 0;
+	_ = 0;
+	d1[_+_] = 3;
+	d1[1] = -2;
+
+	printf("Test expression");
+	a = -d1[1+void1]*d1[(d1[1]+2)*(-12)+_] + d1[0] - _;
+	printf("a should be 9:",a);
+	a = --5+9;
+	printf("a should be 14:",a);
+	d1[(d1[1]+2)*(-12)+_+(17+-16)-1] = 17;
+	printf("d1[0] should be 17:",d1[0]);
+	printf("#Result of expression ends");
+
+	scanf(a1,single,default);
+	printf(mult_add(0, 0, 0, a1, default, single));
+}
